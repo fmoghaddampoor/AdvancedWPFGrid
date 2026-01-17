@@ -95,7 +95,7 @@ public class DoubleColumn : GridColumnBase
 
     public DoubleColumn()
     {
-        HorizontalAlignment = HorizontalAlignment.Right;
+        // Default to Left alignment per base class
     }
 
     #endregion
@@ -112,7 +112,6 @@ public class DoubleColumn : GridColumnBase
         var textBlock = new TextBlock
         {
             Text = displayText,
-            TextAlignment = TextAlignment.Right,
             VerticalAlignment = VerticalAlignment.Center,
             HorizontalAlignment = HorizontalAlignment,
             Foreground = Application.Current.TryFindResource("FluentTextPrimaryBrush") as Brush
@@ -129,7 +128,6 @@ public class DoubleColumn : GridColumnBase
         var textBox = new TextBox
         {
             Text = numericValue.ToString(CultureInfo.CurrentCulture),
-            TextAlignment = TextAlignment.Right,
             VerticalContentAlignment = VerticalAlignment.Center,
             Style = Application.Current.TryFindResource("FluentGridTextBoxStyle") as Style
         };

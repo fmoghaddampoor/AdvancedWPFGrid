@@ -293,7 +293,20 @@ public class AdvancedGrid : Control
             ItemsHost.Grid = this;
         }
 
+        if (ScrollViewer != null)
+        {
+            ScrollViewer.ScrollChanged += OnScrollChanged;
+        }
+
         RefreshView();
+    }
+
+    private void OnScrollChanged(object sender, ScrollChangedEventArgs e)
+    {
+        if (HeaderPresenter != null)
+        {
+            HeaderPresenter.RenderTransform = new TranslateTransform(-e.HorizontalOffset, 0);
+        }
     }
 
     #endregion

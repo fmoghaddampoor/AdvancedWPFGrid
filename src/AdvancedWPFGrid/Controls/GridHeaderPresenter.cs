@@ -13,7 +13,16 @@ namespace AdvancedWPFGrid.Controls;
 /// </summary>
 public class GridHeaderPresenter : Panel
 {
-    internal AdvancedGrid? Grid { get; set; }
+    private AdvancedGrid? _grid;
+    internal AdvancedGrid? Grid 
+    { 
+        get => _grid; 
+        set
+        {
+            _grid = value;
+            UpdateHeaders();
+        }
+    }
 
     public GridHeaderPresenter()
     {

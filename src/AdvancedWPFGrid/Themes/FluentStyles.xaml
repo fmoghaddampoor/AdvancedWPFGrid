@@ -33,7 +33,8 @@
                                     Background="{StaticResource GridHeaderBackgroundBrush}"
                                     BorderBrush="{StaticResource FluentBorderSubtleBrush}"
                                     BorderThickness="0,0,0,1">
-                                <controls:GridHeaderPresenter x:Name="PART_HeaderPresenter" />
+                                <controls:GridHeaderPresenter x:Name="PART_HeaderPresenter" 
+                                                              HorizontalAlignment="Left" />
                             </Border>
                             
                             <!-- Virtualized Content -->
@@ -43,8 +44,7 @@
                                           VerticalScrollBarVisibility="Auto"
                                           CanContentScroll="True"
                                           Focusable="False">
-                                <controls:VirtualizingGridPanel x:Name="PART_ItemsHost"
-                                                                 IsItemsHost="True" />
+                                <controls:VirtualizingGridPanel x:Name="PART_ItemsHost" />
                             </ScrollViewer>
                         </Grid>
                     </Border>
@@ -72,7 +72,8 @@
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             Padding="{TemplateBinding Padding}">
-                        <controls:GridCellsPresenter x:Name="PART_CellsPresenter" />
+                        <controls:GridCellsPresenter x:Name="PART_CellsPresenter" 
+                                                     HorizontalAlignment="Left" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsAlternate" Value="True">

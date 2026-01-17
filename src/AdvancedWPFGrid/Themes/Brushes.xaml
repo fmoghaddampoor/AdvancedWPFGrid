@@ -3,40 +3,40 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:system="clr-namespace:System;assembly=System.Runtime">
 
-    <!-- Fluent Design Colors - Dark Theme -->
+    <!-- Fluent Design Colors - Light Theme -->
     <Color x:Key="FluentAccentColor">#0078D4</Color>
     <Color x:Key="FluentAccentLightColor">#429CE3</Color>
     <Color x:Key="FluentAccentDarkColor">#005A9E</Color>
     
     <!-- Background Colors -->
-    <Color x:Key="FluentBackgroundColor">#202020</Color>
-    <Color x:Key="FluentBackgroundAltColor">#2D2D2D</Color>
-    <Color x:Key="FluentBackgroundHoverColor">#383838</Color>
-    <Color x:Key="FluentBackgroundSelectedColor">#0078D4</Color>
+    <Color x:Key="FluentBackgroundColor">#FFFFFF</Color>
+    <Color x:Key="FluentBackgroundAltColor">#F3F3F3</Color>
+    <Color x:Key="FluentBackgroundHoverColor">#E5E5E5</Color>
+    <Color x:Key="FluentBackgroundSelectedColor">#EBF4FC</Color>
     
     <!-- Surface Colors -->
-    <Color x:Key="FluentSurfaceColor">#2D2D2D</Color>
-    <Color x:Key="FluentSurfaceAltColor">#383838</Color>
-    <Color x:Key="FluentCardColor">#323232</Color>
+    <Color x:Key="FluentSurfaceColor">#FFFFFF</Color>
+    <Color x:Key="FluentSurfaceAltColor">#FAFAFA</Color>
+    <Color x:Key="FluentCardColor">#FFFFFF</Color>
     
     <!-- Border Colors -->
-    <Color x:Key="FluentBorderColor">#454545</Color>
-    <Color x:Key="FluentBorderBrightColor">#666666</Color>
-    <Color x:Key="FluentBorderSubtleColor">#333333</Color>
+    <Color x:Key="FluentBorderColor">#E0E0E0</Color>
+    <Color x:Key="FluentBorderBrightColor">#D0D0D0</Color>
+    <Color x:Key="FluentBorderSubtleColor">#F0F0F0</Color>
     
     <!-- Text Colors -->
-    <Color x:Key="FluentTextPrimaryColor">#FFFFFF</Color>
-    <Color x:Key="FluentTextSecondaryColor">#B3B3B3</Color>
-    <Color x:Key="FluentTextDisabledColor">#666666</Color>
+    <Color x:Key="FluentTextPrimaryColor">#000000</Color>
+    <Color x:Key="FluentTextSecondaryColor">#666666</Color>
+    <Color x:Key="FluentTextDisabledColor">#999999</Color>
     
     <!-- State Colors -->
-    <Color x:Key="FluentSuccessColor">#0F7B0F</Color>
-    <Color x:Key="FluentWarningColor">#FCE100</Color>
-    <Color x:Key="FluentErrorColor">#C42B1C</Color>
+    <Color x:Key="FluentSuccessColor">#107C10</Color>
+    <Color x:Key="FluentWarningColor">#FDE300</Color>
+    <Color x:Key="FluentErrorColor">#D13438</Color>
     
     <!-- Reveal Effect Colors -->
-    <Color x:Key="FluentRevealLightColor">#18FFFFFF</Color>
-    <Color x:Key="FluentRevealBorderColor">#30FFFFFF</Color>
+    <Color x:Key="FluentRevealLightColor">#0D000000</Color>
+    <Color x:Key="FluentRevealBorderColor">#1A000000</Color>
 
     <!-- Brushes -->
     <SolidColorBrush x:Key="FluentAccentBrush" Color="{StaticResource FluentAccentColor}" />
@@ -72,31 +72,31 @@
         <GradientStop Color="{StaticResource FluentAccentColor}" Offset="0" />
         <GradientStop Color="{StaticResource FluentAccentLightColor}" Offset="1" />
     </LinearGradientBrush>
-
+    
     <LinearGradientBrush x:Key="FluentHeaderGradientBrush" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Color="#353535" Offset="0" />
-        <GradientStop Color="#2D2D2D" Offset="1" />
+        <GradientStop Color="#F3F3F3" Offset="0" />
+        <GradientStop Color="#FFFFFF" Offset="1" />
     </LinearGradientBrush>
 
     <!-- Acrylic Effect Brush (simulated) -->
     <LinearGradientBrush x:Key="FluentAcrylicBrush" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Color="#E0202020" Offset="0" />
-        <GradientStop Color="#D0252525" Offset="0.5" />
-        <GradientStop Color="#E0202020" Offset="1" />
+        <GradientStop Color="#E0F2F2F2" Offset="0" />
+        <GradientStop Color="#D0E6E6E6" Offset="0.5" />
+        <GradientStop Color="#E0F2F2F2" Offset="1" />
     </LinearGradientBrush>
 
-    <!-- Grid Specific Brushes -->
-    <SolidColorBrush x:Key="GridBackgroundBrush" Color="#1E1E1E" />
-    <SolidColorBrush x:Key="GridHeaderBackgroundBrush" Color="#2D2D2D" />
-    <SolidColorBrush x:Key="GridRowBackgroundBrush" Color="#252525" />
-    <SolidColorBrush x:Key="GridRowAlternateBackgroundBrush" Color="#2A2A2A" />
-    <SolidColorBrush x:Key="GridRowHoverBackgroundBrush" Color="#353535" />
-    <SolidColorBrush x:Key="GridRowSelectedBackgroundBrush" Color="#0078D4" />
-    <SolidColorBrush x:Key="GridRowSelectedInactiveBackgroundBrush" Color="#404040" />
-    <SolidColorBrush x:Key="GridCellBorderBrush" Color="#3A3A3A" />
-    <SolidColorBrush x:Key="GridGroupHeaderBackgroundBrush" Color="#383838" />
-    <SolidColorBrush x:Key="GridGroupHeaderLevel1Brush" Color="#3D3D3D" />
-    <SolidColorBrush x:Key="GridGroupHeaderLevel2Brush" Color="#424242" />
+    <!-- Grid Specific Brushes (Light Theme overrides) -->
+    <SolidColorBrush x:Key="GridBackgroundBrush" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="GridHeaderBackgroundBrush" Color="#F3F3F3" />
+    <SolidColorBrush x:Key="GridRowBackgroundBrush" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="GridRowAlternateBackgroundBrush" Color="#F9F9F9" />
+    <SolidColorBrush x:Key="GridRowHoverBackgroundBrush" Color="#E5F3FF" />
+    <SolidColorBrush x:Key="GridRowSelectedBackgroundBrush" Color="#C7E0F4" />
+    <SolidColorBrush x:Key="GridRowSelectedInactiveBackgroundBrush" Color="#E0E0E0" />
+    <SolidColorBrush x:Key="GridCellBorderBrush" Color="#E0E0E0" />
+    <SolidColorBrush x:Key="GridGroupHeaderBackgroundBrush" Color="#F3F3F3" />
+    <SolidColorBrush x:Key="GridGroupHeaderLevel1Brush" Color="#ECECEC" />
+    <SolidColorBrush x:Key="GridGroupHeaderLevel2Brush" Color="#E6E6E6" />
 
     <!-- Font Sizes -->
     <system:Double x:Key="FluentFontSizeSmall">11</system:Double>

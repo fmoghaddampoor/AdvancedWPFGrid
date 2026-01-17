@@ -1,0 +1,93 @@
+<Window x:Class="EasyUse.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EasyUse"
+        xmlns:av="clr-namespace:AdvancedWPFGrid.Controls;assembly=AdvancedWPFGrid"
+        xmlns:col="clr-namespace:AdvancedWPFGrid.Columns;assembly=AdvancedWPFGrid"
+        mc:Ignorable="d"
+        Title="Easy Use - Advanced WPF Grid Demo" Height="450" Width="900"
+        WindowStartupLocation="CenterScreen"
+        Background="White">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Easy Use Demo" FontSize="20" FontWeight="Bold" Margin="10"/>
+
+        <av:AdvancedGrid Grid.Row="1" 
+                         ItemsSource="{Binding People}"
+                         SelectionMode="Extended"
+                         CanUserSort="True"
+                         CanUserFilter="True"
+                         CanUserReorderColumns="True"
+                         CanUserResizeColumns="True"
+                         Margin="10">
+            <av:AdvancedGrid.Columns>
+                <!-- Text Column -->
+                <col:TextColumn Header="Name" 
+                                Binding="Name" 
+                                Width="150"/>
+                
+                <!-- Double Column -->
+                <col:DoubleColumn Header="Age" 
+                                  Binding="Age" 
+                                  Width="60"
+                                  StringFormat="N0"/>
+
+                 <!-- Double Column with Currency -->
+                <col:DoubleColumn Header="Salary" 
+                                  Binding="Salary" 
+                                  Width="100"
+                                  StringFormat="C0"/>
+
+                <!-- CheckBox Column -->
+                <col:CheckBoxColumn Header="Active" 
+                                    Binding="IsActive" 
+                                    Width="60"/>
+
+                <!-- ComboBox Column -->
+                <col:ComboBoxColumn Header="Role" 
+                                    Binding="Role" 
+                                    ItemsSource="{Binding DataContext.Roles, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    Width="120"/>
+
+                <!-- Button Column -->
+                <col:ButtonColumn Header="Bio" 
+                                  ButtonContent="View"
+                                  Command="{Binding ShowBioCommand}"
+                                  Width="80"/>
+
+                <!-- Icon Button Column (Edit) -->
+                <col:IconButtonColumn Header="Edit"
+                                      IconData="{x:Static col:IconButtonColumn.EditIcon}"
+                                      Command="{Binding ApproveCommand}"
+                                      ToolTipText="Edit user"
+                                      Width="50"/>
+
+                <!-- Icon Button Column (Delete) -->
+                <col:IconButtonColumn Header="Delete"
+                                      IconData="{x:Static col:IconButtonColumn.DeleteIcon}"
+                                      Command="{Binding DeleteCommand}"
+                                      IconFill="Red"
+                                      IconHoverFill="DarkRed"
+                                      ToolTipText="Delete user"
+                                      Width="50"/>
+
+                <!-- Text Button Column -->
+                <col:TextButtonColumn Header="Status"
+                                      Binding="Name"
+                                      ButtonContent="Approve"
+                                      Command="{Binding ApproveCommand}"
+                                      ButtonPosition="Right"
+                                      ButtonWidth="70"
+                                      Width="180"/>
+                                      
+            </av:AdvancedGrid.Columns>
+        </av:AdvancedGrid>
+    </Grid>
+</Window>
