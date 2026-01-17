@@ -818,8 +818,9 @@ public class AdvancedGrid : Control
             {
                 grid.SelectAll();
             }
-            else if (newState == false)
+            else
             {
+                // Both false and null (indeterminate) should clear selection
                 grid.ClearSelection();
             }
         }

@@ -16,9 +16,8 @@ public class SelectionColumn : GridColumnBase
         Width = 40;
         CanSort = false;
         CanFilter = false;
+        IsSelectionColumn = true;
     }
-
-    public override bool IsSelectionColumn => true;
 
     public override FrameworkElement GenerateElement(GridCell cell, object dataItem)
     {

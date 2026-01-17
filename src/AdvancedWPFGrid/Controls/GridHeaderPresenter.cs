@@ -144,12 +144,19 @@ public class GridHeaderCell : ContentControl
         typeof(GridHeaderCell),
         new FrameworkPropertyMetadata(true));
 
+    public static readonly DependencyProperty IsSelectionColumnProperty = DependencyProperty.Register(
+        nameof(IsSelectionColumn),
+        typeof(bool),
+        typeof(GridHeaderCell),
+        new FrameworkPropertyMetadata(false));
+
     private static void OnColumnChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is GridHeaderCell cell && e.NewValue is GridColumnBase column)
         {
             cell.CanSort = column.CanSort;
             cell.CanFilter = column.CanFilter;
+            cell.IsSelectionColumn = column.IsSelectionColumn;
             cell.UpdateSortIndicator();
             cell.UpdateFilterIndicator();
         }
@@ -187,6 +194,12 @@ public class GridHeaderCell : ContentControl
     {
         get => (bool)GetValue(CanFilterProperty);
         set => SetValue(CanFilterProperty, value);
+    }
+
+    public bool IsSelectionColumn
+    {
+        get => (bool)GetValue(IsSelectionColumnProperty);
+        set => SetValue(IsSelectionColumnProperty, value);
     }
 
     internal AdvancedGrid? Grid { get; set; }

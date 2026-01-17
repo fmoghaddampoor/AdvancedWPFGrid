@@ -47,6 +47,13 @@
                                                    VerticalAlignment="Center"
                                                    TextTrimming="CharacterEllipsis"/>
 
+                                        <CheckBox x:Name="PART_HeaderSelectionCheckBox"
+                                                  Grid.Column="0"
+                                                  HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"
+                                                  Visibility="Collapsed"
+                                                  IsChecked="{Binding SelectionState, RelativeSource={RelativeSource AncestorType=av:AdvancedGrid}}" />
+
                                         <!-- Sort Button (High-Impact SVG) -->
                                         <Button x:Name="PART_SortButton"
                                                 Grid.Column="1"
@@ -181,6 +188,12 @@
                                 </Trigger>
                                 <DataTrigger Binding="{Binding HasVerticalGridLines, RelativeSource={RelativeSource AncestorType=av:AdvancedGrid}}" Value="False">
                                     <Setter TargetName="HeaderBorder" Property="BorderThickness" Value="0,0,0,1" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsSelectionColumn, RelativeSource={RelativeSource Self}}" Value="True">
+                                    <Setter TargetName="PART_SortButton" Property="Visibility" Value="Collapsed" />
+                                    <Setter TargetName="PART_FilterButton" Property="Visibility" Value="Collapsed" />
+                                    <Setter TargetName="HeaderText" Property="Visibility" Value="Collapsed" />
+                                    <Setter TargetName="PART_HeaderSelectionCheckBox" Property="Visibility" Value="Visible" />
                                 </DataTrigger>
                             </ControlTemplate.Triggers>
                     </ControlTemplate>

@@ -83,6 +83,12 @@ public abstract class GridColumnBase : DependencyObject
         typeof(GridColumnBase),
         new FrameworkPropertyMetadata(null));
 
+    public static readonly DependencyProperty IsSelectionColumnProperty = DependencyProperty.Register(
+        nameof(IsSelectionColumn),
+        typeof(bool),
+        typeof(GridColumnBase),
+        new FrameworkPropertyMetadata(false));
+
     #endregion
 
     #region Properties
@@ -161,7 +167,11 @@ public abstract class GridColumnBase : DependencyObject
 
     public double ActualWidth => Math.Max(MinWidth, Math.Min(MaxWidth, Width));
 
-    public virtual bool IsSelectionColumn => false;
+    public bool IsSelectionColumn
+    {
+        get => (bool)GetValue(IsSelectionColumnProperty);
+        set => SetValue(IsSelectionColumnProperty, value);
+    }
 
     internal AdvancedGrid? Grid { get; set; }
 

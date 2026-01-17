@@ -142,10 +142,9 @@
 
                                 <CheckBox x:Name="PART_HeaderSelectionCheckBox"
                                           Grid.Column="0"
-                                          HorizontalAlignment="Left"
+                                          HorizontalAlignment="Center"
                                           VerticalAlignment="Center"
                                           Visibility="Collapsed"
-                                          IsThreeState="True"
                                           IsChecked="{Binding SelectionState, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" />
 
                                 <!-- Sort Button (High-Impact SVG) -->
@@ -270,7 +269,7 @@
                         <DataTrigger Binding="{Binding HasVerticalGridLines, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="False">
                             <Setter TargetName="HeaderBorder" Property="BorderThickness" Value="0" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Column.IsSelectionColumn, RelativeSource={RelativeSource Self}}" Value="True">
+                        <DataTrigger Binding="{Binding IsSelectionColumn, RelativeSource={RelativeSource Self}}" Value="True">
                             <Setter TargetName="PART_SortButton" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="PART_FilterButton" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="HeaderText" Property="Visibility" Value="Collapsed" />
