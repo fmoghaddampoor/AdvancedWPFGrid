@@ -41,7 +41,20 @@
                         </StackPanel>
                     </StackPanel>
                     
-                    <TextBlock Text="Note: Use buttons to adjust decimal places (0-5)." FontStyle="Italic" Foreground="Gray"/>
+                    <TextBlock Text="Grouping:" FontWeight="SemiBold" Margin="0,10,0,5"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                        <TextBlock Text="1: " VerticalAlignment="Center" Width="20"/>
+                        <ComboBox ItemsSource="{Binding AvailableColumns}" SelectedItem="{Binding SelectedGroup1}" Width="120" Margin="0,0,10,0"/>
+                        
+                        <TextBlock Text="2: " VerticalAlignment="Center" Width="20"/>
+                        <ComboBox ItemsSource="{Binding AvailableColumns}" SelectedItem="{Binding SelectedGroup2}" Width="120" Margin="0,0,10,0"/>
+                        
+                        <TextBlock Text="3: " VerticalAlignment="Center" Width="20"/>
+                        <ComboBox ItemsSource="{Binding AvailableColumns}" SelectedItem="{Binding SelectedGroup3}" Width="120"/>
+                    </StackPanel>
+                    <TextBlock Text="Select columns to group by. Order matters." FontStyle="Italic" Foreground="Gray" FontSize="10"/>
+
+                    <TextBlock Text="Note: Use buttons to adjust decimal places (0-5)." FontStyle="Italic" Foreground="Gray" Margin="0,20,0,0"/>
                 </StackPanel>
             </TabItem>
 
@@ -53,7 +66,8 @@
                                  CanUserFilter="True"
                                  CanUserReorderColumns="True"
                                  CanUserResizeColumns="True"
-                                 DoubleFormat="{Binding GlobalDoubleFormat}">
+                                 DoubleFormat="{Binding GlobalDoubleFormat}"
+                                 GroupDescriptions="{Binding GroupDescriptors}">
                     <av:AdvancedGrid.Columns>
                         <!-- Text Column -->
                         <col:TextColumn Header="Name" 

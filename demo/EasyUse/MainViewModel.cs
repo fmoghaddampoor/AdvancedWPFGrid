@@ -8,6 +8,82 @@ namespace EasyUse
         public ObservableCollection<PersonModel> People { get; set; }
         public List<string> Roles { get; set; }
         
+
+        public List<string> AvailableColumns { get; } = new List<string> 
+        { 
+            "(None)", 
+            "Name", 
+            "Age", 
+            "Role", 
+            "IsActive", 
+            "Salary", 
+            "PerformanceScore" 
+        };
+
+        private string? _selectedGroup1 = "(None)";
+        public string? SelectedGroup1
+        {
+            get => _selectedGroup1;
+            set
+            {
+                if (_selectedGroup1 != value)
+                {
+                    _selectedGroup1 = value;
+                    OnPropertyChanged(nameof(SelectedGroup1));
+                    UpdateGroupDescriptors();
+                }
+            }
+        }
+
+        private string? _selectedGroup2 = "(None)";
+        public string? SelectedGroup2
+        {
+            get => _selectedGroup2;
+            set
+            {
+                if (_selectedGroup2 != value)
+                {
+                    _selectedGroup2 = value;
+                    OnPropertyChanged(nameof(SelectedGroup2));
+                    UpdateGroupDescriptors();
+                }
+            }
+        }
+
+        private string? _selectedGroup3 = "(None)";
+        public string? SelectedGroup3
+        {
+            get => _selectedGroup3;
+            set
+            {
+                if (_selectedGroup3 != value)
+                {
+                    _selectedGroup3 = value;
+                    OnPropertyChanged(nameof(SelectedGroup3));
+                    UpdateGroupDescriptors();
+                }
+            }
+        }
+
+        public ObservableCollection<System.ComponentModel.GroupDescription> GroupDescriptors { get; } = new();
+
+        private void UpdateGroupDescriptors()
+        {
+            GroupDescriptors.Clear();
+
+            AddGroupDescriptor(SelectedGroup1);
+            AddGroupDescriptor(SelectedGroup2);
+            AddGroupDescriptor(SelectedGroup3);
+        }
+
+        private void AddGroupDescriptor(string? propertyName)
+        {
+            if (!string.IsNullOrEmpty(propertyName) && propertyName != "(None)")
+            {
+                GroupDescriptors.Add(new System.Windows.Data.PropertyGroupDescription(propertyName));
+            }
+        }
+        
         private int _decimalPlaces = 2;
         public int DecimalPlaces
         {

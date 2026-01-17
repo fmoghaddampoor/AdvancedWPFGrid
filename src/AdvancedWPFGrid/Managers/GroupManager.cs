@@ -35,6 +35,7 @@ public class GroupManager
             {
                 _grid.CollectionView.GroupDescriptions.Clear();
             }
+            _grid.RefreshView();
             return;
         }
 

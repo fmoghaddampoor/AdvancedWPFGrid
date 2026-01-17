@@ -142,7 +142,7 @@ public class VirtualizingGridPanel : VirtualizingPanel, IScrollInfo
 
         if (Grid?.CollectionView == null) return result;
 
-        var groups = Grid.GroupManager.GetFlattenedGroups();
+        var groups = Grid.GroupManager.Groups;
         
         if (groups.Count > 0)
         {
@@ -294,6 +294,25 @@ public class VirtualizingGridPanel : VirtualizingPanel, IScrollInfo
             _recycledGroupRows.Enqueue(groupRow);
             _realizedGroupRows.Remove(key);
         }
+    }
+
+    internal void ClearRealizedRows()
+    {
+        // Recycle all data rows
+        foreach (var row in _realizedRows.Values)
+        {
+            InternalChildren.Remove(row);
+            _recycledRows.Enqueue(row);
+        }
+        _realizedRows.Clear();
+
+        // Recycle all group rows
+        foreach (var row in _realizedGroupRows.Values)
+        {
+            InternalChildren.Remove(row);
+            _recycledGroupRows.Enqueue(row);
+        }
+        _realizedGroupRows.Clear();
     }
 
     private void RealizeVisibleRows(int startIndex, int endIndex, List<object> items, double width)

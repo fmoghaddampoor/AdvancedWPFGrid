@@ -566,6 +566,11 @@ public class AdvancedGrid : Control
 
     public void RefreshView()
     {
+        if (ItemsHost is VirtualizingGridPanel panel)
+        {
+            panel.ClearRealizedRows();
+        }
+
         ItemsHost?.InvalidateMeasure();
         ItemsHost?.InvalidateVisual();
         HeaderPresenter?.InvalidateMeasure();
