@@ -133,6 +133,9 @@
                             <Setter TargetName="CellBorder" Property="BorderBrush" 
                                     Value="{StaticResource FluentAccentBrush}" />
                         </Trigger>
+                        <DataTrigger Binding="{Binding HasVerticalGridLines, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="False">
+                            <Setter TargetName="CellBorder" Property="BorderThickness" Value="0" />
+                        </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -199,8 +202,8 @@
                         
                         <!-- Resize Grip (Overlay to ignore padding) -->
                         <Thumb x:Name="PART_ResizeGrip"
-                               Width="5"
-                               Margin="0,0,-2,0"
+                               Width="8"
+                               Margin="0,0,-4,0"
                                Opacity="0"
                                HorizontalAlignment="Right"
                                Cursor="SizeWE">
@@ -228,6 +231,9 @@
                         <Trigger Property="IsFiltered" Value="True">
                             <Setter TargetName="FilterIndicator" Property="Visibility" Value="Visible" />
                         </Trigger>
+                        <DataTrigger Binding="{Binding HasVerticalGridLines, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="False">
+                            <Setter TargetName="HeaderBorder" Property="BorderThickness" Value="0,0,0,0" />
+                        </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

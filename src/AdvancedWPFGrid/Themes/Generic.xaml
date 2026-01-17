@@ -82,12 +82,18 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:GridCell}">
-                    <Border Background="{TemplateBinding Background}"
+                    <Border x:Name="CellBorder"
+                            Background="{TemplateBinding Background}"
                             BorderBrush="#3A3A3A"
                             BorderThickness="0,0,1,0"
                             Padding="{TemplateBinding Padding}">
                         <ContentPresenter VerticalAlignment="Center" />
                     </Border>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding HasVerticalGridLines, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="False">
+                            <Setter TargetName="CellBorder" Property="BorderThickness" Value="0" />
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -190,18 +196,21 @@
                             </Button>
                             
                             <Thumb x:Name="PART_ResizeGrip"
-                                   Grid.Column="2"
-                                   HorizontalAlignment="Right"
-                                   Width="4"
-                                   Cursor="SizeWE"
-                                   Opacity="0"
-                                   Margin="0,0,-2,0"/>
+                               Width="8"
+                               Margin="0,0,-4,0"
+                               Opacity="0"
+                               HorizontalAlignment="Right"
+                               Cursor="SizeWE"
+                               Grid.Column="2"/>
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="HeaderBorder" Property="Background" Value="#383838" />
                         </Trigger>
+                        <DataTrigger Binding="{Binding HasVerticalGridLines, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="False">
+                            <Setter TargetName="HeaderBorder" Property="BorderThickness" Value="0" />
+                        </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

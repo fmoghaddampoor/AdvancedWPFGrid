@@ -115,6 +115,20 @@ namespace EasyUse
             }
         }
 
+        private bool _hasVerticalGridLines = true;
+        public bool HasVerticalGridLines
+        {
+            get => _hasVerticalGridLines;
+            set
+            {
+                if (_hasVerticalGridLines != value)
+                {
+                    _hasVerticalGridLines = value;
+                    OnPropertyChanged(nameof(HasVerticalGridLines));
+                }
+            }
+        }
+
         public System.Windows.Input.ICommand IncrementDecimalsCommand { get; }
         public System.Windows.Input.ICommand DecrementDecimalsCommand { get; }
 

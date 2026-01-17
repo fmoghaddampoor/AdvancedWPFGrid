@@ -87,6 +87,7 @@ public class GridHeaderPresenter : Panel
             {
                 var width = headerCell.Column?.ActualWidth ?? 100;
                 child.Arrange(new Rect(x, 0, width, height));
+                Canvas.SetZIndex(child, Children.Count - Children.IndexOf(child));
                 x += width;
             }
         }

@@ -148,6 +148,12 @@ public class AdvancedGrid : Control
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(null, OnDoubleFormatChanged));
 
+    public static readonly DependencyProperty HasVerticalGridLinesProperty = DependencyProperty.Register(
+        nameof(HasVerticalGridLines),
+        typeof(bool),
+        typeof(AdvancedGrid),
+        new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.AffectsRender));
+
     #endregion
 
     #region Properties
@@ -246,6 +252,12 @@ public class AdvancedGrid : Control
     {
         get => (string?)GetValue(DoubleFormatProperty);
         set => SetValue(DoubleFormatProperty, value);
+    }
+
+    public bool HasVerticalGridLines
+    {
+        get => (bool)GetValue(HasVerticalGridLinesProperty);
+        set => SetValue(HasVerticalGridLinesProperty, value);
     }
 
     private static void OnDoubleFormatChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
