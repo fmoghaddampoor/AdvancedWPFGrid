@@ -222,18 +222,6 @@ public class GridHeaderCell : ContentControl
         UpdateSortIndicator();
     }
 
-    protected override void OnMouseDoubleClick(MouseButtonEventArgs e)
-    {
-        base.OnMouseDoubleClick(e);
-
-        if (Column != null && Grid?.CanUserResizeColumns == true)
-        {
-            // Auto-fit column width
-            Grid.AutoFitColumn(Column);
-            e.Handled = true;
-        }
-    }
-
     #endregion
 
     #region Methods

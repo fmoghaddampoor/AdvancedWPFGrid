@@ -98,17 +98,17 @@ public class AdvancedGrid : Control
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(true));
 
-    public static readonly DependencyProperty RowHeightProperty = DependencyProperty.Register(
-        nameof(RowHeight),
-        typeof(double),
-        typeof(AdvancedGrid),
-        new FrameworkPropertyMetadata(32.0, FrameworkPropertyMetadataOptions.AffectsMeasure));
-
     public static readonly DependencyProperty HeaderHeightProperty = DependencyProperty.Register(
         nameof(HeaderHeight),
         typeof(double),
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(36.0));
+
+    public static readonly DependencyProperty RowHeightProperty = DependencyProperty.Register(
+        nameof(RowHeight),
+        typeof(double),
+        typeof(AdvancedGrid),
+        new FrameworkPropertyMetadata(32.0, FrameworkPropertyMetadataOptions.AffectsMeasure));
 
     public static readonly DependencyProperty AlternatingRowBackgroundProperty = DependencyProperty.Register(
         nameof(AlternatingRowBackground),
@@ -335,6 +335,15 @@ public class AdvancedGrid : Control
         }
 
         column.Width = maxWidth + extraWidth;
+    }
+
+    public void AutoFitAllColumns()
+    {
+        if (Columns == null) return;
+        foreach (var column in Columns)
+        {
+            AutoFitColumn(column);
+        }
     }
     
     public SortManager SortManager { get; }
@@ -819,6 +828,22 @@ public class AdvancedGrid : Control
                     e.Handled = true;
                 }
                 break;
+        }
+    }
+
+    protected override void OnMouseDoubleClick(MouseButtonEventArgs e)
+    {
+        base.OnMouseDoubleClick(e);
+
+        if (!e.Handled && CanUserResizeColumns)
+        {
+            var pos = e.GetPosition(this);
+            if (pos.Y <= HeaderHeight)
+            {
+                // If it's in the header area but not handled by cells, auto-fit all
+                AutoFitAllColumns();
+                e.Handled = true;
+            }
         }
     }
 
