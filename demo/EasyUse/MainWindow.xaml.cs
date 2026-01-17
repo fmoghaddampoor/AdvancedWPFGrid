@@ -7,7 +7,6 @@ namespace EasyUse
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainViewModel();
         }
     }
 }
