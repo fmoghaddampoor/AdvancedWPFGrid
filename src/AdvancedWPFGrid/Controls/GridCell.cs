@@ -118,11 +118,13 @@ public class GridCell : ContentControl
         {
             _editingElement ??= Column.GenerateEditingElement(this, DataItem);
             Content = _editingElement;
+            ToolTip = null;
         }
         else
         {
             _displayElement ??= Column.GenerateElement(this, DataItem);
             Content = _displayElement;
+            ToolTip = Column.GetCellDisplayText(DataItem);
         }
     }
 

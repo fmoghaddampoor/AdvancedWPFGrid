@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Data;
 using AdvancedWPFGrid.Controls;
 
 namespace AdvancedWPFGrid.Columns;
@@ -169,43 +170,28 @@ public class IconButtonColumn : GridColumnBase
             Content = path,
             Command = Command,
             CommandParameter = dataItem,
-            Background = Brushes.Transparent,
-            BorderBrush = Brushes.Transparent,
             Width = IconSize + 12,
             Height = IconSize + 12,
             HorizontalAlignment = HorizontalAlignment,
             VerticalAlignment = VerticalAlignment.Center,
             Cursor = Cursors.Hand,
             Padding = new Thickness(4),
-            Style = null, // Use minimal style
+            Style = Application.Current.TryFindResource("FluentGridButtonStyle") as Style,
             ToolTip = string.IsNullOrEmpty(toolTip) ? null : toolTip
         };
 
-        // Apply hover effect
-        button.MouseEnter += (s, e) => path.Fill = hoverFill;
-        button.MouseLeave += (s, e) => path.Fill = defaultFill;
+        // Bind icon fill to button foreground
+        var binding = new Binding("Foreground")
+        {
+            Source = button
+        };
+        BindingOperations.SetBinding(path, Path.FillProperty, binding);
 
         button.Click += (s, e) =>
         {
             ButtonClick?.Invoke(this, new ButtonClickEventArgs(dataItem));
             e.Handled = true;
         };
-
-        // Create a simple template for the button
-        var factory = new FrameworkElementFactory(typeof(Border));
-        factory.SetValue(Border.BackgroundProperty, Brushes.Transparent);
-        factory.SetValue(Border.CornerRadiusProperty, new CornerRadius(4));
-        factory.AppendChild(new FrameworkElementFactory(typeof(ContentPresenter))
-        {
-            Name = "contentPresenter"
-        });
-
-        var template = new ControlTemplate(typeof(Button))
-        {
-            VisualTree = factory
-        };
-
-        button.Template = template;
 
         return button;
     }

@@ -10,6 +10,7 @@
         mc:Ignorable="d"
         Title="Easy Use - Advanced WPF Grid Demo" Height="450" Width="900"
         WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
         Background="White"
         x:Name="RootWindow">
     
@@ -90,7 +91,10 @@
                                     </Border>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="BtnBorder" Property="Background" Value="#D0E7F5"/>
+                                            <Setter TargetName="BtnBorder" Property="Background" Value="Transparent"/>
+                                            <Setter TargetName="NeutralUp" Property="Stroke" Value="{StaticResource FluentAccentLightBrush}"/>
+                                            <Setter TargetName="NeutralDown" Property="Stroke" Value="{StaticResource FluentAccentLightBrush}"/>
+                                            <Setter TargetName="SortedArrow" Property="Fill" Value="{StaticResource FluentAccentLightBrush}"/>
                                             <Setter TargetName="NeutralUp" Property="StrokeThickness" Value="3"/>
                                             <Setter TargetName="NeutralDown" Property="StrokeThickness" Value="3"/>
                                         </Trigger>
@@ -148,7 +152,8 @@
                                     </Border>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="BtnBorder" Property="Background" Value="#E0E0E0"/>
+                                            <Setter TargetName="BtnBorder" Property="Background" Value="Transparent"/>
+                                            <Setter TargetName="FilterIcon" Property="Stroke" Value="{StaticResource FluentAccentLightBrush}"/>
                                             <Setter TargetName="FilterIcon" Property="StrokeThickness" Value="3"/>
                                         </Trigger>
                                         <Trigger Property="Tag" Value="True">

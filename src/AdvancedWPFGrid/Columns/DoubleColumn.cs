@@ -110,6 +110,13 @@ public class DoubleColumn : GridColumnBase
 
     #region Methods
 
+    public override string GetCellDisplayText(object dataItem)
+    {
+        var value = GetCellValue(dataItem);
+        double numericValue = ConvertToDouble(value);
+        return FormatValue(numericValue);
+    }
+
     public override FrameworkElement GenerateElement(GridCell cell, object dataItem)
     {
         var value = GetCellValue(dataItem);

@@ -90,7 +90,7 @@
     <SolidColorBrush x:Key="GridHeaderBackgroundBrush" Color="#F3F3F3" />
     <SolidColorBrush x:Key="GridRowBackgroundBrush" Color="#FFFFFF" />
     <SolidColorBrush x:Key="GridRowAlternateBackgroundBrush" Color="#F9F9F9" />
-    <SolidColorBrush x:Key="GridRowHoverBackgroundBrush" Color="#E5F3FF" />
+    <SolidColorBrush x:Key="GridRowHoverBackgroundBrush" Color="Transparent" />
     <SolidColorBrush x:Key="GridRowSelectedBackgroundBrush" Color="#C7E0F4" />
     <SolidColorBrush x:Key="GridRowSelectedInactiveBackgroundBrush" Color="#E0E0E0" />
     <SolidColorBrush x:Key="GridCellBorderBrush" Color="#E0E0E0" />

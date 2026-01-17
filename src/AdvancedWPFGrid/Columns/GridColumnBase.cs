@@ -179,6 +179,14 @@ public abstract class GridColumnBase : DependencyObject
     public abstract void CommitCellEdit(FrameworkElement editingElement, object? dataItem);
 
     /// <summary>
+    /// Gets the display text for a cell in this column.
+    /// </summary>
+    public virtual string GetCellDisplayText(object dataItem)
+    {
+        return GetCellValue(dataItem)?.ToString() ?? string.Empty;
+    }
+
+    /// <summary>
     /// Gets the value from the data item for this column.
     /// </summary>
     internal object? GetCellValue(object dataItem)

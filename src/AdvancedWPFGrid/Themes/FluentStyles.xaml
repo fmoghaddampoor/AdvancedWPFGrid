@@ -214,7 +214,7 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="HeaderBorder" Property="Background" 
-                                    Value="{StaticResource FluentBackgroundHoverBrush}" />
+                                    Value="Transparent" />
                             <Setter TargetName="PART_ResizeGrip" Property="Opacity" Value="1" />
                         </Trigger>
                         <Trigger Property="SortDirection" Value="Ascending">
@@ -317,11 +317,12 @@
 
     <!-- Fluent Button Style for Grid Buttons -->
     <Style x:Key="FluentGridButtonStyle" TargetType="{x:Type Button}">
-        <Setter Property="Background" Value="{StaticResource FluentSurfaceBrush}" />
-        <Setter Property="BorderBrush" Value="{StaticResource FluentBorderBrush}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Foreground" Value="{StaticResource FluentTextPrimaryBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource FluentAccentBrush}" />
         <Setter Property="FontSize" Value="{StaticResource FluentFontSizeSmall}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="Padding" Value="8,4" />
         <Setter Property="MinHeight" Value="24" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -341,19 +342,13 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="ButtonBorder" Property="Background" 
-                                    Value="{StaticResource FluentBackgroundHoverBrush}" />
-                            <Setter TargetName="ButtonBorder" Property="BorderBrush" 
-                                    Value="{StaticResource FluentBorderBrightBrush}" />
+                            <Setter Property="Foreground" Value="{StaticResource FluentAccentLightBrush}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="ButtonBorder" Property="Background" 
-                                    Value="{StaticResource FluentAccentBrush}" />
+                            <Setter Property="Foreground" Value="{StaticResource FluentAccentDarkBrush}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Foreground" Value="{StaticResource FluentTextDisabledBrush}" />
-                            <Setter TargetName="ButtonBorder" Property="Background" 
-                                    Value="{StaticResource FluentBackgroundBrush}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

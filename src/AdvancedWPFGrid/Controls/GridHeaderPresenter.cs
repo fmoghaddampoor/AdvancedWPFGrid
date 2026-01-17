@@ -48,7 +48,8 @@ public class GridHeaderPresenter : Panel
                 Content = column.Header,
                 Column = column,
                 Grid = Grid,
-                Width = column.ActualWidth
+                Width = column.ActualWidth,
+                ToolTip = column.Header
             };
 
             Children.Add(headerCell);
@@ -149,6 +150,7 @@ public class GridHeaderCell : ContentControl
             cell.CanSort = column.CanSort;
             cell.CanFilter = column.CanFilter;
             cell.UpdateSortIndicator();
+            cell.UpdateFilterIndicator();
         }
     }
 
@@ -218,8 +220,9 @@ public class GridHeaderCell : ContentControl
             _filterButton.Click += OnFilterButtonClick;
         }
 
-        // Update sort direction
+        // Update indicators
         UpdateSortIndicator();
+        UpdateFilterIndicator();
     }
 
     #endregion
@@ -231,6 +234,14 @@ public class GridHeaderCell : ContentControl
         if (Grid?.SortManager != null && Column != null)
         {
             SortDirection = Grid.SortManager.GetSortDirection(Column.Binding);
+        }
+    }
+
+    internal void UpdateFilterIndicator()
+    {
+        if (Grid?.FilterManager != null && Column != null)
+        {
+            IsFiltered = Grid.FilterManager.HasFilter(Column.Binding ?? string.Empty);
         }
     }
 
@@ -300,6 +311,15 @@ public class GridHeaderCell : ContentControl
             Margin = new Thickness(0, 0, 0, 8)
         };
 
+        // Initialize with current filter value
+        if (Column != null && Grid?.FilterManager != null)
+        {
+            if (Grid.FilterManager.Filters.TryGetValue(Column.Binding ?? string.Empty, out var descriptor))
+            {
+                textBox.Text = descriptor.FilterValue;
+            }
+        }
+
         var buttonStack = new StackPanel
         {
             Orientation = Orientation.Horizontal,
@@ -328,8 +348,12 @@ public class GridHeaderCell : ContentControl
                 if (!string.IsNullOrWhiteSpace(textBox.Text))
                 {
                     Grid.FilterManager.SetFilter(Column.Binding, textBox.Text);
-                    IsFiltered = true;
                 }
+                else
+                {
+                    Grid.FilterManager.ClearFilter(Column.Binding);
+                }
+                UpdateFilterIndicator();
                 popup.IsOpen = false;
             }
         };
@@ -339,7 +363,7 @@ public class GridHeaderCell : ContentControl
             if (Column != null && Grid != null)
             {
                 Grid.FilterManager.ClearFilter(Column.Binding);
-                IsFiltered = false;
+                UpdateFilterIndicator();
                 popup.IsOpen = false;
             }
         };
