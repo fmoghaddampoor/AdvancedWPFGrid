@@ -181,7 +181,7 @@ public abstract class GridColumnBase : DependencyObject
     /// <summary>
     /// Gets the value from the data item for this column.
     /// </summary>
-    protected object? GetCellValue(object dataItem)
+    internal object? GetCellValue(object dataItem)
     {
         if (Binding == null) return null;
 

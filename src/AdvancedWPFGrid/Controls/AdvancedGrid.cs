@@ -261,6 +261,82 @@ public class AdvancedGrid : Control
 
     #region Internal Properties
 
+    public void AutoFitColumn(GridColumnBase column)
+    {
+        if (column == null) return;
+
+        double maxWidth = 0;
+
+        // 1. Measure Header
+        if (!string.IsNullOrEmpty(column.Header))
+        {
+            var formattedHeader = new FormattedText(
+                column.Header,
+                System.Globalization.CultureInfo.CurrentCulture,
+                FlowDirection.LeftToRight,
+                new Typeface(FontFamily, FontStyle, FontWeight, FontStretch),
+                FontSize,
+                Foreground,
+                VisualTreeHelper.GetDpi(this).PixelsPerDip);
+
+            maxWidth = formattedHeader.Width;
+        }
+
+        // 2. Measure Data
+        if (ItemsSource != null)
+        {
+            var typeface = new Typeface(FontFamily, FontStyle, FontWeight, FontStretch);
+            var dpi = VisualTreeHelper.GetDpi(this).PixelsPerDip;
+
+            // Measure first 500 items to avoid performance hit on large datasets
+            int count = 0;
+            foreach (var item in ItemsSource)
+            {
+                if (count++ > 500) break;
+
+                var value = column.GetCellValue(item);
+                if (value != null)
+                {
+                    string text = value.ToString() ?? string.Empty;
+                    // Format if the column has a string format? 
+                    // GridColumnBase doesn't expose StringFormat universally, check if it's a specific column type?
+                    // For now, simple ToString().
+                    
+                    if (!string.IsNullOrEmpty(text))
+                    {
+                         var formattedText = new FormattedText(
+                            text,
+                            System.Globalization.CultureInfo.CurrentCulture,
+                            FlowDirection.LeftToRight,
+                            typeface,
+                            FontSize,
+                            Foreground,
+                            dpi);
+
+                        if (formattedText.Width > maxWidth)
+                        {
+                            maxWidth = formattedText.Width;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Add sufficient padding for:
+        // - Cell Padding (left/right)
+        // - Header Padding
+        // - Sort/Filter Buttons in Header (~40px)
+        double extraWidth = 60.0;
+        
+        // Handle specialized columns
+        if (column is TextButtonColumn textBtnCol)
+        {
+            extraWidth += textBtnCol.ButtonWidth;
+        }
+
+        column.Width = maxWidth + extraWidth;
+    }
+    
     public SortManager SortManager { get; }
     public FilterManager FilterManager { get; }
     public GroupManager GroupManager { get; }
