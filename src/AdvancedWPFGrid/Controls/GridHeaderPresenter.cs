@@ -208,6 +208,12 @@ public class GridHeaderCell : ContentControl
         set => SetValue(IsSelectionColumnProperty, value);
     }
 
+    public bool IsDragOver
+    {
+        get => (bool)GetValue(IsDragOverProperty);
+        set => SetValue(IsDragOverProperty, value);
+    }
+
     internal AdvancedGrid? Grid { get; set; }
 
     private Thumb? _resizeGrip;
@@ -216,6 +222,7 @@ public class GridHeaderCell : ContentControl
     private bool _isDragging;
     private Point _dragStartPoint;
     private const double DragThreshold = 5.0;
+    private static GridHeaderCell? _currentDragOverCell;
 
     #endregion
 
@@ -323,12 +330,44 @@ public class GridHeaderCell : ContentControl
                 CaptureMouse();
                 Cursor = Cursors.SizeWE;
             }
+            
+            // Update drag-over highlight during drag
+            if (_isDragging && Grid != null)
+            {
+                var mousePos = e.GetPosition(Grid);
+                var targetCell = FindHeaderCellAtPosition(mousePos);
+                
+                // Clear previous highlight
+                if (_currentDragOverCell != null && _currentDragOverCell != targetCell)
+                {
+                    _currentDragOverCell.IsDragOver = false;
+                }
+                
+                // Set new highlight (don't highlight self or selection column)
+                if (targetCell != null && targetCell != this && 
+                    targetCell.Column != null && !targetCell.Column.IsSelectionColumn)
+                {
+                    targetCell.IsDragOver = true;
+                    _currentDragOverCell = targetCell;
+                }
+                else
+                {
+                    _currentDragOverCell = null;
+                }
+            }
         }
     }
 
     protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
     {
         base.OnMouseLeftButtonUp(e);
+        
+        // Clear drag-over highlight
+        if (_currentDragOverCell != null)
+        {
+            _currentDragOverCell.IsDragOver = false;
+            _currentDragOverCell = null;
+        }
         
         if (_isDragging && IsMouseCaptured)
         {
