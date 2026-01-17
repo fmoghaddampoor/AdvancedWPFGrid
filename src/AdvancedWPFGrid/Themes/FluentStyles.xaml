@@ -96,6 +96,9 @@
                             <Setter TargetName="RootBorder" Property="Background" 
                                     Value="{StaticResource GridRowSelectedInactiveBackgroundBrush}" />
                         </MultiTrigger>
+                        <DataTrigger Binding="{Binding HasHorizontalGridLines, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="False">
+                            <Setter TargetName="RootBorder" Property="BorderThickness" Value="0" />
+                        </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -309,6 +312,9 @@
                         <DataTrigger Binding="{Binding HasVerticalGridLines, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="False">
                             <Setter TargetName="HeaderBorder" Property="BorderThickness" Value="0,0,0,0" />
                         </DataTrigger>
+                        <DataTrigger Binding="{Binding HasHorizontalGridLines, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="False">
+                            <Setter TargetName="HeaderBorder" Property="BorderThickness" Value="0,0,0,0" />
+                        </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -390,6 +396,9 @@
                                     Value="{StaticResource GridGroupHeaderLevel2Brush}" />
                             <Setter Property="Padding" Value="32,6,8,6" />
                         </Trigger>
+                        <DataTrigger Binding="{Binding HasHorizontalGridLines, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="False">
+                            <Setter TargetName="GroupBorder" Property="BorderThickness" Value="0" />
+                        </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

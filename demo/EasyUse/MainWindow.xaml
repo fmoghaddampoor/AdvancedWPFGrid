@@ -228,7 +228,8 @@
                     <TextBlock Text="Select columns to group by. Order matters." FontStyle="Italic" Foreground="Gray" FontSize="10"/>
 
                     <TextBlock Text="Appearance:" FontWeight="SemiBold" Margin="0,20,0,5"/>
-                    <CheckBox Content="Show Vertical Grid Lines" IsChecked="{Binding HasVerticalGridLines}" Margin="0,0,0,10"/>
+                    <CheckBox Content="Show Vertical Grid Lines" IsChecked="{Binding HasVerticalGridLines}" Margin="0,0,0,5"/>
+                    <CheckBox Content="Show Horizontal Grid Lines" IsChecked="{Binding HasHorizontalGridLines}" Margin="0,0,0,10"/>
 
                     <TextBlock Text="Note: Use buttons to adjust decimal places (0-5)." FontStyle="Italic" Foreground="Gray" Margin="0,20,0,0"/>
                 </StackPanel>
@@ -244,6 +245,7 @@
                                   CanUserResizeColumns="True"
                                   DoubleFormat="{Binding GlobalDoubleFormat}"
                                   HasVerticalGridLines="{Binding HasVerticalGridLines}"
+                                  HasHorizontalGridLines="{Binding HasHorizontalGridLines}"
                                   GroupDescriptions="{Binding GroupDescriptors}">
                     <av:AdvancedGrid.Columns>
                         <!-- Text Column -->

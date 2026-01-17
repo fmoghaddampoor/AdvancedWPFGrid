@@ -129,6 +129,20 @@ namespace EasyUse
             }
         }
 
+        private bool _hasHorizontalGridLines = true;
+        public bool HasHorizontalGridLines
+        {
+            get => _hasHorizontalGridLines;
+            set
+            {
+                if (_hasHorizontalGridLines != value)
+                {
+                    _hasHorizontalGridLines = value;
+                    OnPropertyChanged(nameof(HasHorizontalGridLines));
+                }
+            }
+        }
+
         public System.Windows.Input.ICommand IncrementDecimalsCommand { get; }
         public System.Windows.Input.ICommand DecrementDecimalsCommand { get; }
 
