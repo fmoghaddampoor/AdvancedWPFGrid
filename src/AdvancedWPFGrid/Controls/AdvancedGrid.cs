@@ -160,6 +160,12 @@ public class AdvancedGrid : Control
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.AffectsRender));
 
+    public static readonly DependencyProperty AlternatingRowsProperty = DependencyProperty.Register(
+        nameof(AlternatingRows),
+        typeof(bool),
+        typeof(AdvancedGrid),
+        new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.AffectsRender));
+
     #endregion
 
     #region Properties
@@ -270,6 +276,12 @@ public class AdvancedGrid : Control
     {
         get => (bool)GetValue(HasHorizontalGridLinesProperty);
         set => SetValue(HasHorizontalGridLinesProperty, value);
+    }
+
+    public bool AlternatingRows
+    {
+        get => (bool)GetValue(AlternatingRowsProperty);
+        set => SetValue(AlternatingRowsProperty, value);
     }
 
     private static void OnDoubleFormatChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

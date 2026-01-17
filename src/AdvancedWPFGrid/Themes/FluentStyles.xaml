@@ -76,10 +76,14 @@
                                                      HorizontalAlignment="Left" />
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsAlternate" Value="True">
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsAlternate, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding AlternatingRows, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="True" />
+                            </MultiDataTrigger.Conditions>
                             <Setter TargetName="RootBorder" Property="Background" 
                                     Value="{StaticResource GridRowAlternateBackgroundBrush}" />
-                        </Trigger>
+                        </MultiDataTrigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="RootBorder" Property="Background" 
                                     Value="{StaticResource GridRowHoverBackgroundBrush}" />

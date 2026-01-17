@@ -71,6 +71,13 @@
                         <DataTrigger Binding="{Binding HasHorizontalGridLines, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="False">
                             <Setter TargetName="RootBorder" Property="BorderThickness" Value="0" />
                         </DataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsAlternate, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding AlternatingRows, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="RootBorder" Property="Background" Value="#252525" />
+                        </MultiDataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

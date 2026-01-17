@@ -143,6 +143,20 @@ namespace EasyUse
             }
         }
 
+        private bool _alternatingRows = true;
+        public bool AlternatingRows
+        {
+            get => _alternatingRows;
+            set
+            {
+                if (_alternatingRows != value)
+                {
+                    _alternatingRows = value;
+                    OnPropertyChanged(nameof(AlternatingRows));
+                }
+            }
+        }
+
         public System.Windows.Input.ICommand IncrementDecimalsCommand { get; }
         public System.Windows.Input.ICommand DecrementDecimalsCommand { get; }
 
