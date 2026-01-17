@@ -147,8 +147,17 @@
                                        Width="8"
                                        Margin="0,0,-4,0"
                                        Background="Transparent"
-                                       HorizontalAlignment="Right"
-                                       Cursor="SizeWE">
+                                       HorizontalAlignment="Right">
+                                    <Thumb.Style>
+                                        <Style TargetType="Thumb">
+                                            <Setter Property="Cursor" Value="SizeWE" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding CanUserResizeColumns, RelativeSource={RelativeSource AncestorType=av:AdvancedGrid}}" Value="False">
+                                                    <Setter Property="Cursor" Value="Arrow" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Thumb.Style>
                                     <Thumb.Template>
                                         <ControlTemplate TargetType="Thumb">
                                             <Border Background="Transparent" SnapsToDevicePixels="True">
@@ -246,6 +255,12 @@
                     <CheckBox Content="Show Horizontal Grid Lines" IsChecked="{Binding HasHorizontalGridLines}" Margin="0,0,0,5"/>
                     <CheckBox Content="Enable Alternating Row Colors" IsChecked="{Binding AlternatingRows}" Margin="0,0,0,10"/>
 
+                    <TextBlock Text="User Interactions:" FontWeight="SemiBold" Margin="0,10,0,5"/>
+                    <CheckBox Content="Allow Sorting" IsChecked="{Binding CanUserSort}" Margin="0,0,0,5"/>
+                    <CheckBox Content="Allow Filtering" IsChecked="{Binding CanUserFilter}" Margin="0,0,0,5"/>
+                    <CheckBox Content="Allow Column Reordering" IsChecked="{Binding CanUserReorderColumns}" Margin="0,0,0,5"/>
+                    <CheckBox Content="Allow Column Resizing" IsChecked="{Binding CanUserResizeColumns}" Margin="0,0,0,10"/>
+
                     <TextBlock Text="Note: Use buttons to adjust decimal places (0-5)." FontStyle="Italic" Foreground="Gray" Margin="0,20,0,0"/>
                 </StackPanel>
             </TabItem>
@@ -254,10 +269,10 @@
             <TabItem Header="Grid">
                 <av:AdvancedGrid ItemsSource="{Binding People}"
                                  SelectionMode="Extended"
-                                 CanUserSort="True"
-                                 CanUserFilter="True"
-                                 CanUserReorderColumns="True"
-                                  CanUserResizeColumns="True"
+                                 CanUserSort="{Binding CanUserSort}"
+                                 CanUserFilter="{Binding CanUserFilter}"
+                                 CanUserReorderColumns="{Binding CanUserReorderColumns}"
+                                 CanUserResizeColumns="{Binding CanUserResizeColumns}"
                                   DoubleFormat="{Binding GlobalDoubleFormat}"
                                   HasVerticalGridLines="{Binding HasVerticalGridLines}"
                                   HasHorizontalGridLines="{Binding HasHorizontalGridLines}"

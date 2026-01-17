@@ -157,6 +157,62 @@ namespace EasyUse
             }
         }
 
+        private bool _canUserSort = true;
+        public bool CanUserSort
+        {
+            get => _canUserSort;
+            set
+            {
+                if (_canUserSort != value)
+                {
+                    _canUserSort = value;
+                    OnPropertyChanged(nameof(CanUserSort));
+                }
+            }
+        }
+
+        private bool _canUserFilter = true;
+        public bool CanUserFilter
+        {
+            get => _canUserFilter;
+            set
+            {
+                if (_canUserFilter != value)
+                {
+                    _canUserFilter = value;
+                    OnPropertyChanged(nameof(CanUserFilter));
+                }
+            }
+        }
+
+        private bool _canUserReorderColumns = true;
+        public bool CanUserReorderColumns
+        {
+            get => _canUserReorderColumns;
+            set
+            {
+                if (_canUserReorderColumns != value)
+                {
+                    _canUserReorderColumns = value;
+                    OnPropertyChanged(nameof(CanUserReorderColumns));
+                }
+            }
+        }
+
+        private bool _canUserResizeColumns = true;
+        public bool CanUserResizeColumns
+        {
+            get => _canUserResizeColumns;
+            set
+            {
+                if (_canUserResizeColumns != value)
+                {
+                    _canUserResizeColumns = value;
+                    OnPropertyChanged(nameof(CanUserResizeColumns));
+                }
+            }
+        }
+
         public System.Windows.Input.ICommand IncrementDecimalsCommand { get; }
         public System.Windows.Input.ICommand DecrementDecimalsCommand { get; }
 
