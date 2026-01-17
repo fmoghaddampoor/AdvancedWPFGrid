@@ -160,9 +160,9 @@
                     <Grid>
                         <Border x:Name="HeaderBorder"
                                 Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                Padding="{TemplateBinding Padding}">
+                                BorderBrush="{StaticResource FluentBorderBrush}"
+                                BorderThickness="0,0,0,2"
+                                Padding="12,0,12,0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
@@ -200,16 +200,28 @@
                             </Grid>
                         </Border>
                         
-                        <!-- Resize Grip (Overlay to ignore padding) -->
+                        <!-- Resize Grip (Overlay to ignore padding and border) -->
                         <Thumb x:Name="PART_ResizeGrip"
                                Width="8"
                                Margin="0,0,-4,0"
-                               Opacity="0"
+                               Background="Transparent"
                                HorizontalAlignment="Right"
                                Cursor="SizeWE">
                             <Thumb.Template>
                                 <ControlTemplate TargetType="Thumb">
-                                    <Rectangle Fill="Transparent" />
+                                    <Border Background="Transparent" SnapsToDevicePixels="True">
+                                        <Rectangle x:Name="DividerLine"
+                                                   VerticalAlignment="Stretch"
+                                                   Width="1"
+                                                   Fill="{StaticResource GridCellBorderBrush}"
+                                                   HorizontalAlignment="Left"
+                                                   Margin="4,0,0,0"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding HasVerticalGridLines, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="False">
+                                            <Setter TargetName="DividerLine" Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </ControlTemplate.Triggers>
                                 </ControlTemplate>
                             </Thumb.Template>
                         </Thumb>

@@ -25,188 +25,144 @@
             <Setter Property="Background" Value="#F7F7F7" />
             <Setter Property="Foreground" Value="Black" />
             <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type av:GridHeaderCell}">
-                        <Border x:Name="HeaderBorder"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="#E0E0E0"
-                                BorderThickness="0,0,1,1"
-                                Padding="{TemplateBinding Padding}">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type av:GridHeaderCell}">
                             <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
+                                <Border x:Name="HeaderBorder"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="#E0E0E0"
+                                        BorderThickness="1,0,0,1"
+                                        Padding="10,0,8,0">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
 
-                                <TextBlock Grid.Column="0"
-                                           Text="{TemplateBinding Content}"
-                                           Foreground="{TemplateBinding Foreground}"
-                                           VerticalAlignment="Center"
-                                           FontSize="14"
-                                           TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock x:Name="HeaderText"
+                                                   Grid.Column="0"
+                                                   Text="{TemplateBinding Content}"
+                                                   Foreground="#333333"
+                                                   VerticalAlignment="Center"
+                                                   TextTrimming="CharacterEllipsis"/>
 
-                                <!-- Sort Button -->
-                        <Button x:Name="PART_SortButton"
-                                Grid.Column="1"
-                                Width="28" Height="28"
-                                Margin="4,0,0,0"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                Opacity="0.9"
-                                Tag="{Binding SortDirection, RelativeSource={RelativeSource TemplatedParent}}">
-                            <Button.Template>
-                                <ControlTemplate TargetType="Button">
-                                    <Border x:Name="BtnBorder" Background="Transparent" CornerRadius="6">
-                                        <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
-                                            <!-- Neutral State: Outline Arrows -->
-                                            <Path x:Name="NeutralUp"
-                                                  Data="M 0 5 L 6 0 L 12 5"
-                                                  Stroke="#0078D4"
-                                                  StrokeThickness="2"
-                                                  StrokeStartLineCap="Round"
-                                                  StrokeEndLineCap="Round"
-                                                  Margin="0,0,0,7"
-                                                  Width="12" Height="5"
-                                                  Stretch="Uniform"/>
-                                            <Path x:Name="NeutralDown"
-                                                  Data="M 0 0 L 6 5 L 12 0"
-                                                  Stroke="#0078D4"
-                                                  StrokeThickness="2"
-                                                  StrokeStartLineCap="Round"
-                                                  StrokeEndLineCap="Round"
-                                                  Margin="0,7,0,0"
-                                                  Width="12" Height="5"
-                                                  Stretch="Uniform"/>
-                                            
-                                            <!-- Sorted State: Filled Bold Arrow -->
-                                            <Path x:Name="SortedArrow"
-                                                  Visibility="Collapsed"
-                                                  Fill="#005A9E"
-                                                  HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center"
-                                                  Width="14" Height="10"
-                                                  Stretch="Uniform"/>
-                                        </Grid>
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="BtnBorder" Property="Background" Value="Transparent"/>
-                                            <Setter TargetName="NeutralUp" Property="Stroke" Value="{StaticResource FluentAccentLightBrush}"/>
-                                            <Setter TargetName="NeutralDown" Property="Stroke" Value="{StaticResource FluentAccentLightBrush}"/>
-                                            <Setter TargetName="SortedArrow" Property="Fill" Value="{StaticResource FluentAccentLightBrush}"/>
-                                            <Setter TargetName="NeutralUp" Property="StrokeThickness" Value="3"/>
-                                            <Setter TargetName="NeutralDown" Property="StrokeThickness" Value="3"/>
-                                        </Trigger>
-                                        
-                                        <!-- DataTriggers to watch for TemplatedParent's SortDirection -->
-                                        <DataTrigger Binding="{Binding SortDirection, RelativeSource={RelativeSource TemplatedParent}}" Value="Ascending">
-                                            <Setter TargetName="NeutralUp" Property="Visibility" Value="Collapsed" />
-                                            <Setter TargetName="NeutralDown" Property="Visibility" Value="Collapsed" />
-                                            <Setter TargetName="SortedArrow" Property="Visibility" Value="Visible" />
-                                            <Setter TargetName="SortedArrow" Property="Data" Value="M 0 10 L 7 0 L 14 10 Z" />
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding SortDirection, RelativeSource={RelativeSource TemplatedParent}}" Value="Descending">
-                                            <Setter TargetName="NeutralUp" Property="Visibility" Value="Collapsed" />
-                                            <Setter TargetName="NeutralDown" Property="Visibility" Value="Collapsed" />
-                                            <Setter TargetName="SortedArrow" Property="Visibility" Value="Visible" />
-                                            <Setter TargetName="SortedArrow" Property="Data" Value="M 0 0 L 7 10 L 14 0 Z" />
-                                        </DataTrigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Button.Template>
-                            <Button.Style>
-                                <Style TargetType="Button">
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding CanSort, RelativeSource={RelativeSource TemplatedParent}}" Value="False">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
+                                        <!-- Sort Button (Custom styling) -->
+                                        <Button x:Name="PART_SortButton"
+                                                Grid.Column="1"
+                                                Width="16" Height="16"
+                                                Margin="4,0,0,0"
+                                                Background="Transparent"
+                                                BorderThickness="0"
+                                                Opacity="0.4">
+                                            <Button.Template>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Path x:Name="SortArrow"
+                                                          Data="M 0 3 L 4 0 L 8 3 M 0 6 L 4 9 L 8 6"
+                                                          Fill="#888888"
+                                                          Stretch="Uniform"
+                                                          Width="10" Height="10"
+                                                          HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center"/>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding SortDirection, RelativeSource={RelativeSource TemplatedParent}}" Value="Ascending">
+                                                            <Setter Property="Opacity" Value="1"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding SortDirection, RelativeSource={RelativeSource TemplatedParent}}" Value="Descending">
+                                                            <Setter Property="Opacity" Value="1"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
 
-                        <!-- Filter Button -->
-                        <Button x:Name="PART_FilterButton"
-                                Grid.Column="2"
-                                Width="28" Height="28"
-                                Margin="4,0,0,0"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                Opacity="0.9"
-                                Tag="{Binding IsFiltered, RelativeSource={RelativeSource TemplatedParent}}">
-                            <Button.Template>
-                                <ControlTemplate TargetType="Button">
-                                    <Border x:Name="BtnBorder" Background="Transparent" CornerRadius="6">
-                                        <Path x:Name="FilterIcon"
-                                              Data="M 2 2 L 12 2 L 8 7 L 8 13 L 6 13 L 6 7 Z"
-                                              Stroke="#0078D4"
-                                              StrokeThickness="2"
-                                              StrokeLineJoin="Round"
-                                              Fill="Transparent"
-                                              HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Width="14" Height="14"
-                                              Stretch="Uniform"/>
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="BtnBorder" Property="Background" Value="Transparent"/>
-                                            <Setter TargetName="FilterIcon" Property="Stroke" Value="{StaticResource FluentAccentLightBrush}"/>
-                                            <Setter TargetName="FilterIcon" Property="StrokeThickness" Value="3"/>
-                                        </Trigger>
-                                        <Trigger Property="Tag" Value="True">
-                                            <Setter TargetName="FilterIcon" Property="Fill" Value="#0078D4"/>
-                                            <Setter TargetName="FilterIcon" Property="Stroke" Value="#005A9E"/>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Button.Template>
-                            <Button.Style>
-                                <Style TargetType="Button">
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding CanFilter, RelativeSource={RelativeSource TemplatedParent}}" Value="False">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                                
+                                        <!-- Filter Button (Custom styling) -->
+                                        <Button x:Name="PART_FilterButton"
+                                                Grid.Column="2"
+                                                Width="16" Height="16"
+                                                Margin="4,0,0,0"
+                                                Background="Transparent"
+                                                BorderThickness="0"
+                                                Opacity="0.4">
+                                            <Button.Template>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Path x:Name="FilterIcon"
+                                                          Data="M 1,1 L 9,1 L 5,6 L 5,9 L 3,9 L 3,6 Z"
+                                                          Fill="#888888"
+                                                          Stroke="#888888"
+                                                          StrokeThickness="1"
+                                                          HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center"/>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsFiltered, RelativeSource={RelativeSource TemplatedParent}}" Value="True">
+                                                            <Setter Property="Opacity" Value="1"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding CanFilter, RelativeSource={RelativeSource TemplatedParent}}" Value="False">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+                                    </Grid>
+                                </Border>
+
                                 <Thumb x:Name="PART_ResizeGrip"
-                                       Grid.Column="2"
-                                       HorizontalAlignment="Right"
                                        Width="8"
-                                       Cursor="SizeWE"
-                                       Opacity="0"
-                                       Margin="0,0,-4,0"/>
+                                       Margin="0,0,-4,0"
+                                       Background="Transparent"
+                                       HorizontalAlignment="Right"
+                                       Cursor="SizeWE">
+                                    <Thumb.Template>
+                                        <ControlTemplate TargetType="Thumb">
+                                            <Border Background="Transparent" SnapsToDevicePixels="True">
+                                                <Rectangle x:Name="DividerLine"
+                                                           VerticalAlignment="Stretch"
+                                                           Width="1"
+                                                           Fill="#E0E0E0"
+                                                           HorizontalAlignment="Left"
+                                                           Margin="4,0,0,0"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <DataTrigger Binding="{Binding HasVerticalGridLines, RelativeSource={RelativeSource AncestorType=av:AdvancedGrid}}" Value="False">
+                                                    <Setter TargetName="DividerLine" Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Thumb.Template>
+                                </Thumb>
                             </Grid>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <!-- Hover state for the whole header cell -->
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="HeaderBorder" Property="Background" Value="#EEEEEE" />
-                                <!-- Make buttons fully visible on hover -->
-                                <Setter TargetName="PART_SortButton" Property="Opacity" Value="1" />
-                                <Setter TargetName="PART_FilterButton" Property="Opacity" Value="1" />
-                            </Trigger>
-                            
-                            <!-- Make active buttons fully visible -->
-                             <Trigger Property="SortDirection" Value="Ascending">
-                                <Setter TargetName="PART_SortButton" Property="Opacity" Value="1" />
-                            </Trigger>
-                            <Trigger Property="SortDirection" Value="Descending">
-                                <Setter TargetName="PART_SortButton" Property="Opacity" Value="1" />
-                            </Trigger>
-                            <Trigger Property="IsFiltered" Value="True">
-                                <Setter TargetName="PART_FilterButton" Property="Opacity" Value="1" />
-                            </Trigger>
-                            <DataTrigger Binding="{Binding HasVerticalGridLines, RelativeSource={RelativeSource AncestorType=av:AdvancedGrid}}" Value="False">
-                                <Setter TargetName="HeaderBorder" Property="BorderThickness" Value="0,0,0,1" />
-                            </DataTrigger>
-                        </ControlTemplate.Triggers>
+                            <ControlTemplate.Triggers>
+                                <!-- Hover state for the whole header cell -->
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="HeaderBorder" Property="Background" Value="#EEEEEE" />
+                                    <!-- Make buttons fully visible on hover -->
+                                    <Setter TargetName="PART_SortButton" Property="Opacity" Value="1" />
+                                    <Setter TargetName="PART_FilterButton" Property="Opacity" Value="1" />
+                                </Trigger>
+                                
+                                <!-- Make active buttons fully visible -->
+                                <Trigger Property="SortDirection" Value="Ascending">
+                                    <Setter TargetName="PART_SortButton" Property="Opacity" Value="1" />
+                                </Trigger>
+                                <Trigger Property="SortDirection" Value="Descending">
+                                    <Setter TargetName="PART_SortButton" Property="Opacity" Value="1" />
+                                </Trigger>
+                                <Trigger Property="IsFiltered" Value="True">
+                                    <Setter TargetName="PART_FilterButton" Property="Opacity" Value="1" />
+                                </Trigger>
+                                <DataTrigger Binding="{Binding HasVerticalGridLines, RelativeSource={RelativeSource AncestorType=av:AdvancedGrid}}" Value="False">
+                                    <Setter TargetName="HeaderBorder" Property="BorderThickness" Value="0,0,0,1" />
+                                </DataTrigger>
+                            </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
