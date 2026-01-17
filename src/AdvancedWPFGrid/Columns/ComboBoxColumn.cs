@@ -84,23 +84,6 @@ public class ComboBoxColumn : GridColumnBase
     public override FrameworkElement GenerateElement(GridCell cell, object dataItem)
     {
         var value = GetCellValue(dataItem);
-        string displayText = GetDisplayText(value, dataItem);
-
-        var textBlock = new TextBlock
-        {
-            Text = displayText,
-            VerticalAlignment = VerticalAlignment.Center,
-            HorizontalAlignment = HorizontalAlignment,
-            TextTrimming = TextTrimming.CharacterEllipsis,
-            Foreground = Application.Current.TryFindResource("FluentTextPrimaryBrush") as Brush
-        };
-
-        return textBlock;
-    }
-
-    public override FrameworkElement GenerateEditingElement(GridCell cell, object dataItem)
-    {
-        var value = GetCellValue(dataItem);
         var items = GetItemsSource(dataItem);
 
         var comboBox = new ComboBox
@@ -110,6 +93,8 @@ public class ComboBoxColumn : GridColumnBase
             SelectedValuePath = SelectedValuePath,
             IsEditable = IsEditable,
             VerticalContentAlignment = VerticalAlignment.Center,
+            IsHitTestVisible = !IsReadOnly,
+            Focusable = !IsReadOnly,
             Style = Application.Current.TryFindResource("FluentGridComboBoxStyle") as Style
         };
 
@@ -133,12 +118,15 @@ public class ComboBoxColumn : GridColumnBase
         return comboBox;
     }
 
+    public override FrameworkElement GenerateEditingElement(GridCell cell, object dataItem)
+    {
+        // ComboBox is always interactive in display mode
+        return GenerateElement(cell, dataItem);
+    }
+
     public override void CommitCellEdit(FrameworkElement editingElement, object? dataItem)
     {
-        if (editingElement is ComboBox comboBox && dataItem != null)
-        {
-            OnSelectionChanged(dataItem, comboBox);
-        }
+        // Commits immediately on selection change
     }
 
     private IEnumerable? GetItemsSource(object dataItem)
