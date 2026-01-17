@@ -39,7 +39,7 @@ public class GridRow : Control
         nameof(IsSelected),
         typeof(bool),
         typeof(GridRow),
-        new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsRender));
+        new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsRender, OnIsSelectedChanged));
 
     public static readonly DependencyProperty IsAlternateProperty = DependencyProperty.Register(
         nameof(IsAlternate),
@@ -116,6 +116,25 @@ public class GridRow : Control
     #endregion
 
     #region Methods
+
+    private static void OnIsSelectedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is GridRow row && row.Grid != null && row.DataItem != null)
+        {
+            var isSelected = (bool)e.NewValue;
+            if (isSelected != row.Grid.IsItemSelected(row.DataItem))
+            {
+                if (isSelected)
+                {
+                    row.Grid.SelectItem(row.DataItem, true);
+                }
+                else
+                {
+                    row.Grid.DeselectItem(row.DataItem);
+                }
+            }
+        }
+    }
 
     private static void OnDataItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {

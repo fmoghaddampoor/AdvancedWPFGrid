@@ -142,6 +142,12 @@ public class AdvancedGrid : Control
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(0));
 
+    public static readonly DependencyProperty SelectionStateProperty = DependencyProperty.Register(
+        nameof(SelectionState),
+        typeof(bool?),
+        typeof(AdvancedGrid),
+        new FrameworkPropertyMetadata(false, OnSelectionStateChanged));
+
     public static readonly DependencyProperty DoubleFormatProperty = DependencyProperty.Register(
         nameof(DoubleFormat),
         typeof(string),
@@ -284,6 +290,12 @@ public class AdvancedGrid : Control
         set => SetValue(AlternatingRowsProperty, value);
     }
 
+    public bool? SelectionState
+    {
+        get => (bool?)GetValue(SelectionStateProperty);
+        set => SetValue(SelectionStateProperty, value);
+    }
+
     private static void OnDoubleFormatChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is AdvancedGrid grid)
@@ -404,6 +416,8 @@ public class AdvancedGrid : Control
         SortManager = new SortManager(this);
         FilterManager = new FilterManager(this);
         GroupManager = new GroupManager(this);
+
+        _selectedItems.CollectionChanged += OnSelectedItemsChanged;
 
         Loaded += OnGridLoaded;
         Unloaded += OnGridUnloaded;
@@ -699,6 +713,72 @@ public class AdvancedGrid : Control
     }
 
     public bool IsItemSelected(object item) => _selectedItems.Contains(item);
+
+    private bool _isUpdatingSelectionState = false;
+
+    private void OnSelectedItemsChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (_isUpdatingSelectionState) return;
+
+        UpdateSelectionState();
+
+        // Sync materialized rows
+        if (ItemsHost != null)
+        {
+            foreach (UIElement child in ItemsHost.PublicInternalChildren)
+            {
+                if (child is GridRow row && row.DataItem != null)
+                {
+                    row.IsSelected = IsItemSelected(row.DataItem);
+                }
+            }
+        }
+    }
+
+    private void UpdateSelectionState()
+    {
+        if (CollectionView == null)
+        {
+            _isUpdatingSelectionState = true;
+            SelectionState = false;
+            _isUpdatingSelectionState = false;
+            return;
+        }
+
+        var totalCount = CollectionView.Cast<object>().Count();
+        var selectedCount = _selectedItems.Count;
+
+        _isUpdatingSelectionState = true;
+        if (selectedCount == 0)
+        {
+            SelectionState = false;
+        }
+        else if (selectedCount >= totalCount)
+        {
+            SelectionState = true;
+        }
+        else
+        {
+            SelectionState = null; // Indeterminate
+        }
+        _isUpdatingSelectionState = false;
+    }
+
+    private static void OnSelectionStateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is AdvancedGrid grid && !grid._isUpdatingSelectionState)
+        {
+            var newState = (bool?)e.NewValue;
+            if (newState == true)
+            {
+                grid.SelectAll();
+            }
+            else if (newState == false)
+            {
+                grid.ClearSelection();
+            }
+        }
+    }
 
     #endregion
 

@@ -250,6 +250,9 @@
                                   AlternatingRows="{Binding AlternatingRows}"
                                   GroupDescriptions="{Binding GroupDescriptors}">
                     <av:AdvancedGrid.Columns>
+                        <!-- Selection Column -->
+                        <col:SelectionColumn Width="50" />
+                        
                         <!-- Text Column -->
                         <col:TextColumn Header="Name" 
                                         Binding="Name" 
