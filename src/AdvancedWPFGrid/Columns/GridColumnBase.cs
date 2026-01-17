@@ -71,6 +71,12 @@ public abstract class GridColumnBase : DependencyObject
         typeof(GridColumnBase),
         new FrameworkPropertyMetadata(HorizontalAlignment.Left));
 
+    public static readonly DependencyProperty DataContextProperty = DependencyProperty.Register(
+        nameof(DataContext),
+        typeof(object),
+        typeof(GridColumnBase),
+        new FrameworkPropertyMetadata(null));
+
     #endregion
 
     #region Properties
@@ -133,6 +139,12 @@ public abstract class GridColumnBase : DependencyObject
     {
         get => (HorizontalAlignment)GetValue(HorizontalAlignmentProperty);
         set => SetValue(HorizontalAlignmentProperty, value);
+    }
+
+    public object DataContext
+    {
+        get => GetValue(DataContextProperty);
+        set => SetValue(DataContextProperty, value);
     }
 
     public double ActualWidth => Math.Max(MinWidth, Math.Min(MaxWidth, Width));

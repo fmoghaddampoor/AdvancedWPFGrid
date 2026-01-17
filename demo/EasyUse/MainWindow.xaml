@@ -9,8 +9,13 @@
         mc:Ignorable="d"
         Title="Easy Use - Advanced WPF Grid Demo" Height="450" Width="900"
         WindowStartupLocation="CenterScreen"
-        Background="White">
+        Background="White"
+        x:Name="RootWindow">
     
+    <Window.Resources>
+        <local:BindingProxy x:Key="DataContextProxy" Data="{Binding}" />
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -19,75 +24,98 @@
 
         <TextBlock Text="Easy Use Demo" FontSize="20" FontWeight="Bold" Margin="10"/>
 
-        <av:AdvancedGrid Grid.Row="1" 
-                         ItemsSource="{Binding People}"
-                         SelectionMode="Extended"
-                         CanUserSort="True"
-                         CanUserFilter="True"
-                         CanUserReorderColumns="True"
-                         CanUserResizeColumns="True"
-                         Margin="10">
-            <av:AdvancedGrid.Columns>
-                <!-- Text Column -->
-                <col:TextColumn Header="Name" 
-                                Binding="Name" 
-                                Width="150"/>
-                
-                <!-- Double Column -->
-                <col:DoubleColumn Header="Age" 
-                                  Binding="Age" 
-                                  Width="60"
-                                  StringFormat="N0"/>
+        <TabControl Grid.Row="1" Margin="10">
+            <!-- Settings Tab -->
+            <TabItem Header="Settings">
+                <StackPanel Margin="20">
+                    <TextBlock Text="Salary Decimal Places:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                        <TextBlock Text="{Binding SalaryDecimalPlaces}" 
+                                   Width="50" FontSize="16" VerticalAlignment="Center" 
+                                   TextAlignment="Center" FontWeight="Bold"
+                                   Background="#DDDDDD" Padding="5"/>
+                        
+                        <StackPanel Orientation="Vertical" Margin="5,0,0,0">
+                            <Button Content="▲" Command="{Binding IncrementDecimalsCommand}" Width="30" Height="15" FontSize="8"/>
+                            <Button Content="▼" Command="{Binding DecrementDecimalsCommand}" Width="30" Height="15" FontSize="8"/>
+                        </StackPanel>
+                    </StackPanel>
+                    
+                    <TextBlock Text="Note: Use buttons to adjust decimal places (0-5)." FontStyle="Italic" Foreground="Gray"/>
+                </StackPanel>
+            </TabItem>
 
-                 <!-- Double Column with Currency -->
-                <col:DoubleColumn Header="Salary" 
-                                  Binding="Salary" 
-                                  Width="100"
-                                  StringFormat="C5"/>
+            <!-- Grid Tab -->
+            <TabItem Header="Grid">
+                <av:AdvancedGrid ItemsSource="{Binding People}"
+                                 SelectionMode="Extended"
+                                 CanUserSort="True"
+                                 CanUserFilter="True"
+                                 CanUserReorderColumns="True"
+                                 CanUserResizeColumns="True">
+                    <av:AdvancedGrid.Columns>
+                        <!-- Text Column -->
+                        <col:TextColumn Header="Name" 
+                                        Binding="Name" 
+                                        Width="150"/>
+                        
+                        <!-- Double Column -->
+                        <col:DoubleColumn Header="Age" 
+                                          Binding="Age" 
+                                          Width="60"
+                                          StringFormat="N0"/>
 
-                <!-- CheckBox Column -->
-                <col:CheckBoxColumn Header="Active" 
-                                    Binding="IsActive" 
-                                    Width="60"/>
+                        <!-- Double Column with Currency -->
+                        <col:DoubleColumn Header="Salary" 
+                                          Binding="Salary" 
+                                          Width="100"
+                                          StringFormat="{Binding Data.SalaryFormatString, Source={StaticResource DataContextProxy}}"/>
 
-                <!-- ComboBox Column -->
-                <col:ComboBoxColumn Header="Role" 
-                                    Binding="Role" 
-                                    ItemsSource="{Binding DataContext.Roles, RelativeSource={RelativeSource AncestorType=Window}}"
-                                    Width="120"/>
+                        <!-- CheckBox Column -->
+                        <col:CheckBoxColumn Header="Active" 
+                                            Binding="IsActive" 
+                                            Width="60"/>
 
-                <!-- Button Column -->
-                <col:ButtonColumn Header="Bio" 
-                                  ButtonContent="View"
-                                  Command="{Binding ShowBioCommand}"
-                                  Width="80"/>
+                        <!-- ComboBox Column -->
+                        <col:ComboBoxColumn Header="Role" 
+                                            Binding="Role" 
+                                            ItemsSource="{Binding DataContext.Roles, RelativeSource={RelativeSource AncestorType=Window}}"
+                                            Width="120"/>
 
-                <!-- Icon Button Column (Edit) -->
-                <col:IconButtonColumn Header="Edit"
-                                      IconData="{x:Static col:IconButtonColumn.EditIcon}"
-                                      Command="{Binding ApproveCommand}"
-                                      ToolTipText="Edit user"
-                                      Width="50"/>
+                        <!-- Button Column -->
+                        <col:ButtonColumn Header="Bio" 
+                                          ButtonContent="View"
+                                          Command="{Binding ShowBioCommand}"
+                                          Width="80"/>
 
-                <!-- Icon Button Column (Delete) -->
-                <col:IconButtonColumn Header="Delete"
-                                      IconData="{x:Static col:IconButtonColumn.DeleteIcon}"
-                                      Command="{Binding DeleteCommand}"
-                                      IconFill="Red"
-                                      IconHoverFill="DarkRed"
-                                      ToolTipText="Delete user"
-                                      Width="50"/>
+                        <!-- Icon Button Column (Edit) -->
+                        <col:IconButtonColumn Header="Edit"
+                                              IconData="{x:Static col:IconButtonColumn.EditIcon}"
+                                              Command="{Binding ApproveCommand}"
+                                              ToolTipText="Edit user"
+                                              Width="50"/>
 
-                <!-- Text Button Column -->
-                <col:TextButtonColumn Header="Status"
-                                      Binding="Name"
-                                      ButtonContent="Approve"
-                                      Command="{Binding ApproveCommand}"
-                                      ButtonPosition="Right"
-                                      ButtonWidth="70"
-                                      Width="180"/>
-                                      
-            </av:AdvancedGrid.Columns>
-        </av:AdvancedGrid>
+                        <!-- Icon Button Column (Delete) -->
+                        <col:IconButtonColumn Header="Delete"
+                                              IconData="{x:Static col:IconButtonColumn.DeleteIcon}"
+                                              Command="{Binding DeleteCommand}"
+                                              IconFill="Red"
+                                              IconHoverFill="DarkRed"
+                                              ToolTipText="Delete user"
+                                              Width="50"/>
+
+                        <!-- Text Button Column -->
+                        <col:TextButtonColumn Header="Status"
+                                              Binding="Name"
+                                              ButtonContent="Approve"
+                                              Command="{Binding ApproveCommand}"
+                                              ButtonPosition="Right"
+                                              ButtonWidth="70"
+                                              Width="180"/>
+                                              
+                    </av:AdvancedGrid.Columns>
+                </av:AdvancedGrid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

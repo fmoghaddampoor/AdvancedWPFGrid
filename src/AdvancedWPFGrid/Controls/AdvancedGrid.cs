@@ -269,6 +269,18 @@ public class AdvancedGrid : Control
         Unloaded += OnGridUnloaded;
         GotFocus += OnGridGotFocus;
         LostFocus += OnGridLostFocus;
+        DataContextChanged += OnDataContextChanged;
+    }
+
+    private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+        if (Columns != null)
+        {
+            foreach (var column in Columns)
+            {
+                column.DataContext = e.NewValue;
+            }
+        }
     }
 
     #endregion
@@ -395,6 +407,7 @@ public class AdvancedGrid : Control
                 foreach (var column in newColumns)
                 {
                     column.Grid = grid;
+                    column.DataContext = grid.DataContext;
                 }
             }
 
@@ -409,6 +422,7 @@ public class AdvancedGrid : Control
             foreach (GridColumnBase column in e.NewItems)
             {
                 column.Grid = this;
+                column.DataContext = this.DataContext;
             }
         }
 

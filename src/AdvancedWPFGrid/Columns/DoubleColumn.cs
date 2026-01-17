@@ -17,7 +17,15 @@ public class DoubleColumn : GridColumnBase
         nameof(StringFormat),
         typeof(string),
         typeof(DoubleColumn),
-        new FrameworkPropertyMetadata("N2"));
+        new FrameworkPropertyMetadata("N2", OnStringFormatChanged));
+
+    private static void OnStringFormatChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is DoubleColumn column)
+        {
+            column.Grid?.RefreshView();
+        }
+    }
 
     public static readonly DependencyProperty MinimumProperty = DependencyProperty.Register(
         nameof(Minimum),
