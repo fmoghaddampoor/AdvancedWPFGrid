@@ -178,25 +178,99 @@
                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                            TextTrimming="CharacterEllipsis" />
                                 
-                                <!-- Sort Indicator -->
-                                <Path x:Name="SortIndicator"
-                                      Grid.Column="1"
-                                      Width="8" Height="6"
-                                      Margin="4,0,0,0"
-                                      Fill="{StaticResource FluentTextSecondaryBrush}"
-                                      Visibility="Collapsed"
-                                      VerticalAlignment="Center"
-                                      Data="M0,0 L4,5 L8,0 Z" />
+                                <!-- Sort Button (High-Impact SVG) -->
+                                <Button x:Name="PART_SortButton"
+                                        Grid.Column="1"
+                                        Width="24" Height="24"
+                                        Margin="4,0,0,0"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        VerticalAlignment="Center">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="BtnBorder" Background="Transparent" CornerRadius="0">
+                                                <Path x:Name="SortIndicator"
+                                                      Data="M 6,12 L 14,4 L 22,12 M 6,16 L 14,24 L 22,16"
+                                                      Stroke="{StaticResource FluentAccentBrush}"
+                                                      StrokeThickness="2"
+                                                      StrokeStartLineCap="Round"
+                                                      StrokeEndLineCap="Round"
+                                                      StrokeLineJoin="Round"
+                                                      Stretch="Uniform"
+                                                      Width="14" Height="18"
+                                                      HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="SortIndicator" Property="Stroke" Value="#005A9E"/>
+                                                </Trigger>
+                                                <DataTrigger Binding="{Binding SortDirection, RelativeSource={RelativeSource AncestorType=controls:GridHeaderCell}}" Value="Ascending">
+                                                    <Setter TargetName="SortIndicator" Property="Data" Value="M 4,20 L 14,4 L 24,20" />
+                                                    <Setter TargetName="SortIndicator" Property="Stroke" Value="{StaticResource FluentAccentBrush}"/>
+                                                    <Setter TargetName="SortIndicator" Property="Fill" Value="{StaticResource FluentAccentBrush}"/>
+                                                    <Setter TargetName="SortIndicator" Property="StrokeThickness" Value="1"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding SortDirection, RelativeSource={RelativeSource AncestorType=controls:GridHeaderCell}}" Value="Descending">
+                                                    <Setter TargetName="SortIndicator" Property="Data" Value="M 4,8 L 14,24 L 24,8" />
+                                                    <Setter TargetName="SortIndicator" Property="Stroke" Value="{StaticResource FluentAccentBrush}"/>
+                                                    <Setter TargetName="SortIndicator" Property="Fill" Value="{StaticResource FluentAccentBrush}"/>
+                                                    <Setter TargetName="SortIndicator" Property="StrokeThickness" Value="1"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding CanSort, RelativeSource={RelativeSource AncestorType=controls:GridHeaderCell}}" Value="False">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
                                 
-                                <!-- Filter Indicator -->
-                                <Path x:Name="FilterIndicator"
-                                      Grid.Column="2"
-                                      Width="10" Height="10"
-                                      Margin="4,0,0,0"
-                                      Fill="{StaticResource FluentAccentBrush}"
-                                      Visibility="Collapsed"
-                                      VerticalAlignment="Center"
-                                      Data="M0,0 L10,0 L6,5 L6,10 L4,10 L4,5 Z" />
+                                <!-- Filter Button (High-Impact SVG) -->
+                                <Button x:Name="PART_FilterButton"
+                                        Grid.Column="2"
+                                        Width="24" Height="24"
+                                        Margin="4,0,0,0"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        VerticalAlignment="Center">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="BtnBorder" Background="Transparent" CornerRadius="0">
+                                                <Path x:Name="FilterIndicator"
+                                                      Data="M 4,4 L 24,4 L 16,14 L 16,24 L 12,20 L 12,14 Z"
+                                                      Stroke="{StaticResource FluentAccentBrush}"
+                                                      StrokeThickness="2"
+                                                      StrokeStartLineCap="Round"
+                                                      StrokeEndLineCap="Round"
+                                                      StrokeLineJoin="Round"
+                                                      Fill="Transparent"
+                                                      Width="16" Height="16"
+                                                      Stretch="Uniform"
+                                                      HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="FilterIndicator" Property="Stroke" Value="#005A9E"/>
+                                                </Trigger>
+                                                <DataTrigger Binding="{Binding IsFiltered, RelativeSource={RelativeSource AncestorType=controls:GridHeaderCell}}" Value="True">
+                                                    <Setter TargetName="FilterIndicator" Property="Fill" Value="{StaticResource FluentAccentBrush}"/>
+                                                    <Setter TargetName="FilterIndicator" Property="Stroke" Value="{StaticResource FluentAccentBrush}"/>
+                                                    <Setter TargetName="FilterIndicator" Property="StrokeThickness" Value="1"/>
+                                                </DataTrigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding CanFilter, RelativeSource={RelativeSource AncestorType=controls:GridHeaderCell}}" Value="False">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
                             </Grid>
                         </Border>
                         
@@ -231,17 +305,6 @@
                             <Setter TargetName="HeaderBorder" Property="Background" 
                                     Value="Transparent" />
                             <Setter TargetName="PART_ResizeGrip" Property="Opacity" Value="1" />
-                        </Trigger>
-                        <Trigger Property="SortDirection" Value="Ascending">
-                            <Setter TargetName="SortIndicator" Property="Visibility" Value="Visible" />
-                            <Setter TargetName="SortIndicator" Property="Data" Value="M0,5 L4,0 L8,5 Z" />
-                        </Trigger>
-                        <Trigger Property="SortDirection" Value="Descending">
-                            <Setter TargetName="SortIndicator" Property="Visibility" Value="Visible" />
-                            <Setter TargetName="SortIndicator" Property="Data" Value="M0,0 L4,5 L8,0 Z" />
-                        </Trigger>
-                        <Trigger Property="IsFiltered" Value="True">
-                            <Setter TargetName="FilterIndicator" Property="Visibility" Value="Visible" />
                         </Trigger>
                         <DataTrigger Binding="{Binding HasVerticalGridLines, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="False">
                             <Setter TargetName="HeaderBorder" Property="BorderThickness" Value="0,0,0,0" />

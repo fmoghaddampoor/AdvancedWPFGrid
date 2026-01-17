@@ -47,70 +47,90 @@
                                                    VerticalAlignment="Center"
                                                    TextTrimming="CharacterEllipsis"/>
 
-                                        <!-- Sort Button (Custom styling) -->
+                                        <!-- Sort Button (High-Impact SVG) -->
                                         <Button x:Name="PART_SortButton"
                                                 Grid.Column="1"
-                                                Width="16" Height="16"
+                                                Width="28" Height="28"
                                                 Margin="4,0,0,0"
                                                 Background="Transparent"
-                                                BorderThickness="0"
-                                                Opacity="0.4">
+                                                BorderThickness="0">
                                             <Button.Template>
                                                 <ControlTemplate TargetType="Button">
-                                                    <Path x:Name="SortArrow"
-                                                          Data="M 0 3 L 4 0 L 8 3 M 0 6 L 4 9 L 8 6"
-                                                          Fill="#888888"
-                                                          Stretch="Uniform"
-                                                          Width="10" Height="10"
-                                                          HorizontalAlignment="Center"
-                                                          VerticalAlignment="Center"/>
-                                                </ControlTemplate>
-                                            </Button.Template>
-                                            <Button.Style>
-                                                <Style TargetType="Button">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding SortDirection, RelativeSource={RelativeSource TemplatedParent}}" Value="Ascending">
-                                                            <Setter Property="Opacity" Value="1"/>
+                                                    <Border x:Name="BtnBorder" Background="Transparent" CornerRadius="0">
+                                                        <Path x:Name="SortArrow"
+                                                              Data="M 6,12 L 14,4 L 22,12 M 6,16 L 14,24 L 22,16"
+                                                              Stroke="#0078D4"
+                                                              StrokeThickness="2"
+                                                              StrokeStartLineCap="Round"
+                                                              StrokeEndLineCap="Round"
+                                                              StrokeLineJoin="Round"
+                                                              Stretch="Uniform"
+                                                              Width="16" Height="20"
+                                                              HorizontalAlignment="Center"
+                                                              VerticalAlignment="Center"/>
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter TargetName="SortArrow" Property="Stroke" Value="#005A9E"/>
+                                                        </Trigger>
+                                                        <DataTrigger Binding="{Binding SortDirection, RelativeSource={RelativeSource AncestorType=av:GridHeaderCell}}" Value="Ascending">
+                                                            <Setter TargetName="SortArrow" Property="Data" Value="M 4,20 L 14,4 L 24,20" />
+                                                            <Setter TargetName="SortArrow" Property="Stroke" Value="#0078D4"/>
+                                                            <Setter TargetName="SortArrow" Property="Fill" Value="#0078D4"/>
+                                                            <Setter TargetName="SortArrow" Property="StrokeThickness" Value="1"/>
                                                         </DataTrigger>
-                                                        <DataTrigger Binding="{Binding SortDirection, RelativeSource={RelativeSource TemplatedParent}}" Value="Descending">
-                                                            <Setter Property="Opacity" Value="1"/>
+                                                        <DataTrigger Binding="{Binding SortDirection, RelativeSource={RelativeSource AncestorType=av:GridHeaderCell}}" Value="Descending">
+                                                            <Setter TargetName="SortArrow" Property="Data" Value="M 4,8 L 14,24 L 24,8" />
+                                                            <Setter TargetName="SortArrow" Property="Stroke" Value="#0078D4"/>
+                                                            <Setter TargetName="SortArrow" Property="Fill" Value="#0078D4"/>
+                                                            <Setter TargetName="SortArrow" Property="StrokeThickness" Value="1"/>
                                                         </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Button.Style>
-                                        </Button>
-
-                                        <!-- Filter Button (Custom styling) -->
-                                        <Button x:Name="PART_FilterButton"
-                                                Grid.Column="2"
-                                                Width="16" Height="16"
-                                                Margin="4,0,0,0"
-                                                Background="Transparent"
-                                                BorderThickness="0"
-                                                Opacity="0.4">
-                                            <Button.Template>
-                                                <ControlTemplate TargetType="Button">
-                                                    <Path x:Name="FilterIcon"
-                                                          Data="M 1,1 L 9,1 L 5,6 L 5,9 L 3,9 L 3,6 Z"
-                                                          Fill="#888888"
-                                                          Stroke="#888888"
-                                                          StrokeThickness="1"
-                                                          HorizontalAlignment="Center"
-                                                          VerticalAlignment="Center"/>
-                                                </ControlTemplate>
-                                            </Button.Template>
-                                            <Button.Style>
-                                                <Style TargetType="Button">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsFiltered, RelativeSource={RelativeSource TemplatedParent}}" Value="True">
-                                                            <Setter Property="Opacity" Value="1"/>
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding CanFilter, RelativeSource={RelativeSource TemplatedParent}}" Value="False">
+                                                        <DataTrigger Binding="{Binding CanSort, RelativeSource={RelativeSource AncestorType=av:GridHeaderCell}}" Value="False">
                                                             <Setter Property="Visibility" Value="Collapsed"/>
                                                         </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Button.Style>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+
+                                        <!-- Filter Button (High-Impact SVG) -->
+                                        <Button x:Name="PART_FilterButton"
+                                                Grid.Column="2"
+                                                Width="28" Height="28"
+                                                Margin="4,0,0,0"
+                                                Background="Transparent"
+                                                BorderThickness="0">
+                                            <Button.Template>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border x:Name="BtnBorder" Background="Transparent" CornerRadius="0">
+                                                        <Path x:Name="FilterIcon"
+                                                              Data="M 4,4 L 24,4 L 16,14 L 16,24 L 12,20 L 12,14 Z"
+                                                              Stroke="#0078D4"
+                                                              StrokeThickness="2"
+                                                              StrokeStartLineCap="Round"
+                                                              StrokeEndLineCap="Round"
+                                                              StrokeLineJoin="Round"
+                                                              Fill="Transparent"
+                                                              Width="18" Height="18"
+                                                              Stretch="Uniform"
+                                                              HorizontalAlignment="Center"
+                                                              VerticalAlignment="Center"/>
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter TargetName="FilterIcon" Property="Stroke" Value="#005A9E"/>
+                                                        </Trigger>
+                                                        <DataTrigger Binding="{Binding IsFiltered, RelativeSource={RelativeSource AncestorType=av:GridHeaderCell}}" Value="True">
+                                                            <Setter TargetName="FilterIcon" Property="Fill" Value="#0078D4"/>
+                                                            <Setter TargetName="FilterIcon" Property="Stroke" Value="#0078D4"/>
+                                                            <Setter TargetName="FilterIcon" Property="StrokeThickness" Value="1"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding CanFilter, RelativeSource={RelativeSource AncestorType=av:GridHeaderCell}}" Value="False">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Button.Template>
                                         </Button>
                                     </Grid>
                                 </Border>
@@ -282,12 +302,11 @@
                         <col:IconButtonColumn Header="Delete"
                                               IconData="{x:Static col:IconButtonColumn.DeleteIcon}"
                                               Command="{Binding DeleteCommand}"
-                                              IconFill="Red"
-                                              IconHoverFill="DarkRed"
                                               ToolTipText="Delete user"
-                                              Width="60"
-                                              CanSort="False"
+                                              Width="50"
+                                              CanSort="False" 
                                               CanFilter="False"/>
+
 
                         <!-- Text Button Column -->
                         <col:TextButtonColumn Header="Status"

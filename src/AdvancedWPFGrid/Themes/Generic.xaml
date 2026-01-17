@@ -128,69 +128,89 @@
                                            VerticalAlignment="Center"
                                            TextTrimming="CharacterEllipsis"/>
 
-                                <!-- Sort Button -->
+                                <!-- Sort Button (High-Impact SVG) -->
                                 <Button x:Name="PART_SortButton"
                                         Grid.Column="1"
-                                        Width="16" Height="16"
+                                        Width="24" Height="24"
                                         Margin="2,0,0,0"
-                                        Background="Yellow"
+                                        Background="Transparent"
                                         BorderThickness="0"
-                                        Tag="{Binding SortDirection, RelativeSource={RelativeSource TemplatedParent}}">
+                                        Tag="{Binding RelativeSource={RelativeSource TemplatedParent}}">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
-                                            <Border Background="{TemplateBinding Background}" CornerRadius="2">
+                                            <Border x:Name="BtnBorder" Background="Transparent" CornerRadius="0">
                                                 <Path x:Name="SortArrow"
-                                                      Data="M 0 4 L 4 0 L 8 4 M 0 8 L 4 12 L 8 8"
-                                                      Fill="Red"
+                                                      Data="M 6,12 L 14,4 L 22,12 M 6,16 L 14,24 L 22,16"
+                                                      Stroke="#0078D4"
+                                                      StrokeThickness="2"
+                                                      StrokeStartLineCap="Round"
+                                                      StrokeEndLineCap="Round"
+                                                      StrokeLineJoin="Round"
                                                       Stretch="Uniform"
-                                                      Width="8" Height="12"
+                                                      Width="14" Height="18"
                                                       HorizontalAlignment="Center"
                                                       VerticalAlignment="Center"/>
                                             </Border>
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter Property="Background" Value="Orange"/>
+                                                    <Setter TargetName="SortArrow" Property="Stroke" Value="#005A9E"/>
                                                 </Trigger>
-                                                <Trigger Property="Tag" Value="Ascending">
-                                                    <Setter TargetName="SortArrow" Property="Data" Value="M 0 5 L 4 0 L 8 5" />
-                                                    <Setter TargetName="SortArrow" Property="Fill" Value="Black" />
-                                                </Trigger>
-                                                <Trigger Property="Tag" Value="Descending">
-                                                    <Setter TargetName="SortArrow" Property="Data" Value="M 0 0 L 4 5 L 8 0" />
-                                                    <Setter TargetName="SortArrow" Property="Fill" Value="Black" />
-                                                </Trigger>
+                                                <DataTrigger Binding="{Binding Tag.SortDirection, RelativeSource={RelativeSource Self}}" Value="Ascending">
+                                                    <Setter TargetName="SortArrow" Property="Data" Value="M 4,20 L 14,4 L 24,20" />
+                                                    <Setter TargetName="SortArrow" Property="Stroke" Value="#0078D4"/>
+                                                    <Setter TargetName="SortArrow" Property="Fill" Value="#0078D4"/>
+                                                    <Setter TargetName="SortArrow" Property="StrokeThickness" Value="1"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Tag.SortDirection, RelativeSource={RelativeSource Self}}" Value="Descending">
+                                                    <Setter TargetName="SortArrow" Property="Data" Value="M 4,8 L 14,24 L 24,8" />
+                                                    <Setter TargetName="SortArrow" Property="Stroke" Value="#0078D4"/>
+                                                    <Setter TargetName="SortArrow" Property="Fill" Value="#0078D4"/>
+                                                    <Setter TargetName="SortArrow" Property="StrokeThickness" Value="1"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Tag.CanSort, RelativeSource={RelativeSource Self}}" Value="False">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>
                                     </Button.Template>
                                 </Button>
 
-                                <!-- Filter Button -->
+                                <!-- Filter Button (High-Impact SVG) -->
                                 <Button x:Name="PART_FilterButton"
                                         Grid.Column="2"
-                                        Width="16" Height="16"
+                                        Width="24" Height="24"
                                         Margin="2,0,0,0"
                                         Background="Transparent"
                                         BorderThickness="0"
-                                        Tag="{Binding IsFiltered, RelativeSource={RelativeSource TemplatedParent}}">
+                                        Tag="{Binding RelativeSource={RelativeSource TemplatedParent}}">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
-                                            <Border Background="{TemplateBinding Background}" CornerRadius="2">
+                                            <Border x:Name="BtnBorder" Background="Transparent" CornerRadius="0">
                                                 <Path x:Name="FilterIcon"
-                                                      Data="M 1,1 L 9,1 L 5,6 L 5,9 L 3,9 L 3,6 Z"
-                                                      Fill="#888888"
-                                                      Stroke="#888888"
-                                                      StrokeThickness="1"
+                                                      Data="M 4,4 L 24,4 L 16,14 L 16,24 L 12,20 L 12,14 Z"
+                                                      Stroke="#0078D4"
+                                                      StrokeThickness="2"
+                                                      StrokeStartLineCap="Round"
+                                                      StrokeEndLineCap="Round"
+                                                      StrokeLineJoin="Round"
+                                                      Fill="Transparent"
+                                                      Width="16" Height="16"
+                                                      Stretch="Uniform"
                                                       HorizontalAlignment="Center"
                                                       VerticalAlignment="Center"/>
                                             </Border>
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter Property="Background" Value="#E0E0E0"/>
+                                                    <Setter TargetName="FilterIcon" Property="Stroke" Value="#005A9E"/>
                                                 </Trigger>
-                                                <Trigger Property="Tag" Value="True">
+                                                <DataTrigger Binding="{Binding Tag.IsFiltered, RelativeSource={RelativeSource Self}}" Value="True">
                                                     <Setter TargetName="FilterIcon" Property="Fill" Value="#0078D4"/>
                                                     <Setter TargetName="FilterIcon" Property="Stroke" Value="#0078D4"/>
-                                                </Trigger>
+                                                    <Setter TargetName="FilterIcon" Property="StrokeThickness" Value="1"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Tag.CanFilter, RelativeSource={RelativeSource Self}}" Value="False">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>
                                     </Button.Template>
