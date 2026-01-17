@@ -159,7 +159,7 @@ public class VirtualizingGridPanel : VirtualizingPanel, IScrollInfo
         return result;
     }
 
-    private void AddGroupedItems(IList<GridGroupItem> groups, List<object> result)
+    private void AddGroupedItems(IReadOnlyList<GridGroupItem> groups, List<object> result)
     {
         foreach (var group in groups)
         {
