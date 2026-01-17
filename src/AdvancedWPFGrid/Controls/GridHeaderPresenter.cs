@@ -128,7 +128,29 @@ public class GridHeaderCell : ContentControl
         nameof(Column),
         typeof(GridColumnBase),
         typeof(GridHeaderCell),
-        new FrameworkPropertyMetadata(null));
+        new FrameworkPropertyMetadata(null, OnColumnChanged));
+
+    public static readonly DependencyProperty CanSortProperty = DependencyProperty.Register(
+        nameof(CanSort),
+        typeof(bool),
+        typeof(GridHeaderCell),
+        new FrameworkPropertyMetadata(true));
+
+    public static readonly DependencyProperty CanFilterProperty = DependencyProperty.Register(
+        nameof(CanFilter),
+        typeof(bool),
+        typeof(GridHeaderCell),
+        new FrameworkPropertyMetadata(true));
+
+    private static void OnColumnChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is GridHeaderCell cell && e.NewValue is GridColumnBase column)
+        {
+            cell.CanSort = column.CanSort;
+            cell.CanFilter = column.CanFilter;
+            cell.UpdateSortIndicator();
+        }
+    }
 
     #endregion
 
@@ -152,9 +174,23 @@ public class GridHeaderCell : ContentControl
         set => SetValue(ColumnProperty, value);
     }
 
+    public bool CanSort
+    {
+        get => (bool)GetValue(CanSortProperty);
+        set => SetValue(CanSortProperty, value);
+    }
+
+    public bool CanFilter
+    {
+        get => (bool)GetValue(CanFilterProperty);
+        set => SetValue(CanFilterProperty, value);
+    }
+
     internal AdvancedGrid? Grid { get; set; }
 
     private Thumb? _resizeGrip;
+    private Button? _sortButton;
+    private Button? _filterButton;
 
     #endregion
 
@@ -165,10 +201,21 @@ public class GridHeaderCell : ContentControl
         base.OnApplyTemplate();
 
         _resizeGrip = GetTemplateChild("PART_ResizeGrip") as Thumb;
-
         if (_resizeGrip != null)
         {
             _resizeGrip.DragDelta += OnResizeGripDragDelta;
+        }
+
+        _sortButton = GetTemplateChild("PART_SortButton") as Button;
+        if (_sortButton != null)
+        {
+            _sortButton.Click += OnSortButtonClick;
+        }
+
+        _filterButton = GetTemplateChild("PART_FilterButton") as Button;
+        if (_filterButton != null)
+        {
+            _filterButton.Click += OnFilterButtonClick;
         }
 
         // Update sort direction
@@ -199,10 +246,8 @@ public class GridHeaderCell : ContentControl
         }
     }
 
-    protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+    private void OnSortButtonClick(object sender, RoutedEventArgs e)
     {
-        base.OnMouseLeftButtonDown(e);
-
         if (Column != null && Column.CanSort && Grid?.CanUserSort == true)
         {
             Grid.SortManager.ToggleSort(Column.Binding);
@@ -210,13 +255,10 @@ public class GridHeaderCell : ContentControl
         }
     }
 
-    protected override void OnMouseRightButtonDown(MouseButtonEventArgs e)
+    private void OnFilterButtonClick(object sender, RoutedEventArgs e)
     {
-        base.OnMouseRightButtonDown(e);
-
         if (Column != null && Column.CanFilter && Grid?.CanUserFilter == true)
         {
-            // Show filter popup
             ShowFilterPopup();
         }
     }
@@ -226,7 +268,7 @@ public class GridHeaderCell : ContentControl
         // Create a simple filter popup
         var popup = new Popup
         {
-            PlacementTarget = this,
+            PlacementTarget = _filterButton ?? (UIElement)this,
             Placement = PlacementMode.Bottom,
             StaysOpen = false,
             AllowsTransparency = true
