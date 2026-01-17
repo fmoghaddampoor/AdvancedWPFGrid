@@ -23,6 +23,12 @@ public abstract class GridColumnBase : DependencyObject
         typeof(GridColumnBase),
         new FrameworkPropertyMetadata(null));
 
+    public static readonly DependencyProperty HeaderToolTipProperty = DependencyProperty.Register(
+        nameof(HeaderToolTip),
+        typeof(object),
+        typeof(GridColumnBase),
+        new FrameworkPropertyMetadata(null));
+
     public static readonly DependencyProperty WidthProperty = DependencyProperty.Register(
         nameof(Width),
         typeof(double),
@@ -91,6 +97,12 @@ public abstract class GridColumnBase : DependencyObject
     {
         get => (string?)GetValue(BindingProperty);
         set => SetValue(BindingProperty, value);
+    }
+
+    public object? HeaderToolTip
+    {
+        get => GetValue(HeaderToolTipProperty);
+        set => SetValue(HeaderToolTipProperty, value);
     }
 
     public double Width

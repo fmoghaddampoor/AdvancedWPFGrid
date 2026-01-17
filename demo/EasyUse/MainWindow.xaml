@@ -266,11 +266,13 @@
                         <!-- Text Column -->
                         <col:TextColumn Header="Name" 
                                         Binding="Name" 
+                                        HeaderToolTip="Full name of the person"
                                         Width="150"/>
                         
                         <!-- Double Column -->
                         <col:DoubleColumn Header="Age" 
                                           Binding="Age" 
+                                          HeaderToolTip="Current age in years"
                                           Width="60"
                                           StringFormat="N0"/>
 
@@ -282,6 +284,7 @@
                         <!-- Double Column with Currency -->
                         <col:DoubleColumn Header="Salary" 
                                           Binding="Salary" 
+                                          HeaderToolTip="Annual base salary in USD"
                                           Width="100"/>
 
                         <!-- CheckBox Column -->

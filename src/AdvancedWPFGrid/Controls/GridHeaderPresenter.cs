@@ -49,7 +49,7 @@ public class GridHeaderPresenter : Panel
                 Column = column,
                 Grid = Grid,
                 Width = column.ActualWidth,
-                ToolTip = column.Header
+                ToolTip = column.HeaderToolTip ?? column.Header
             };
 
             Children.Add(headerCell);
