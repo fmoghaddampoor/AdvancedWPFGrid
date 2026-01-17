@@ -43,7 +43,7 @@
                 <col:DoubleColumn Header="Salary" 
                                   Binding="Salary" 
                                   Width="100"
-                                  StringFormat="C0"/>
+                                  StringFormat="C5"/>
 
                 <!-- CheckBox Column -->
                 <col:CheckBoxColumn Header="Active" 
