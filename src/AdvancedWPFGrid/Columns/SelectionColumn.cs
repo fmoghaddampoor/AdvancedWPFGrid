@@ -18,6 +18,8 @@ public class SelectionColumn : GridColumnBase
         CanFilter = false;
     }
 
+    public override bool IsSelectionColumn => true;
+
     public override FrameworkElement GenerateElement(GridCell cell, object dataItem)
     {
         var checkBox = new CheckBox

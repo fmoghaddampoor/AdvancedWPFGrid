@@ -161,6 +161,8 @@ public abstract class GridColumnBase : DependencyObject
 
     public double ActualWidth => Math.Max(MinWidth, Math.Min(MaxWidth, Width));
 
+    public virtual bool IsSelectionColumn => false;
+
     internal AdvancedGrid? Grid { get; set; }
 
     #endregion

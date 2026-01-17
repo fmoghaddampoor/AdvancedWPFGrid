@@ -155,11 +155,10 @@ public class GridRow : Control
 
         if (Grid != null && DataItem != null)
         {
-            var addToSelection = Grid.SelectionMode != GridSelectionMode.Single &&
-                                 (Keyboard.Modifiers.HasFlag(ModifierKeys.Control) ||
-                                  Keyboard.Modifiers.HasFlag(ModifierKeys.Shift));
+            var isControl = Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
+            var isShift = Keyboard.Modifiers.HasFlag(ModifierKeys.Shift);
 
-            Grid.SelectItem(DataItem, addToSelection);
+            Grid.SelectItem(DataItem, isControl, isShift);
             Focus();
             e.Handled = true;
         }

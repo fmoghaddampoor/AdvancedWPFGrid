@@ -402,6 +402,7 @@ public class AdvancedGrid : Control
     internal ScrollViewer? ScrollViewer { get; private set; }
 
     private readonly ObservableCollection<object> _selectedItems = new ObservableCollection<object>();
+    private object? _selectionAnchor;
 
     #endregion
 
@@ -664,20 +665,64 @@ public class AdvancedGrid : Control
 
     #region Selection
 
-    public void SelectItem(object item, bool addToSelection = false)
+    public void SelectItem(object item, bool isControlPressed, bool isShiftPressed)
     {
-        if (!addToSelection || SelectionMode == GridSelectionMode.Single)
-        {
-            _selectedItems.Clear();
-        }
+        if (CollectionView == null) return;
 
-        if (!_selectedItems.Contains(item))
+        if (isShiftPressed && _selectionAnchor != null && SelectionMode != GridSelectionMode.Single)
         {
+            // Range Selection
+            var items = CollectionView.Cast<object>().ToList();
+            var start = items.IndexOf(_selectionAnchor);
+            var end = items.IndexOf(item);
+
+            if (start >= 0 && end >= 0)
+            {
+                if (!isControlPressed)
+                {
+                    _selectedItems.Clear();
+                }
+
+                var from = Math.Min(start, end);
+                var to = Math.Max(start, end);
+
+                for (int i = from; i <= to; i++)
+                {
+                    if (!_selectedItems.Contains(items[i]))
+                    {
+                        _selectedItems.Add(items[i]);
+                    }
+                }
+            }
+        }
+        else if (isControlPressed && SelectionMode != GridSelectionMode.Single)
+        {
+            // Toggle Selection
+            if (_selectedItems.Contains(item))
+            {
+                _selectedItems.Remove(item);
+            }
+            else
+            {
+                _selectedItems.Add(item);
+            }
+            _selectionAnchor = item;
+        }
+        else
+        {
+            // Single Selection
+            _selectedItems.Clear();
             _selectedItems.Add(item);
+            _selectionAnchor = item;
         }
 
         SelectedItem = item;
         ItemsHost?.InvalidateVisual();
+    }
+
+    public void SelectItem(object item, bool addToSelection = false)
+    {
+        SelectItem(item, addToSelection, false);
     }
 
     public void DeselectItem(object item)
@@ -889,12 +934,15 @@ public class AdvancedGrid : Control
         var items = CollectionView.Cast<object>().ToList();
         var currentIndex = SelectedItem != null ? items.IndexOf(SelectedItem) : -1;
 
+        var isControl = Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
+        var isShift = Keyboard.Modifiers.HasFlag(ModifierKeys.Shift);
+
         switch (e.Key)
         {
             case Key.Up:
                 if (currentIndex > 0)
                 {
-                    SelectItem(items[currentIndex - 1], Keyboard.Modifiers.HasFlag(ModifierKeys.Shift));
+                    SelectItem(items[currentIndex - 1], isControl, isShift);
                     ScrollIntoView(items[currentIndex - 1]);
                 }
                 e.Handled = true;
@@ -904,7 +952,7 @@ public class AdvancedGrid : Control
                 if (currentIndex < items.Count - 1)
                 {
                     var newIndex = currentIndex < 0 ? 0 : currentIndex + 1;
-                    SelectItem(items[newIndex], Keyboard.Modifiers.HasFlag(ModifierKeys.Shift));
+                    SelectItem(items[newIndex], isControl, isShift);
                     ScrollIntoView(items[newIndex]);
                 }
                 e.Handled = true;
@@ -913,7 +961,7 @@ public class AdvancedGrid : Control
             case Key.Home:
                 if (items.Count > 0)
                 {
-                    SelectItem(items[0], Keyboard.Modifiers.HasFlag(ModifierKeys.Shift));
+                    SelectItem(items[0], isControl, isShift);
                     ScrollIntoView(items[0]);
                 }
                 e.Handled = true;
@@ -922,7 +970,7 @@ public class AdvancedGrid : Control
             case Key.End:
                 if (items.Count > 0)
                 {
-                    SelectItem(items[^1], Keyboard.Modifiers.HasFlag(ModifierKeys.Shift));
+                    SelectItem(items[^1], isControl, isShift);
                     ScrollIntoView(items[^1]);
                 }
                 e.Handled = true;
@@ -933,7 +981,7 @@ public class AdvancedGrid : Control
                 {
                     var pageSize = (int)(ScrollViewer.ViewportHeight / RowHeight);
                     var newIndex = Math.Max(0, currentIndex - pageSize);
-                    SelectItem(items[newIndex], Keyboard.Modifiers.HasFlag(ModifierKeys.Shift));
+                    SelectItem(items[newIndex], isControl, isShift);
                     ScrollIntoView(items[newIndex]);
                 }
                 e.Handled = true;
@@ -944,7 +992,7 @@ public class AdvancedGrid : Control
                 {
                     var pageSize = (int)(ScrollViewer.ViewportHeight / RowHeight);
                     var newIndex = Math.Min(items.Count - 1, currentIndex + pageSize);
-                    SelectItem(items[newIndex], Keyboard.Modifiers.HasFlag(ModifierKeys.Shift));
+                    SelectItem(items[newIndex], isControl, isShift);
                     ScrollIntoView(items[newIndex]);
                 }
                 e.Handled = true;
