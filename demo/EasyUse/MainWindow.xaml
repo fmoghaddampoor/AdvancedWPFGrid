@@ -24,6 +24,7 @@
             <Setter Property="MinHeight" Value="{Binding HeaderHeight, RelativeSource={RelativeSource AncestorType=av:AdvancedGrid}}" />
             <Setter Property="Background" Value="#F7F7F7" />
             <Setter Property="Foreground" Value="Black" />
+            <Setter Property="Cursor" Value="Arrow" />
             <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type av:GridHeaderCell}">
@@ -209,6 +210,11 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CanUserReorderColumns, RelativeSource={RelativeSource AncestorType=av:AdvancedGrid}}" Value="True">
+                    <Setter Property="Cursor" Value="Hand" />
+                </DataTrigger>
+            </Style.Triggers>
         </Style>
     </Window.Resources>
 
