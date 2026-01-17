@@ -674,6 +674,18 @@ public class AdvancedGrid : Control
         {
             panel.ClearRealizedRows();
         }
+        
+        // Refresh header sort/filter indicators
+        if (HeaderPresenter != null)
+        {
+            foreach (UIElement child in HeaderPresenter.Children)
+            {
+                if (child is GridHeaderCell cell)
+                {
+                    cell.UpdateSortIndicator();
+                }
+            }
+        }
 
         ItemsHost?.InvalidateMeasure();
         ItemsHost?.InvalidateVisual();

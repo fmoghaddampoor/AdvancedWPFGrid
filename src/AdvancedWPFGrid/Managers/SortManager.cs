@@ -1,5 +1,10 @@
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Windows.Data;
 using AdvancedWPFGrid.Controls;
+using AdvancedWPFGrid.Data;
 
 namespace AdvancedWPFGrid.Managers;
 
@@ -123,20 +128,81 @@ public class SortManager
     /// </summary>
     public void ApplySorting()
     {
-        if (_grid.CollectionView == null) return;
-
-        using (_grid.CollectionView.DeferRefresh())
+        if (_grid.CollectionView is ListCollectionView lcv)
         {
-            _grid.CollectionView.SortDescriptions.Clear();
-
-            foreach (var sort in _sortDescriptors)
+            if (_sortDescriptors.Count == 0)
             {
-                _grid.CollectionView.SortDescriptions.Add(
-                    new SortDescription(sort.PropertyName, sort.Direction));
+                lcv.CustomSort = null;
+                lcv.SortDescriptions.Clear();
+            }
+            else
+            {
+                // For simplicity, we'll use CustomSort if any string columns are involved, 
+                // but standard SortDescriptions are better for simple types.
+                // However, CustomSort overrides SortDescriptions.
+                
+                var firstSort = _sortDescriptors[0];
+                var firstItem = lcv.Cast<object>().FirstOrDefault();
+                Type? propertyType = null;
+                
+                if (firstItem != null)
+                {
+                    propertyType = firstItem.GetType().GetProperty(firstSort.PropertyName)?.PropertyType;
+                }
+                
+                if (propertyType == typeof(string))
+                {
+                    lcv.CustomSort = new PropertyNaturalComparer(firstSort.PropertyName, firstSort.Direction == ListSortDirection.Ascending);
+                }
+                else
+                {
+                    lcv.CustomSort = null; // Use standard sorting
+                    lcv.SortDescriptions.Clear();
+                    foreach (var sort in _sortDescriptors)
+                    {
+                        lcv.SortDescriptions.Add(new SortDescription(sort.PropertyName, sort.Direction));
+                    }
+                }
+            }
+        }
+        else if (_grid.CollectionView != null)
+        {
+            using (_grid.CollectionView.DeferRefresh())
+            {
+                _grid.CollectionView.SortDescriptions.Clear();
+                foreach (var sort in _sortDescriptors)
+                {
+                    _grid.CollectionView.SortDescriptions.Add(
+                        new SortDescription(sort.PropertyName, sort.Direction));
+                }
             }
         }
 
         _grid.RefreshView();
+    }
+}
+
+internal class PropertyNaturalComparer : IComparer
+{
+    private readonly string _propertyName;
+    private readonly bool _ascending;
+    private readonly NaturalStringComparer _comparer;
+
+    public PropertyNaturalComparer(string propertyName, bool ascending)
+    {
+        _propertyName = propertyName;
+        _ascending = ascending;
+        _comparer = new NaturalStringComparer(ascending);
+    }
+
+    public int Compare(object? x, object? y)
+    {
+        if (x == null || y == null) return 0;
+        
+        var v1 = x.GetType().GetProperty(_propertyName)?.GetValue(x);
+        var v2 = y.GetType().GetProperty(_propertyName)?.GetValue(y);
+        
+        return _comparer.Compare(v1, v2);
     }
 }
 
