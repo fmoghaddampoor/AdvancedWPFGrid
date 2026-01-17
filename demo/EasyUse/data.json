@@ -1,710 +1,810 @@
-﻿{
-    "People":  [
-                   {
-                       "Role":  "User",
-                       "Name":  "Person 1",
-                       "Age":  33,
-                       "Salary":  37500.66666,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Manager",
-                       "Name":  "Person 2",
-                       "Age":  23,
-                       "Salary":  57500.10101,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Guest",
-                       "Name":  "Person 3",
-                       "Age":  20,
-                       "Salary":  30000.12345,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Guest",
-                       "Name":  "Person 4",
-                       "Age":  29,
-                       "Salary":  80000.00001,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 5",
-                       "Age":  44,
-                       "Salary":  65000.11223,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Manager",
-                       "Name":  "Person 6",
-                       "Age":  24,
-                       "Salary":  57500.10101,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Manager",
-                       "Name":  "Person 7",
-                       "Age":  35,
-                       "Salary":  57500.10101,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Manager",
-                       "Name":  "Person 8",
-                       "Age":  33,
-                       "Salary":  57500.10101,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Manager",
-                       "Name":  "Person 9",
-                       "Age":  23,
-                       "Salary":  70000.55667,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Guest",
-                       "Name":  "Person 10",
-                       "Age":  25,
-                       "Salary":  45000.11111,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Guest",
-                       "Name":  "Person 11",
-                       "Age":  31,
-                       "Salary":  72500.77889,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Manager",
-                       "Name":  "Person 12",
-                       "Age":  24,
-                       "Salary":  70000.55667,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Manager",
-                       "Name":  "Person 13",
-                       "Age":  35,
-                       "Salary":  57500.10101,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "User",
-                       "Name":  "Person 14",
-                       "Age":  24,
-                       "Salary":  52500.99999,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Guest",
-                       "Name":  "Person 15",
-                       "Age":  20,
-                       "Salary":  30000.12345,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 16",
-                       "Age":  24,
-                       "Salary":  50000.22222,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 17",
-                       "Age":  40,
-                       "Salary":  50000.22222,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "User",
-                       "Name":  "Person 18",
-                       "Age":  22,
-                       "Salary":  60000.44444,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "User",
-                       "Name":  "Person 19",
-                       "Age":  41,
-                       "Salary":  47500.88888,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Manager",
-                       "Name":  "Person 20",
-                       "Age":  24,
-                       "Salary":  57500.10101,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "User",
-                       "Name":  "Person 21",
-                       "Age":  44,
-                       "Salary":  80000.00001,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 22",
-                       "Age":  28,
-                       "Salary":  70000.55667,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 23",
-                       "Age":  23,
-                       "Salary":  67500.33445,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 24",
-                       "Age":  28,
-                       "Salary":  40000.98765,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Guest",
-                       "Name":  "Person 25",
-                       "Age":  40,
-                       "Salary":  62500.20202,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 26",
-                       "Age":  41,
-                       "Salary":  60000.44444,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 27",
-                       "Age":  41,
-                       "Salary":  60000.44444,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "User",
-                       "Name":  "Person 28",
-                       "Age":  41,
-                       "Salary":  47500.88888,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Manager",
-                       "Name":  "Person 29",
-                       "Age":  24,
-                       "Salary":  70000.55667,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Manager",
-                       "Name":  "Person 30",
-                       "Age":  25,
-                       "Salary":  65000.11223,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 31",
-                       "Age":  35,
-                       "Salary":  30000.12345,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Guest",
-                       "Name":  "Person 32",
-                       "Age":  28,
-                       "Salary":  50000.22222,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Guest",
-                       "Name":  "Person 33",
-                       "Age":  37,
-                       "Salary":  50000.22222,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 34",
-                       "Age":  44,
-                       "Salary":  57500.10101,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Manager",
-                       "Name":  "Person 35",
-                       "Age":  35,
-                       "Salary":  57500.10101,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Manager",
-                       "Name":  "Person 36",
-                       "Age":  42,
-                       "Salary":  80000.00001,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 37",
-                       "Age":  37,
-                       "Salary":  62500.20202,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "User",
-                       "Name":  "Person 38",
-                       "Age":  42,
-                       "Salary":  67500.33445,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 39",
-                       "Age":  36,
-                       "Salary":  35000.54321,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Guest",
-                       "Name":  "Person 40",
-                       "Age":  42,
-                       "Salary":  52500.99999,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "User",
-                       "Name":  "Person 41",
-                       "Age":  30,
-                       "Salary":  37500.66666,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Guest",
-                       "Name":  "Person 42",
-                       "Age":  29,
-                       "Salary":  80000.00001,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Manager",
-                       "Name":  "Person 43",
-                       "Age":  31,
-                       "Salary":  70000.55667,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "User",
-                       "Name":  "Person 44",
-                       "Age":  41,
-                       "Salary":  47500.88888,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Guest",
-                       "Name":  "Person 45",
-                       "Age":  42,
-                       "Salary":  67500.33445,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Manager",
-                       "Name":  "Person 46",
-                       "Age":  25,
-                       "Salary":  65000.11223,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "User",
-                       "Name":  "Person 47",
-                       "Age":  26,
-                       "Salary":  80000.00001,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Manager",
-                       "Name":  "Person 48",
-                       "Age":  42,
-                       "Salary":  80000.00001,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "User",
-                       "Name":  "Person 49",
-                       "Age":  26,
-                       "Salary":  45000.11111,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "User",
-                       "Name":  "Person 50",
-                       "Age":  35,
-                       "Salary":  35000.54321,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 51",
-                       "Age":  29,
-                       "Salary":  35000.54321,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Manager",
-                       "Name":  "Person 52",
-                       "Age":  33,
-                       "Salary":  60000.44444,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 53",
-                       "Age":  24,
-                       "Salary":  50000.22222,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Guest",
-                       "Name":  "Person 54",
-                       "Age":  30,
-                       "Salary":  37500.66666,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 55",
-                       "Age":  41,
-                       "Salary":  60000.44444,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "User",
-                       "Name":  "Person 56",
-                       "Age":  26,
-                       "Salary":  45000.11111,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "User",
-                       "Name":  "Person 57",
-                       "Age":  36,
-                       "Salary":  52500.99999,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 58",
-                       "Age":  37,
-                       "Salary":  62500.20202,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "User",
-                       "Name":  "Person 59",
-                       "Age":  26,
-                       "Salary":  52500.99999,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Manager",
-                       "Name":  "Person 60",
-                       "Age":  27,
-                       "Salary":  57500.10101,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 61",
-                       "Age":  24,
-                       "Salary":  50000.22222,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Guest",
-                       "Name":  "Person 62",
-                       "Age":  37,
-                       "Salary":  80000.00001,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "User",
-                       "Name":  "Person 63",
-                       "Age":  26,
-                       "Salary":  45000.11111,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 64",
-                       "Age":  21,
-                       "Salary":  47500.88888,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 65",
-                       "Age":  24,
-                       "Salary":  37500.66666,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Guest",
-                       "Name":  "Person 66",
-                       "Age":  30,
-                       "Salary":  37500.66666,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "User",
-                       "Name":  "Person 67",
-                       "Age":  35,
-                       "Salary":  50000.22222,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 68",
-                       "Age":  40,
-                       "Salary":  45000.11111,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Guest",
-                       "Name":  "Person 69",
-                       "Age":  31,
-                       "Salary":  72500.77889,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 70",
-                       "Age":  42,
-                       "Salary":  75000.99001,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 71",
-                       "Age":  23,
-                       "Salary":  55000.33333,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Manager",
-                       "Name":  "Person 72",
-                       "Age":  42,
-                       "Salary":  55000.33333,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "User",
-                       "Name":  "Person 73",
-                       "Age":  37,
-                       "Salary":  32500.55555,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 74",
-                       "Age":  30,
-                       "Salary":  55000.33333,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "User",
-                       "Name":  "Person 75",
-                       "Age":  35,
-                       "Salary":  67500.33445,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Guest",
-                       "Name":  "Person 76",
-                       "Age":  24,
-                       "Salary":  57500.10101,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Manager",
-                       "Name":  "Person 77",
-                       "Age":  31,
-                       "Salary":  47500.88888,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 78",
-                       "Age":  42,
-                       "Salary":  55000.33333,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Manager",
-                       "Name":  "Person 79",
-                       "Age":  30,
-                       "Salary":  50000.22222,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 80",
-                       "Age":  20,
-                       "Salary":  40000.98765,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 81",
-                       "Age":  21,
-                       "Salary":  47500.88888,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Manager",
-                       "Name":  "Person 82",
-                       "Age":  24,
-                       "Salary":  57500.10101,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "User",
-                       "Name":  "Person 83",
-                       "Age":  26,
-                       "Salary":  45000.11111,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Manager",
-                       "Name":  "Person 84",
-                       "Age":  31,
-                       "Salary":  42500.77777,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Manager",
-                       "Name":  "Person 85",
-                       "Age":  22,
-                       "Salary":  75000.99001,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "User",
-                       "Name":  "Person 86",
-                       "Age":  21,
-                       "Salary":  52500.99999,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 87",
-                       "Age":  24,
-                       "Salary":  50000.22222,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "User",
-                       "Name":  "Person 88",
-                       "Age":  41,
-                       "Salary":  37500.66666,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Manager",
-                       "Name":  "Person 89",
-                       "Age":  35,
-                       "Salary":  57500.10101,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "User",
-                       "Name":  "Person 90",
-                       "Age":  24,
-                       "Salary":  60000.44444,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "User",
-                       "Name":  "Person 91",
-                       "Age":  31,
-                       "Salary":  80000.00001,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "User",
-                       "Name":  "Person 92",
-                       "Age":  33,
-                       "Salary":  60000.44444,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "User",
-                       "Name":  "Person 93",
-                       "Age":  25,
-                       "Salary":  40000.98765,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "User",
-                       "Name":  "Person 94",
-                       "Age":  33,
-                       "Salary":  75000.99001,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Manager",
-                       "Name":  "Person 95",
-                       "Age":  32,
-                       "Salary":  45000.11111,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Guest",
-                       "Name":  "Person 96",
-                       "Age":  23,
-                       "Salary":  75000.99001,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Guest",
-                       "Name":  "Person 97",
-                       "Age":  20,
-                       "Salary":  30000.12345,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Manager",
-                       "Name":  "Person 98",
-                       "Age":  24,
-                       "Salary":  70000.55667,
-                       "IsActive":  true
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 99",
-                       "Age":  30,
-                       "Salary":  80000.00001,
-                       "IsActive":  false
-                   },
-                   {
-                       "Role":  "Admin",
-                       "Name":  "Person 100",
-                       "Age":  37,
-                       "Salary":  62500.20202,
-                       "IsActive":  true
-                   }
-               ],
-    "Roles":  [
-                  "User",
-                  "Admin",
-                  "Manager",
-                  "Guest"
-              ]
+{
+  "People": [
+    {
+      "Role": "User",
+      "Name": "Person 1",
+      "Age": 33,
+      "Salary": 37500.66666,
+      "IsActive": false,
+      "PerformanceScore": 0.469294510534636
+    },
+    {
+      "Role": "Manager",
+      "Name": "Person 2",
+      "Age": 23,
+      "Salary": 57500.10101,
+      "IsActive": true,
+      "PerformanceScore": 0.7221211468438251
+    },
+    {
+      "Role": "Guest",
+      "Name": "Person 3",
+      "Age": 20,
+      "Salary": 30000.12345,
+      "IsActive": false,
+      "PerformanceScore": 0.3402336455603287
+    },
+    {
+      "Role": "Guest",
+      "Name": "Person 4",
+      "Age": 29,
+      "Salary": 80000.00001,
+      "IsActive": true,
+      "PerformanceScore": 0.15560320725459756
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 5",
+      "Age": 44,
+      "Salary": 65000.11223,
+      "IsActive": false,
+      "PerformanceScore": 0.9900675411289872
+    },
+    {
+      "Role": "Manager",
+      "Name": "Person 6",
+      "Age": 24,
+      "Salary": 57500.10101,
+      "IsActive": true,
+      "PerformanceScore": 0.997956872451099
+    },
+    {
+      "Role": "Manager",
+      "Name": "Person 7",
+      "Age": 35,
+      "Salary": 57500.10101,
+      "IsActive": false,
+      "PerformanceScore": 0.09746263506704132
+    },
+    {
+      "Role": "Manager",
+      "Name": "Person 8",
+      "Age": 33,
+      "Salary": 57500.10101,
+      "IsActive": true,
+      "PerformanceScore": 0.19542746348093612
+    },
+    {
+      "Role": "Manager",
+      "Name": "Person 9",
+      "Age": 23,
+      "Salary": 70000.55667,
+      "IsActive": false,
+      "PerformanceScore": 0.30174250542267345
+    },
+    {
+      "Role": "Guest",
+      "Name": "Person 10",
+      "Age": 25,
+      "Salary": 45000.11111,
+      "IsActive": true,
+      "PerformanceScore": 0.17189084793063386
+    },
+    {
+      "Role": "Guest",
+      "Name": "Person 11",
+      "Age": 31,
+      "Salary": 72500.77889,
+      "IsActive": false,
+      "PerformanceScore": 0.454367401755586
+    },
+    {
+      "Role": "Manager",
+      "Name": "Person 12",
+      "Age": 24,
+      "Salary": 70000.55667,
+      "IsActive": true,
+      "PerformanceScore": 0.928393285688196
+    },
+    {
+      "Role": "Manager",
+      "Name": "Person 13",
+      "Age": 35,
+      "Salary": 57500.10101,
+      "IsActive": false,
+      "PerformanceScore": 0.7805420722721806
+    },
+    {
+      "Role": "User",
+      "Name": "Person 14",
+      "Age": 24,
+      "Salary": 52500.99999,
+      "IsActive": true,
+      "PerformanceScore": 0.5428068849923121
+    },
+    {
+      "Role": "Guest",
+      "Name": "Person 15",
+      "Age": 20,
+      "Salary": 30000.12345,
+      "IsActive": false,
+      "PerformanceScore": 0.4714174603444605
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 16",
+      "Age": 24,
+      "Salary": 50000.22222,
+      "IsActive": true,
+      "PerformanceScore": 0.35337025083292756
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 17",
+      "Age": 40,
+      "Salary": 50000.22222,
+      "IsActive": false,
+      "PerformanceScore": 0.037767471763197086
+    },
+    {
+      "Role": "User",
+      "Name": "Person 18",
+      "Age": 22,
+      "Salary": 60000.44444,
+      "IsActive": true,
+      "PerformanceScore": 0.9297761763119028
+    },
+    {
+      "Role": "User",
+      "Name": "Person 19",
+      "Age": 41,
+      "Salary": 47500.88888,
+      "IsActive": false,
+      "PerformanceScore": 0.928975135986216
+    },
+    {
+      "Role": "Manager",
+      "Name": "Person 20",
+      "Age": 24,
+      "Salary": 57500.10101,
+      "IsActive": true,
+      "PerformanceScore": 0.28783233989394846
+    },
+    {
+      "Role": "User",
+      "Name": "Person 21",
+      "Age": 44,
+      "Salary": 80000.00001,
+      "IsActive": false,
+      "PerformanceScore": 0.8411993406904859
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 22",
+      "Age": 28,
+      "Salary": 70000.55667,
+      "IsActive": true,
+      "PerformanceScore": 0.4654859460263913
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 23",
+      "Age": 23,
+      "Salary": 67500.33445,
+      "IsActive": false,
+      "PerformanceScore": 0.20993865756780777
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 24",
+      "Age": 28,
+      "Salary": 40000.98765,
+      "IsActive": true,
+      "PerformanceScore": 0.7613321513688807
+    },
+    {
+      "Role": "Guest",
+      "Name": "Person 25",
+      "Age": 40,
+      "Salary": 62500.20202,
+      "IsActive": false,
+      "PerformanceScore": 0.6626339706883924
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 26",
+      "Age": 41,
+      "Salary": 60000.44444,
+      "IsActive": true,
+      "PerformanceScore": 0.8177521330387109
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 27",
+      "Age": 41,
+      "Salary": 60000.44444,
+      "IsActive": false,
+      "PerformanceScore": 0.4176367104135625
+    },
+    {
+      "Role": "User",
+      "Name": "Person 28",
+      "Age": 41,
+      "Salary": 47500.88888,
+      "IsActive": true,
+      "PerformanceScore": 0.33633968249724233
+    },
+    {
+      "Role": "Manager",
+      "Name": "Person 29",
+      "Age": 24,
+      "Salary": 70000.55667,
+      "IsActive": false,
+      "PerformanceScore": 0.09885464892669332
+    },
+    {
+      "Role": "Manager",
+      "Name": "Person 30",
+      "Age": 25,
+      "Salary": 65000.11223,
+      "IsActive": true,
+      "PerformanceScore": 0.3259014912535909
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 31",
+      "Age": 35,
+      "Salary": 30000.12345,
+      "IsActive": false,
+      "PerformanceScore": 0.638358156959693
+    },
+    {
+      "Role": "Guest",
+      "Name": "Person 32",
+      "Age": 28,
+      "Salary": 50000.22222,
+      "IsActive": true,
+      "PerformanceScore": 0.2595955171899849
+    },
+    {
+      "Role": "Guest",
+      "Name": "Person 33",
+      "Age": 37,
+      "Salary": 50000.22222,
+      "IsActive": false,
+      "PerformanceScore": 0.03718118836971986
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 34",
+      "Age": 44,
+      "Salary": 57500.10101,
+      "IsActive": true,
+      "PerformanceScore": 0.49415338062409003
+    },
+    {
+      "Role": "Manager",
+      "Name": "Person 35",
+      "Age": 35,
+      "Salary": 57500.10101,
+      "IsActive": false,
+      "PerformanceScore": 0.12759509642030814
+    },
+    {
+      "Role": "Manager",
+      "Name": "Person 36",
+      "Age": 42,
+      "Salary": 80000.00001,
+      "IsActive": true,
+      "PerformanceScore": 0.4686333217977701
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 37",
+      "Age": 37,
+      "Salary": 62500.20202,
+      "IsActive": false,
+      "PerformanceScore": 0.776074735343491
+    },
+    {
+      "Role": "User",
+      "Name": "Person 38",
+      "Age": 42,
+      "Salary": 67500.33445,
+      "IsActive": true,
+      "PerformanceScore": 0.7480926940907224
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 39",
+      "Age": 36,
+      "Salary": 35000.54321,
+      "IsActive": false,
+      "PerformanceScore": 0.21457017036833342
+    },
+    {
+      "Role": "Guest",
+      "Name": "Person 40",
+      "Age": 42,
+      "Salary": 52500.99999,
+      "IsActive": true,
+      "PerformanceScore": 0.43141245675804674
+    },
+    {
+      "Role": "User",
+      "Name": "Person 41",
+      "Age": 30,
+      "Salary": 37500.66666,
+      "IsActive": false,
+      "PerformanceScore": 0.20134295020315002
+    },
+    {
+      "Role": "Guest",
+      "Name": "Person 42",
+      "Age": 29,
+      "Salary": 80000.00001,
+      "IsActive": true,
+      "PerformanceScore": 0.6682607301828735
+    },
+    {
+      "Role": "Manager",
+      "Name": "Person 43",
+      "Age": 31,
+      "Salary": 70000.55667,
+      "IsActive": false,
+      "PerformanceScore": 0.16080254416950165
+    },
+    {
+      "Role": "User",
+      "Name": "Person 44",
+      "Age": 41,
+      "Salary": 47500.88888,
+      "IsActive": true,
+      "PerformanceScore": 0.09611939084535437
+    },
+    {
+      "Role": "Guest",
+      "Name": "Person 45",
+      "Age": 42,
+      "Salary": 67500.33445,
+      "IsActive": false,
+      "PerformanceScore": 0.35855483885787187
+    },
+    {
+      "Role": "Manager",
+      "Name": "Person 46",
+      "Age": 25,
+      "Salary": 65000.11223,
+      "IsActive": true,
+      "PerformanceScore": 0.4203322890309302
+    },
+    {
+      "Role": "User",
+      "Name": "Person 47",
+      "Age": 26,
+      "Salary": 80000.00001,
+      "IsActive": false,
+      "PerformanceScore": 0.38848168653830967
+    },
+    {
+      "Role": "Manager",
+      "Name": "Person 48",
+      "Age": 42,
+      "Salary": 80000.00001,
+      "IsActive": true,
+      "PerformanceScore": 0.6788205488951973
+    },
+    {
+      "Role": "User",
+      "Name": "Person 49",
+      "Age": 26,
+      "Salary": 45000.11111,
+      "IsActive": false,
+      "PerformanceScore": 0.47440501278005776
+    },
+    {
+      "Role": "User",
+      "Name": "Person 50",
+      "Age": 35,
+      "Salary": 35000.54321,
+      "IsActive": true,
+      "PerformanceScore": 0.15427989612998436
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 51",
+      "Age": 29,
+      "Salary": 35000.54321,
+      "IsActive": false,
+      "PerformanceScore": 0.9605914177189541
+    },
+    {
+      "Role": "Manager",
+      "Name": "Person 52",
+      "Age": 33,
+      "Salary": 60000.44444,
+      "IsActive": true,
+      "PerformanceScore": 0.2963534590305544
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 53",
+      "Age": 24,
+      "Salary": 50000.22222,
+      "IsActive": false,
+      "PerformanceScore": 0.3807820008978164
+    },
+    {
+      "Role": "Guest",
+      "Name": "Person 54",
+      "Age": 30,
+      "Salary": 37500.66666,
+      "IsActive": true,
+      "PerformanceScore": 0.274480797943883
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 55",
+      "Age": 41,
+      "Salary": 60000.44444,
+      "IsActive": false,
+      "PerformanceScore": 0.7524317855725213
+    },
+    {
+      "Role": "User",
+      "Name": "Person 56",
+      "Age": 26,
+      "Salary": 45000.11111,
+      "IsActive": true,
+      "PerformanceScore": 0.06263092861633325
+    },
+    {
+      "Role": "User",
+      "Name": "Person 57",
+      "Age": 36,
+      "Salary": 52500.99999,
+      "IsActive": false,
+      "PerformanceScore": 0.5997671022078801
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 58",
+      "Age": 37,
+      "Salary": 62500.20202,
+      "IsActive": true,
+      "PerformanceScore": 0.6646908054429529
+    },
+    {
+      "Role": "User",
+      "Name": "Person 59",
+      "Age": 26,
+      "Salary": 52500.99999,
+      "IsActive": false,
+      "PerformanceScore": 0.04444358453361484
+    },
+    {
+      "Role": "Manager",
+      "Name": "Person 60",
+      "Age": 27,
+      "Salary": 57500.10101,
+      "IsActive": true,
+      "PerformanceScore": 0.1534810141443652
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 61",
+      "Age": 24,
+      "Salary": 50000.22222,
+      "IsActive": false,
+      "PerformanceScore": 0.7158813642877533
+    },
+    {
+      "Role": "Guest",
+      "Name": "Person 62",
+      "Age": 37,
+      "Salary": 80000.00001,
+      "IsActive": true,
+      "PerformanceScore": 0.8667248375093214
+    },
+    {
+      "Role": "User",
+      "Name": "Person 63",
+      "Age": 26,
+      "Salary": 45000.11111,
+      "IsActive": false,
+      "PerformanceScore": 0.7843986310923465
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 64",
+      "Age": 21,
+      "Salary": 47500.88888,
+      "IsActive": true,
+      "PerformanceScore": 0.2516962309608684
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 65",
+      "Age": 24,
+      "Salary": 37500.66666,
+      "IsActive": false,
+      "PerformanceScore": 0.6724649591708858
+    },
+    {
+      "Role": "Guest",
+      "Name": "Person 66",
+      "Age": 30,
+      "Salary": 37500.66666,
+      "IsActive": true,
+      "PerformanceScore": 0.32809478106354123
+    },
+    {
+      "Role": "User",
+      "Name": "Person 67",
+      "Age": 35,
+      "Salary": 50000.22222,
+      "IsActive": false,
+      "PerformanceScore": 0.659923113724181
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 68",
+      "Age": 40,
+      "Salary": 45000.11111,
+      "IsActive": true,
+      "PerformanceScore": 0.960005736891183
+    },
+    {
+      "Role": "Guest",
+      "Name": "Person 69",
+      "Age": 31,
+      "Salary": 72500.77889,
+      "IsActive": false,
+      "PerformanceScore": 0.8057998888221569
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 70",
+      "Age": 42,
+      "Salary": 75000.99001,
+      "IsActive": true,
+      "PerformanceScore": 0.5902364876075817
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 71",
+      "Age": 23,
+      "Salary": 55000.33333,
+      "IsActive": false,
+      "PerformanceScore": 0.36992109444454363
+    },
+    {
+      "Role": "Manager",
+      "Name": "Person 72",
+      "Age": 42,
+      "Salary": 55000.33333,
+      "IsActive": true,
+      "PerformanceScore": 0.8422727057907138
+    },
+    {
+      "Role": "User",
+      "Name": "Person 73",
+      "Age": 37,
+      "Salary": 32500.55555,
+      "IsActive": false,
+      "PerformanceScore": 0.34950441138330124
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 74",
+      "Age": 30,
+      "Salary": 55000.33333,
+      "IsActive": true,
+      "PerformanceScore": 0.1601119163260385
+    },
+    {
+      "Role": "User",
+      "Name": "Person 75",
+      "Age": 35,
+      "Salary": 67500.33445,
+      "IsActive": false,
+      "PerformanceScore": 0.1314717266389503
+    },
+    {
+      "Role": "Guest",
+      "Name": "Person 76",
+      "Age": 24,
+      "Salary": 57500.10101,
+      "IsActive": true,
+      "PerformanceScore": 0.47625061891798426
+    },
+    {
+      "Role": "Manager",
+      "Name": "Person 77",
+      "Age": 31,
+      "Salary": 47500.88888,
+      "IsActive": false,
+      "PerformanceScore": 0.013927340979654035
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 78",
+      "Age": 42,
+      "Salary": 55000.33333,
+      "IsActive": true,
+      "PerformanceScore": 0.0953669548478755
+    },
+    {
+      "Role": "Manager",
+      "Name": "Person 79",
+      "Age": 30,
+      "Salary": 50000.22222,
+      "IsActive": false,
+      "PerformanceScore": 0.4362532833759921
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 80",
+      "Age": 20,
+      "Salary": 40000.98765,
+      "IsActive": true,
+      "PerformanceScore": 0.5305491851319323
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 81",
+      "Age": 21,
+      "Salary": 47500.88888,
+      "IsActive": false,
+      "PerformanceScore": 0.36779031826545966
+    },
+    {
+      "Role": "Manager",
+      "Name": "Person 82",
+      "Age": 24,
+      "Salary": 57500.10101,
+      "IsActive": true,
+      "PerformanceScore": 0.32142333282224056
+    },
+    {
+      "Role": "User",
+      "Name": "Person 83",
+      "Age": 26,
+      "Salary": 45000.11111,
+      "IsActive": false,
+      "PerformanceScore": 0.21957960222828182
+    },
+    {
+      "Role": "Manager",
+      "Name": "Person 84",
+      "Age": 31,
+      "Salary": 42500.77777,
+      "IsActive": true,
+      "PerformanceScore": 0.8485074959921219
+    },
+    {
+      "Role": "Manager",
+      "Name": "Person 85",
+      "Age": 22,
+      "Salary": 75000.99001,
+      "IsActive": false,
+      "PerformanceScore": 0.3615623448796395
+    },
+    {
+      "Role": "User",
+      "Name": "Person 86",
+      "Age": 21,
+      "Salary": 52500.99999,
+      "IsActive": true,
+      "PerformanceScore": 0.9161198441479913
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 87",
+      "Age": 24,
+      "Salary": 50000.22222,
+      "IsActive": false,
+      "PerformanceScore": 0.3603779814952882
+    },
+    {
+      "Role": "User",
+      "Name": "Person 88",
+      "Age": 41,
+      "Salary": 37500.66666,
+      "IsActive": true,
+      "PerformanceScore": 0.6420831520306334
+    },
+    {
+      "Role": "Manager",
+      "Name": "Person 89",
+      "Age": 35,
+      "Salary": 57500.10101,
+      "IsActive": false,
+      "PerformanceScore": 0.9636910133826039
+    },
+    {
+      "Role": "User",
+      "Name": "Person 90",
+      "Age": 24,
+      "Salary": 60000.44444,
+      "IsActive": true,
+      "PerformanceScore": 0.2935212833311042
+    },
+    {
+      "Role": "User",
+      "Name": "Person 91",
+      "Age": 31,
+      "Salary": 80000.00001,
+      "IsActive": false,
+      "PerformanceScore": 0.5997996910474261
+    },
+    {
+      "Role": "User",
+      "Name": "Person 92",
+      "Age": 33,
+      "Salary": 60000.44444,
+      "IsActive": true,
+      "PerformanceScore": 0.7317161027955432
+    },
+    {
+      "Role": "User",
+      "Name": "Person 93",
+      "Age": 25,
+      "Salary": 40000.98765,
+      "IsActive": false,
+      "PerformanceScore": 0.3949838091595954
+    },
+    {
+      "Role": "User",
+      "Name": "Person 94",
+      "Age": 33,
+      "Salary": 75000.99001,
+      "IsActive": true,
+      "PerformanceScore": 0.5040144717805155
+    },
+    {
+      "Role": "Manager",
+      "Name": "Person 95",
+      "Age": 32,
+      "Salary": 45000.11111,
+      "IsActive": false,
+      "PerformanceScore": 0.03577568942484245
+    },
+    {
+      "Role": "Guest",
+      "Name": "Person 96",
+      "Age": 23,
+      "Salary": 75000.99001,
+      "IsActive": true,
+      "PerformanceScore": 0.5855867278695045
+    },
+    {
+      "Role": "Guest",
+      "Name": "Person 97",
+      "Age": 20,
+      "Salary": 30000.12345,
+      "IsActive": false,
+      "PerformanceScore": 0.1728053140327359
+    },
+    {
+      "Role": "Manager",
+      "Name": "Person 98",
+      "Age": 24,
+      "Salary": 70000.55667,
+      "IsActive": true,
+      "PerformanceScore": 0.2640023502819251
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 99",
+      "Age": 30,
+      "Salary": 80000.00001,
+      "IsActive": false,
+      "PerformanceScore": 0.9363767080644038
+    },
+    {
+      "Role": "Admin",
+      "Name": "Person 100",
+      "Age": 37,
+      "Salary": 62500.20202,
+      "IsActive": true,
+      "PerformanceScore": 0.9903215947515898
+    }
+  ],
+  "Roles": [
+    "User",
+    "Admin",
+    "Manager",
+    "Guest"
+  ]
 }

@@ -11,6 +11,7 @@ namespace EasyUse
         public bool IsActive { get; set; }
         public string Role { get; set; } = "User";
         public double Salary { get; set; }
+        public double PerformanceScore { get; set; }
         
         // Setup commands for buttons
         public ICommand ShowBioCommand { get; }

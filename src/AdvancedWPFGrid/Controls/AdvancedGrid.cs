@@ -140,6 +140,12 @@ public class AdvancedGrid : Control
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(0));
 
+    public static readonly DependencyProperty DoubleFormatProperty = DependencyProperty.Register(
+        nameof(DoubleFormat),
+        typeof(string),
+        typeof(AdvancedGrid),
+        new FrameworkPropertyMetadata(null, OnDoubleFormatChanged));
+
     #endregion
 
     #region Properties
@@ -232,6 +238,20 @@ public class AdvancedGrid : Control
     {
         get => (int)GetValue(FrozenColumnCountProperty);
         set => SetValue(FrozenColumnCountProperty, value);
+    }
+
+    public string? DoubleFormat
+    {
+        get => (string?)GetValue(DoubleFormatProperty);
+        set => SetValue(DoubleFormatProperty, value);
+    }
+
+    private static void OnDoubleFormatChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is AdvancedGrid grid)
+        {
+            grid.RefreshView();
+        }
     }
 
     public static bool GetIsGridFocused(DependencyObject obj) => (bool)obj.GetValue(IsGridFocusedProperty);

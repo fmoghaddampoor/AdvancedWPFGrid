@@ -17,7 +17,7 @@ public class DoubleColumn : GridColumnBase
         nameof(StringFormat),
         typeof(string),
         typeof(DoubleColumn),
-        new FrameworkPropertyMetadata("N2", OnStringFormatChanged));
+        new FrameworkPropertyMetadata(null, OnStringFormatChanged));
 
     private static void OnStringFormatChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -184,6 +184,19 @@ public class DoubleColumn : GridColumnBase
             try
             {
                 return value.ToString(StringFormat, CultureInfo.CurrentCulture);
+            }
+            catch
+            {
+                // Fall through to default formatting
+            }
+        }
+
+        // Try global grid format
+        if (Grid != null && !string.IsNullOrEmpty(Grid.DoubleFormat))
+        {
+            try
+            {
+                return value.ToString(Grid.DoubleFormat, CultureInfo.CurrentCulture);
             }
             catch
             {

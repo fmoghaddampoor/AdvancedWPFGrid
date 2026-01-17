@@ -28,9 +28,9 @@
             <!-- Settings Tab -->
             <TabItem Header="Settings">
                 <StackPanel Margin="20">
-                    <TextBlock Text="Salary Decimal Places:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                    <TextBlock Text="Decimal Places:" FontWeight="SemiBold" Margin="0,0,0,5"/>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                        <TextBlock Text="{Binding SalaryDecimalPlaces}" 
+                        <TextBlock Text="{Binding DecimalPlaces}" 
                                    Width="50" FontSize="16" VerticalAlignment="Center" 
                                    TextAlignment="Center" FontWeight="Bold"
                                    Background="#DDDDDD" Padding="5"/>
@@ -52,7 +52,8 @@
                                  CanUserSort="True"
                                  CanUserFilter="True"
                                  CanUserReorderColumns="True"
-                                 CanUserResizeColumns="True">
+                                 CanUserResizeColumns="True"
+                                 DoubleFormat="{Binding GlobalDoubleFormat}">
                     <av:AdvancedGrid.Columns>
                         <!-- Text Column -->
                         <col:TextColumn Header="Name" 
@@ -65,11 +66,15 @@
                                           Width="60"
                                           StringFormat="N0"/>
 
+                        <!-- New Performance Score Column (Uses Global Format) -->
+                        <col:DoubleColumn Header="Performance" 
+                                          Binding="PerformanceScore" 
+                                          Width="100"/>
+                                          
                         <!-- Double Column with Currency -->
                         <col:DoubleColumn Header="Salary" 
                                           Binding="Salary" 
-                                          Width="100"
-                                          StringFormat="{Binding Data.SalaryFormatString, Source={StaticResource Proxy}}"/>
+                                          Width="100"/>
 
                         <!-- CheckBox Column -->
                         <col:CheckBoxColumn Header="Active" 

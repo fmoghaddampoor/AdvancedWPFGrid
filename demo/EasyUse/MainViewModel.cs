@@ -7,31 +7,35 @@ namespace EasyUse
     {
         public ObservableCollection<PersonModel> People { get; set; }
         public List<string> Roles { get; set; }
-
-        private int _salaryDecimalPlaces = 5;
-        public int SalaryDecimalPlaces
+        
+        private int _decimalPlaces = 2;
+        public int DecimalPlaces
         {
-            get => _salaryDecimalPlaces;
+            get => _decimalPlaces;
             set
             {
-                if (_salaryDecimalPlaces != value)
+                if (_decimalPlaces != value)
                 {
-                    _salaryDecimalPlaces = value;
-                    OnPropertyChanged(nameof(SalaryDecimalPlaces));
-                    OnPropertyChanged(nameof(SalaryFormatString));
+                    _decimalPlaces = value;
+                    GlobalDoubleFormat = $"F{value}";
+                    OnPropertyChanged(nameof(DecimalPlaces));
                     System.Windows.Input.CommandManager.InvalidateRequerySuggested();
                 }
             }
         }
 
-        public string SalaryFormatString
-        {
-            get
-            {
-                if (SalaryDecimalPlaces <= 0)
-                    return "'$'0";
 
-                return "'$'0." + new string('0', SalaryDecimalPlaces);
+        private string _globalDoubleFormat = "P2";
+        public string GlobalDoubleFormat
+        {
+            get => _globalDoubleFormat;
+            set
+            {
+                if (_globalDoubleFormat != value)
+                {
+                    _globalDoubleFormat = value;
+                    OnPropertyChanged(nameof(GlobalDoubleFormat));
+                }
             }
         }
 
@@ -42,9 +46,12 @@ namespace EasyUse
         {
             Roles = appData.Roles ?? new List<string>();
             People = new ObservableCollection<PersonModel>(appData.People ?? new List<PersonModel>());
+            
+            // Initial format update
+            GlobalDoubleFormat = $"F{DecimalPlaces}";
 
-            IncrementDecimalsCommand = new RelayCommand(_ => SalaryDecimalPlaces++, _ => SalaryDecimalPlaces < 5);
-            DecrementDecimalsCommand = new RelayCommand(_ => SalaryDecimalPlaces--, _ => SalaryDecimalPlaces > 0);
+            IncrementDecimalsCommand = new RelayCommand(_ => DecimalPlaces++, _ => DecimalPlaces < 5);
+            DecrementDecimalsCommand = new RelayCommand(_ => DecimalPlaces--, _ => DecimalPlaces > 0);
         }
 
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
