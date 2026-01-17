@@ -1,0 +1,8 @@
+<Application x:Class="AdvancedWPFGrid.Demo.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <!-- Resources loaded directly in Generic.xaml via assembly attribute -->
+    </Application.Resources>
+</Application>

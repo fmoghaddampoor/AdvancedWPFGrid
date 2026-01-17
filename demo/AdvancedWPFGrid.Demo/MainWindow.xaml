@@ -1,0 +1,237 @@
+<Window x:Class="AdvancedWPFGrid.Demo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:grid="clr-namespace:AdvancedWPFGrid.Controls;assembly=AdvancedWPFGrid"
+        xmlns:columns="clr-namespace:AdvancedWPFGrid.Columns;assembly=AdvancedWPFGrid"
+        mc:Ignorable="d"
+        Title="Advanced WPF Grid Demo" Height="800" Width="1400"
+        WindowStartupLocation="CenterScreen"
+        Background="#1E1E1E">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,16">
+            <TextBlock Text="Advanced WPF Grid"
+                       FontSize="28"
+                       FontWeight="Light"
+                       Foreground="#FFFFFF" />
+            <TextBlock Text="High-performance virtualized data grid with grouping, sorting, filtering, and fluent styling"
+                       FontSize="14"
+                       Foreground="#888888"
+                       Margin="0,4,0,0" />
+        </StackPanel>
+
+        <!-- Toolbar -->
+        <Border Grid.Row="1" 
+                Background="#2D2D2D" 
+                CornerRadius="8" 
+                Padding="12"
+                Margin="0,0,0,12">
+            <WrapPanel>
+                <Button x:Name="LoadDataButton" 
+                        Content="Load 100K Rows" 
+                        Click="LoadDataButton_Click"
+                        Margin="0,0,8,0"
+                        Padding="16,8"
+                        Background="#0078D4"
+                        Foreground="White"
+                        BorderThickness="0"
+                        FontWeight="SemiBold" />
+                
+                <Button x:Name="LoadMillionButton" 
+                        Content="Load 1M Rows" 
+                        Click="LoadMillionButton_Click"
+                        Margin="0,0,8,0"
+                        Padding="16,8"
+                        Background="#107C10"
+                        Foreground="White"
+                        BorderThickness="0"
+                        FontWeight="SemiBold" />
+
+                <Separator Width="1" Height="24" Background="#454545" Margin="8,0" />
+
+                <Button x:Name="GroupButton" 
+                        Content="Toggle Grouping" 
+                        Click="GroupButton_Click"
+                        Margin="0,0,8,0"
+                        Padding="16,8"
+                        Background="#383838"
+                        Foreground="White"
+                        BorderThickness="0" />
+
+                <Button x:Name="ExpandAllButton" 
+                        Content="Expand All" 
+                        Click="ExpandAllButton_Click"
+                        Margin="0,0,8,0"
+                        Padding="16,8"
+                        Background="#383838"
+                        Foreground="White"
+                        BorderThickness="0" />
+
+                <Button x:Name="CollapseAllButton" 
+                        Content="Collapse All" 
+                        Click="CollapseAllButton_Click"
+                        Margin="0,0,8,0"
+                        Padding="16,8"
+                        Background="#383838"
+                        Foreground="White"
+                        BorderThickness="0" />
+
+                <Separator Width="1" Height="24" Background="#454545" Margin="8,0" />
+
+                <Button x:Name="ClearFiltersButton" 
+                        Content="Clear Filters" 
+                        Click="ClearFiltersButton_Click"
+                        Margin="0,0,8,0"
+                        Padding="16,8"
+                        Background="#383838"
+                        Foreground="White"
+                        BorderThickness="0" />
+
+                <Button x:Name="ClearSortButton" 
+                        Content="Clear Sort" 
+                        Click="ClearSortButton_Click"
+                        Padding="16,8"
+                        Background="#383838"
+                        Foreground="White"
+                        BorderThickness="0" />
+            </WrapPanel>
+        </Border>
+
+        <!-- Grid -->
+        <grid:AdvancedGrid x:Name="MainGrid"
+                           Grid.Row="2"
+                           RowHeight="36"
+                           HeaderHeight="40"
+                           CanUserSort="True"
+                           CanUserFilter="True"
+                           CanUserResizeColumns="True"
+                           SelectionMode="Extended">
+            <grid:AdvancedGrid.Columns>
+                <!-- Checkbox Column -->
+                <columns:CheckBoxColumn Header="✓"
+                                        Binding="IsSelected"
+                                        Width="50"
+                                        CanSort="False"
+                                        CanFilter="False" />
+                
+                <!-- ID Column (Read-only) -->
+                <columns:DoubleColumn Header="ID"
+                                      Binding="Id"
+                                      Width="80"
+                                      IsReadOnly="True"
+                                      StringFormat="N0" />
+                
+                <!-- Name Column -->
+                <columns:TextColumn Header="Name"
+                                    Binding="Name"
+                                    Width="180" />
+                
+                <!-- Description with Button -->
+                <columns:TextButtonColumn Header="Description"
+                                          Binding="Description"
+                                          Width="250"
+                                          ButtonContent="..."
+                                          ButtonPosition="Right" />
+                
+                <!-- Category Dropdown -->
+                <columns:ComboBoxColumn Header="Category"
+                                        Binding="Category"
+                                        Width="140" />
+                
+                <!-- Status Dropdown -->
+                <columns:ComboBoxColumn Header="Status"
+                                        Binding="Status"
+                                        Width="120" />
+                
+                <!-- Priority Column -->
+                <columns:TextColumn Header="Priority"
+                                    Binding="Priority"
+                                    Width="100" />
+                
+                <!-- Value Column (Numeric) -->
+                <columns:DoubleColumn Header="Value"
+                                      Binding="Value"
+                                      Width="120"
+                                      StringFormat="C2"
+                                      HorizontalAlignment="Right" />
+                
+                <!-- Quantity Column -->
+                <columns:DoubleColumn Header="Quantity"
+                                      Binding="Quantity"
+                                      Width="100"
+                                      StringFormat="N0"
+                                      Minimum="0"
+                                      Maximum="10000" />
+                
+                <!-- Date Column -->
+                <columns:TextColumn Header="Created"
+                                    Binding="CreatedDate"
+                                    Width="120"
+                                    IsReadOnly="True" />
+                
+                <!-- Active Checkbox -->
+                <columns:CheckBoxColumn Header="Active"
+                                        Binding="IsActive"
+                                        Width="70" />
+                
+                <!-- Action Button -->
+                <columns:ButtonColumn Header="Action"
+                                      ButtonContent="View"
+                                      Width="80" />
+                
+                <!-- Edit Icon Button -->
+                <columns:IconButtonColumn Header=""
+                                          Width="44"
+                                          ToolTipText="Edit Item" />
+                
+                <!-- Delete Icon Button -->
+                <columns:IconButtonColumn Header=""
+                                          Width="44"
+                                          ToolTipText="Delete Item" />
+            </grid:AdvancedGrid.Columns>
+        </grid:AdvancedGrid>
+
+        <!-- Status Bar -->
+        <Border Grid.Row="3" 
+                Background="#2D2D2D" 
+                CornerRadius="4" 
+                Padding="12,8"
+                Margin="0,12,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock x:Name="StatusText"
+                           Grid.Column="0"
+                           Text="Ready - Click 'Load 100K Rows' or 'Load 1M Rows' to populate the grid"
+                           Foreground="#AAAAAA"
+                           VerticalAlignment="Center" />
+
+                <TextBlock x:Name="RowCountText"
+                           Grid.Column="1"
+                           Text="0 rows"
+                           Foreground="#888888"
+                           Margin="16,0"
+                           VerticalAlignment="Center" />
+
+                <TextBlock x:Name="LoadTimeText"
+                           Grid.Column="2"
+                           Text=""
+                           Foreground="#888888"
+                           VerticalAlignment="Center" />
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

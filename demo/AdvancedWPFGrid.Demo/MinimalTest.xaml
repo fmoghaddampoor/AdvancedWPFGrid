@@ -1,0 +1,21 @@
+<Window x:Class="AdvancedWPFGrid.Demo.MinimalTest"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:grid="clr-namespace:AdvancedWPFGrid.Controls;assembly=AdvancedWPFGrid"
+        xmlns:columns="clr-namespace:AdvancedWPFGrid.Columns;assembly=AdvancedWPFGrid"
+        Title="Minimal Grid Test" Height="450" Width="800"
+        Background="#1E1E1E">
+    <Grid>
+        <TextBlock Text="Testing AdvancedGrid instantiation..."
+                   Foreground="White"
+                   Margin="10"/>
+        
+        <!-- Try to create the most minimal grid possible -->
+        <grid:AdvancedGrid x:Name="TestGrid"
+                           Margin="50">
+            <grid:AdvancedGrid.Columns>
+                <columns:TextColumn Header="Test" Binding="Name" Width="100" />
+            </grid:AdvancedGrid.Columns>
+        </grid:AdvancedGrid>
+    </Grid>
+</Window>

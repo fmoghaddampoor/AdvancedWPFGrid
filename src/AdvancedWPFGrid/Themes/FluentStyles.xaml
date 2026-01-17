@@ -1,0 +1,572 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:AdvancedWPFGrid.Controls">
+
+    <!-- AdvancedGrid Style -->
+    <Style TargetType="{x:Type controls:AdvancedGrid}">
+        <Setter Property="Background" Value="{StaticResource GridBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource FluentBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Foreground" Value="{StaticResource FluentTextPrimaryBrush}" />
+        <Setter Property="FontFamily" Value="Segoe UI Variable, Segoe UI, sans-serif" />
+        <Setter Property="FontSize" Value="{StaticResource FluentFontSizeNormal}" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="UseLayoutRounding" Value="True" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:AdvancedGrid}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{StaticResource FluentCornerRadius}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            
+                            <!-- Column Headers -->
+                            <Border x:Name="PART_HeaderHost"
+                                    Grid.Row="0"
+                                    Background="{StaticResource GridHeaderBackgroundBrush}"
+                                    BorderBrush="{StaticResource FluentBorderSubtleBrush}"
+                                    BorderThickness="0,0,0,1">
+                                <controls:GridHeaderPresenter x:Name="PART_HeaderPresenter" />
+                            </Border>
+                            
+                            <!-- Virtualized Content -->
+                            <ScrollViewer x:Name="PART_ScrollViewer"
+                                          Grid.Row="1"
+                                          HorizontalScrollBarVisibility="Auto"
+                                          VerticalScrollBarVisibility="Auto"
+                                          CanContentScroll="True"
+                                          Focusable="False">
+                                <controls:VirtualizingGridPanel x:Name="PART_ItemsHost"
+                                                                 IsItemsHost="True" />
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- GridRow Style -->
+    <Style TargetType="{x:Type controls:GridRow}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{StaticResource GridCellBorderBrush}" />
+        <Setter Property="BorderThickness" Value="0,0,0,1" />
+        <Setter Property="Foreground" Value="{StaticResource FluentTextPrimaryBrush}" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="MinHeight" Value="32" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:GridRow}">
+                    <Border x:Name="RootBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}">
+                        <controls:GridCellsPresenter x:Name="PART_CellsPresenter" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsAlternate" Value="True">
+                            <Setter TargetName="RootBorder" Property="Background" 
+                                    Value="{StaticResource GridRowAlternateBackgroundBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="RootBorder" Property="Background" 
+                                    Value="{StaticResource GridRowHoverBackgroundBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="RootBorder" Property="Background" 
+                                    Value="{StaticResource GridRowSelectedBackgroundBrush}" />
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected" Value="True" />
+                                <Condition Property="controls:AdvancedGrid.IsGridFocused" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="RootBorder" Property="Background" 
+                                    Value="{StaticResource GridRowSelectedInactiveBackgroundBrush}" />
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- GridCell Style -->
+    <Style TargetType="{x:Type controls:GridCell}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{StaticResource GridCellBorderBrush}" />
+        <Setter Property="BorderThickness" Value="0,0,1,0" />
+        <Setter Property="Foreground" Value="{StaticResource FluentTextPrimaryBrush}" />
+        <Setter Property="Padding" Value="{StaticResource FluentCellPadding}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:GridCell}">
+                    <Border x:Name="CellBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEditing" Value="True">
+                            <Setter TargetName="CellBorder" Property="BorderBrush" 
+                                    Value="{StaticResource FluentAccentBrush}" />
+                            <Setter TargetName="CellBorder" Property="BorderThickness" Value="2" />
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter TargetName="CellBorder" Property="BorderBrush" 
+                                    Value="{StaticResource FluentAccentBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- GridHeaderCell Style -->
+    <Style TargetType="{x:Type controls:GridHeaderCell}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{StaticResource GridCellBorderBrush}" />
+        <Setter Property="BorderThickness" Value="0,0,1,0" />
+        <Setter Property="Foreground" Value="{StaticResource FluentTextPrimaryBrush}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Padding" Value="{StaticResource FluentHeaderPadding}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="MinHeight" Value="36" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:GridHeaderCell}">
+                    <Border x:Name="HeaderBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            
+                            <!-- Header Text -->
+                            <TextBlock x:Name="HeaderText"
+                                       Grid.Column="0"
+                                       Text="{TemplateBinding Content}"
+                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                       TextTrimming="CharacterEllipsis" />
+                            
+                            <!-- Sort Indicator -->
+                            <Path x:Name="SortIndicator"
+                                  Grid.Column="1"
+                                  Width="8" Height="6"
+                                  Margin="4,0,0,0"
+                                  Fill="{StaticResource FluentTextSecondaryBrush}"
+                                  Visibility="Collapsed"
+                                  VerticalAlignment="Center"
+                                  Data="M0,0 L4,5 L8,0 Z" />
+                            
+                            <!-- Filter Indicator -->
+                            <Path x:Name="FilterIndicator"
+                                  Grid.Column="2"
+                                  Width="10" Height="10"
+                                  Margin="4,0,0,0"
+                                  Fill="{StaticResource FluentAccentBrush}"
+                                  Visibility="Collapsed"
+                                  VerticalAlignment="Center"
+                                  Data="M0,0 L10,0 L6,5 L6,10 L4,10 L4,5 Z" />
+                            
+                            <!-- Resize Grip -->
+                            <Thumb x:Name="PART_ResizeGrip"
+                                   Width="4"
+                                   Margin="-2,0,-2,0"
+                                   Opacity="0"
+                                   HorizontalAlignment="Right"
+                                   Cursor="SizeWE">
+                                <Thumb.Template>
+                                    <ControlTemplate TargetType="Thumb">
+                                        <Rectangle Fill="Transparent" />
+                                    </ControlTemplate>
+                                </Thumb.Template>
+                            </Thumb>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="HeaderBorder" Property="Background" 
+                                    Value="{StaticResource FluentBackgroundHoverBrush}" />
+                            <Setter TargetName="PART_ResizeGrip" Property="Opacity" Value="1" />
+                        </Trigger>
+                        <Trigger Property="SortDirection" Value="Ascending">
+                            <Setter TargetName="SortIndicator" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="SortIndicator" Property="Data" Value="M0,5 L4,0 L8,5 Z" />
+                        </Trigger>
+                        <Trigger Property="SortDirection" Value="Descending">
+                            <Setter TargetName="SortIndicator" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="SortIndicator" Property="Data" Value="M0,0 L4,5 L8,0 Z" />
+                        </Trigger>
+                        <Trigger Property="IsFiltered" Value="True">
+                            <Setter TargetName="FilterIndicator" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- GridGroupRow Style -->
+    <Style TargetType="{x:Type controls:GridGroupRow}">
+        <Setter Property="Background" Value="{StaticResource GridGroupHeaderBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource FluentBorderSubtleBrush}" />
+        <Setter Property="BorderThickness" Value="0,0,0,1" />
+        <Setter Property="Foreground" Value="{StaticResource FluentTextPrimaryBrush}" />
+        <Setter Property="Padding" Value="8,6" />
+        <Setter Property="MinHeight" Value="32" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:GridGroupRow}">
+                    <Border x:Name="GroupBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            
+                            <!-- Expand/Collapse Icon -->
+                            <Path x:Name="ExpandIcon"
+                                  Grid.Column="0"
+                                  Width="10" Height="10"
+                                  Fill="{StaticResource FluentTextSecondaryBrush}"
+                                  VerticalAlignment="Center"
+                                  RenderTransformOrigin="0.5,0.5"
+                                  Data="M0,0 L6,5 L0,10 Z">
+                                <Path.RenderTransform>
+                                    <RotateTransform x:Name="ExpandIconRotation" Angle="0" />
+                                </Path.RenderTransform>
+                            </Path>
+                            
+                            <!-- Group Header Content -->
+                            <ContentPresenter Grid.Column="1"
+                                              Margin="8,0,0,0"
+                                              VerticalAlignment="Center" />
+                            
+                            <!-- Item Count -->
+                            <TextBlock x:Name="ItemCount"
+                                       Grid.Column="2"
+                                       Text="{TemplateBinding ItemCountText}"
+                                       Foreground="{StaticResource FluentTextSecondaryBrush}"
+                                       FontWeight="Normal"
+                                       FontSize="{StaticResource FluentFontSizeSmall}"
+                                       VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsExpanded" Value="True">
+                            <Setter TargetName="ExpandIcon" Property="RenderTransform">
+                                <Setter.Value>
+                                    <RotateTransform Angle="90" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="GroupBorder" Property="Background" 
+                                    Value="{StaticResource FluentBackgroundHoverBrush}" />
+                        </Trigger>
+                        <Trigger Property="GroupLevel" Value="1">
+                            <Setter TargetName="GroupBorder" Property="Background" 
+                                    Value="{StaticResource GridGroupHeaderLevel1Brush}" />
+                            <Setter Property="Padding" Value="20,6,8,6" />
+                        </Trigger>
+                        <Trigger Property="GroupLevel" Value="2">
+                            <Setter TargetName="GroupBorder" Property="Background" 
+                                    Value="{StaticResource GridGroupHeaderLevel2Brush}" />
+                            <Setter Property="Padding" Value="32,6,8,6" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Fluent Button Style for Grid Buttons -->
+    <Style x:Key="FluentGridButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{StaticResource FluentSurfaceBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource FluentBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Foreground" Value="{StaticResource FluentTextPrimaryBrush}" />
+        <Setter Property="FontSize" Value="{StaticResource FluentFontSizeSmall}" />
+        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="MinHeight" Value="24" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="ButtonBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{StaticResource FluentCornerRadiusSmall}"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ButtonBorder" Property="Background" 
+                                    Value="{StaticResource FluentBackgroundHoverBrush}" />
+                            <Setter TargetName="ButtonBorder" Property="BorderBrush" 
+                                    Value="{StaticResource FluentBorderBrightBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="ButtonBorder" Property="Background" 
+                                    Value="{StaticResource FluentAccentBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{StaticResource FluentTextDisabledBrush}" />
+                            <Setter TargetName="ButtonBorder" Property="Background" 
+                                    Value="{StaticResource FluentBackgroundBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Fluent CheckBox Style -->
+    <Style x:Key="FluentGridCheckBoxStyle" TargetType="{x:Type CheckBox}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{StaticResource FluentBorderBrightBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Foreground" Value="{StaticResource FluentTextPrimaryBrush}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type CheckBox}">
+                    <Grid>
+                        <Border x:Name="CheckBorder"
+                                Width="18" Height="18"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{StaticResource FluentCornerRadiusSmall}">
+                            <Path x:Name="CheckMark"
+                                  Width="12" Height="12"
+                                  Fill="{StaticResource FluentTextPrimaryBrush}"
+                                  Visibility="Collapsed"
+                                  Data="M1.5,5.5 L4.5,8.5 L10.5,2.5" 
+                                  Stretch="Uniform"
+                                  StrokeThickness="2"
+                                  Stroke="{StaticResource FluentTextPrimaryBrush}" />
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="CheckBorder" Property="Background" 
+                                    Value="{StaticResource FluentAccentBrush}" />
+                            <Setter TargetName="CheckBorder" Property="BorderBrush" 
+                                    Value="{StaticResource FluentAccentBrush}" />
+                            <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="{x:Null}">
+                            <Setter TargetName="CheckBorder" Property="Background" 
+                                    Value="{StaticResource FluentAccentBrush}" />
+                            <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="CheckMark" Property="Data" Value="M3,9 L13,9" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="CheckBorder" Property="BorderBrush" 
+                                    Value="{StaticResource FluentAccentLightBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="CheckBorder" Property="Background" 
+                                    Value="{StaticResource FluentBackgroundBrush}" />
+                            <Setter TargetName="CheckBorder" Property="BorderBrush" 
+                                    Value="{StaticResource FluentTextDisabledBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Fluent ComboBox Style -->
+    <Style x:Key="FluentGridComboBoxStyle" TargetType="{x:Type ComboBox}">
+        <Setter Property="Background" Value="{StaticResource FluentSurfaceBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource FluentBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Foreground" Value="{StaticResource FluentTextPrimaryBrush}" />
+        <Setter Property="FontSize" Value="{StaticResource FluentFontSizeNormal}" />
+        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="MinHeight" Value="28" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ComboBox}">
+                    <Grid>
+                        <ToggleButton x:Name="ToggleButton"
+                                      Focusable="False"
+                                      ClickMode="Press"
+                                      IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
+                            <ToggleButton.Template>
+                                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                    <Border x:Name="Border"
+                                            Background="{StaticResource FluentSurfaceBrush}"
+                                            BorderBrush="{StaticResource FluentBorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="{StaticResource FluentCornerRadiusSmall}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="24" />
+                                            </Grid.ColumnDefinitions>
+                                            <Path Grid.Column="1"
+                                                  Width="10" Height="6"
+                                                  Fill="{StaticResource FluentTextSecondaryBrush}"
+                                                  HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"
+                                                  Data="M0,0 L5,5 L10,0 Z" />
+                                        </Grid>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Border" Property="BorderBrush" 
+                                                    Value="{StaticResource FluentBorderBrightBrush}" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </ToggleButton.Template>
+                        </ToggleButton>
+                        <ContentPresenter x:Name="ContentSite"
+                                          IsHitTestVisible="False"
+                                          Content="{TemplateBinding SelectionBoxItem}"
+                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                          Margin="8,4,24,4"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Left" />
+                        <Popup x:Name="Popup"
+                               Placement="Bottom"
+                               IsOpen="{TemplateBinding IsDropDownOpen}"
+                               AllowsTransparency="True"
+                               Focusable="False"
+                               PopupAnimation="Slide">
+                            <Border x:Name="DropDownBorder"
+                                    MinWidth="{TemplateBinding ActualWidth}"
+                                    MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                    Background="{StaticResource FluentSurfaceBrush}"
+                                    BorderBrush="{StaticResource FluentBorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="{StaticResource FluentCornerRadius}"
+                                    Margin="0,2,0,0">
+                                <ScrollViewer SnapsToDevicePixels="True">
+                                    <StackPanel IsItemsHost="True" 
+                                                KeyboardNavigation.DirectionalNavigation="Contained" />
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Fluent TextBox Style -->
+    <Style x:Key="FluentGridTextBoxStyle" TargetType="{x:Type TextBox}">
+        <Setter Property="Background" Value="{StaticResource FluentSurfaceBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource FluentBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Foreground" Value="{StaticResource FluentTextPrimaryBrush}" />
+        <Setter Property="CaretBrush" Value="{StaticResource FluentTextPrimaryBrush}" />
+        <Setter Property="SelectionBrush" Value="{StaticResource FluentAccentBrush}" />
+        <Setter Property="FontSize" Value="{StaticResource FluentFontSizeNormal}" />
+        <Setter Property="Padding" Value="6,4" />
+        <Setter Property="MinHeight" Value="28" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Border x:Name="Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{StaticResource FluentCornerRadiusSmall}">
+                        <ScrollViewer x:Name="PART_ContentHost"
+                                      Margin="{TemplateBinding Padding}"
+                                      Focusable="False"
+                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="BorderBrush" 
+                                    Value="{StaticResource FluentBorderBrightBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter TargetName="Border" Property="BorderBrush" 
+                                    Value="{StaticResource FluentAccentBrush}" />
+                            <Setter TargetName="Border" Property="BorderThickness" Value="1,1,1,2" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Fluent ScrollBar Style -->
+    <Style x:Key="FluentScrollBarThumbStyle" TargetType="{x:Type Thumb}">
+        <Setter Property="Background" Value="{StaticResource FluentBorderBrightBrush}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <Border x:Name="ThumbBorder"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="3"
+                            Margin="2" />
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ThumbBorder" Property="Background" 
+                                    Value="{StaticResource FluentTextSecondaryBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="FluentScrollBarStyle" TargetType="{x:Type ScrollBar}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Width" Value="12" />
+        <Style.Triggers>
+            <Trigger Property="Orientation" Value="Horizontal">
+                <Setter Property="Width" Value="Auto" />
+                <Setter Property="Height" Value="12" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+</ResourceDictionary>
