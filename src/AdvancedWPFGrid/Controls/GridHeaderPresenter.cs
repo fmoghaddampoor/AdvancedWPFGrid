@@ -150,6 +150,12 @@ public class GridHeaderCell : ContentControl
         typeof(GridHeaderCell),
         new FrameworkPropertyMetadata(false));
 
+    public static readonly DependencyProperty IsDragOverProperty = DependencyProperty.Register(
+        nameof(IsDragOver),
+        typeof(bool),
+        typeof(GridHeaderCell),
+        new FrameworkPropertyMetadata(false));
+
     private static void OnColumnChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is GridHeaderCell cell && e.NewValue is GridColumnBase column)
@@ -207,6 +213,9 @@ public class GridHeaderCell : ContentControl
     private Thumb? _resizeGrip;
     private Button? _sortButton;
     private Button? _filterButton;
+    private bool _isDragging;
+    private Point _dragStartPoint;
+    private const double DragThreshold = 5.0;
 
     #endregion
 
@@ -279,6 +288,118 @@ public class GridHeaderCell : ContentControl
             UpdateSortIndicator();
         }
     }
+
+    #endregion
+
+    #region Drag and Drop Column Reordering
+
+    protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+    {
+        base.OnMouseLeftButtonDown(e);
+        
+        // Only track for potential drag, don't capture yet
+        if (Grid?.CanUserReorderColumns == true && Column != null && !Column.IsSelectionColumn)
+        {
+            _dragStartPoint = e.GetPosition(this);
+            _isDragging = false;
+            // Don't capture mouse here - let other elements handle clicks first
+        }
+    }
+
+    protected override void OnMouseMove(MouseEventArgs e)
+    {
+        base.OnMouseMove(e);
+        
+        if (e.LeftButton == MouseButtonState.Pressed && Grid?.CanUserReorderColumns == true && 
+            Column != null && !Column.IsSelectionColumn)
+        {
+            var currentPos = e.GetPosition(this);
+            var diff = currentPos - _dragStartPoint;
+            
+            // Only start dragging after exceeding threshold
+            if (!_isDragging && (Math.Abs(diff.X) > DragThreshold || Math.Abs(diff.Y) > DragThreshold))
+            {
+                _isDragging = true;
+                CaptureMouse();
+                Cursor = Cursors.SizeWE;
+            }
+        }
+    }
+
+    protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
+    {
+        base.OnMouseLeftButtonUp(e);
+        
+        if (_isDragging && IsMouseCaptured)
+        {
+            ReleaseMouseCapture();
+            
+            if (Grid?.CanUserReorderColumns == true && Column != null)
+            {
+                // Find the target header cell under the mouse
+                var mousePos = e.GetPosition(Grid);
+                var targetCell = FindHeaderCellAtPosition(mousePos);
+                
+                if (targetCell != null && targetCell != this && targetCell.Column != null && 
+                    !targetCell.Column.IsSelectionColumn)
+                {
+                    MoveColumn(Column, targetCell.Column);
+                }
+            }
+            
+            _isDragging = false;
+            Cursor = Grid?.CanUserReorderColumns == true ? Cursors.Hand : Cursors.Arrow;
+        }
+    }
+
+    private GridHeaderCell? FindHeaderCellAtPosition(Point position)
+    {
+        if (Grid == null) return null;
+        
+        // Find the GridHeaderPresenter
+        var presenter = Grid.Template?.FindName("PART_HeaderPresenter", Grid) as GridHeaderPresenter;
+        if (presenter == null) return null;
+        
+        // Iterate through header cells using VisualTreeHelper
+        var childCount = System.Windows.Media.VisualTreeHelper.GetChildrenCount(presenter);
+        for (int i = 0; i < childCount; i++)
+        {
+            if (System.Windows.Media.VisualTreeHelper.GetChild(presenter, i) is GridHeaderCell child)
+            {
+                var cellBounds = child.TransformToAncestor(Grid).TransformBounds(
+                    new Rect(0, 0, child.ActualWidth, child.ActualHeight));
+                
+                if (cellBounds.Contains(position))
+                {
+                    return child;
+                }
+            }
+        }
+        
+        return null;
+    }
+
+    private void MoveColumn(GridColumnBase sourceColumn, GridColumnBase targetColumn)
+    {
+        if (Grid?.Columns == null) return;
+        
+        var columns = Grid.Columns;
+        var sourceIndex = columns.IndexOf(sourceColumn);
+        var targetIndex = columns.IndexOf(targetColumn);
+        
+        if (sourceIndex >= 0 && targetIndex >= 0 && sourceIndex != targetIndex)
+        {
+            // True swap: exchange positions by assigning directly
+            // We need to use a temporary approach since ObservableCollection doesn't have direct swap
+            columns[sourceIndex] = targetColumn;
+            columns[targetIndex] = sourceColumn;
+            
+            // Rebuild headers
+            var presenter = Grid.Template?.FindName("PART_HeaderPresenter", Grid) as GridHeaderPresenter;
+            presenter?.UpdateHeaders();
+        }
+    }
+
 
     private void OnFilterButtonClick(object sender, RoutedEventArgs e)
     {
