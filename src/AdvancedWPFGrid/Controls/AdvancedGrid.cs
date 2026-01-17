@@ -39,7 +39,7 @@ public class AdvancedGrid : Control
             typeof(AdvancedGrid),
             new FrameworkPropertyMetadata(true));
     }
-
+    
     #endregion
 
     #region Dependency Properties
@@ -55,6 +55,8 @@ public class AdvancedGrid : Control
         typeof(GridColumnCollection),
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(null, OnColumnsChanged));
+
+    private bool _initialAutoFitDone = false;
 
     public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(
         nameof(SelectedItem),
@@ -102,7 +104,7 @@ public class AdvancedGrid : Control
         nameof(HeaderHeight),
         typeof(double),
         typeof(AdvancedGrid),
-        new FrameworkPropertyMetadata(36.0));
+        new FrameworkPropertyMetadata(48.0));
 
     public static readonly DependencyProperty RowHeightProperty = DependencyProperty.Register(
         nameof(RowHeight),
@@ -324,16 +326,13 @@ public class AdvancedGrid : Control
 
         // Add sufficient padding for:
         // - Cell Padding (left/right)
-        // - Header Padding
-        // - Sort/Filter Buttons in Header (~40px)
-        double extraWidth = 60.0;
+        // - Header Padding (10+8=18px)
+        // - Two Large Buttons (28x2 = 56px)
+        // - Margins & Spacing (~10px)
+        // - Buffer for Font Variations (Bold etc)
+        // Total needed ~100px.
+        double extraWidth = 100.0;
         
-        // Handle specialized columns
-        if (column is TextButtonColumn textBtnCol)
-        {
-            extraWidth += textBtnCol.ButtonWidth;
-        }
-
         column.Width = maxWidth + extraWidth;
     }
 
@@ -433,6 +432,16 @@ public class AdvancedGrid : Control
     private void OnGridLoaded(object sender, RoutedEventArgs e)
     {
         RefreshView();
+        
+        if (!_initialAutoFitDone && ItemsSource != null)
+        {
+            Dispatcher.BeginInvoke(new Action(() => {
+                if (!_initialAutoFitDone) {
+                    AutoFitAllColumns();
+                    _initialAutoFitDone = true;
+                }
+            }), System.Windows.Threading.DispatcherPriority.Loaded);
+        }
     }
 
     private void OnGridUnloaded(object sender, RoutedEventArgs e)
@@ -486,6 +495,16 @@ public class AdvancedGrid : Control
         }
 
         RefreshView();
+
+        if (IsLoaded && !_initialAutoFitDone && newValue != null)
+        {
+            Dispatcher.BeginInvoke(new Action(() => {
+                if (!_initialAutoFitDone) {
+                    AutoFitAllColumns();
+                    _initialAutoFitDone = true;
+                }
+            }), System.Windows.Threading.DispatcherPriority.Loaded);
+        }
     }
 
     private void OnSourceCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
