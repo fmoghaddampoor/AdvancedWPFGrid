@@ -154,61 +154,63 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:GridHeaderCell}">
-                    <Border x:Name="HeaderBorder"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            Padding="{TemplateBinding Padding}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            
-                            <!-- Header Text -->
-                            <TextBlock x:Name="HeaderText"
-                                       Grid.Column="0"
-                                       Text="{TemplateBinding Content}"
-                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                       TextTrimming="CharacterEllipsis" />
-                            
-                            <!-- Sort Indicator -->
-                            <Path x:Name="SortIndicator"
-                                  Grid.Column="1"
-                                  Width="8" Height="6"
-                                  Margin="4,0,0,0"
-                                  Fill="{StaticResource FluentTextSecondaryBrush}"
-                                  Visibility="Collapsed"
-                                  VerticalAlignment="Center"
-                                  Data="M0,0 L4,5 L8,0 Z" />
-                            
-                            <!-- Filter Indicator -->
-                            <Path x:Name="FilterIndicator"
-                                  Grid.Column="2"
-                                  Width="10" Height="10"
-                                  Margin="4,0,0,0"
-                                  Fill="{StaticResource FluentAccentBrush}"
-                                  Visibility="Collapsed"
-                                  VerticalAlignment="Center"
-                                  Data="M0,0 L10,0 L6,5 L6,10 L4,10 L4,5 Z" />
-                            
-                            <!-- Resize Grip -->
-                            <Thumb x:Name="PART_ResizeGrip"
-                                   Width="4"
-                                   Margin="-2,0,-2,0"
-                                   Opacity="0"
-                                   HorizontalAlignment="Right"
-                                   Cursor="SizeWE">
-                                <Thumb.Template>
-                                    <ControlTemplate TargetType="Thumb">
-                                        <Rectangle Fill="Transparent" />
-                                    </ControlTemplate>
-                                </Thumb.Template>
-                            </Thumb>
-                        </Grid>
-                    </Border>
+                    <Grid>
+                        <Border x:Name="HeaderBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                
+                                <!-- Header Text -->
+                                <TextBlock x:Name="HeaderText"
+                                           Grid.Column="0"
+                                           Text="{TemplateBinding Content}"
+                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                           TextTrimming="CharacterEllipsis" />
+                                
+                                <!-- Sort Indicator -->
+                                <Path x:Name="SortIndicator"
+                                      Grid.Column="1"
+                                      Width="8" Height="6"
+                                      Margin="4,0,0,0"
+                                      Fill="{StaticResource FluentTextSecondaryBrush}"
+                                      Visibility="Collapsed"
+                                      VerticalAlignment="Center"
+                                      Data="M0,0 L4,5 L8,0 Z" />
+                                
+                                <!-- Filter Indicator -->
+                                <Path x:Name="FilterIndicator"
+                                      Grid.Column="2"
+                                      Width="10" Height="10"
+                                      Margin="4,0,0,0"
+                                      Fill="{StaticResource FluentAccentBrush}"
+                                      Visibility="Collapsed"
+                                      VerticalAlignment="Center"
+                                      Data="M0,0 L10,0 L6,5 L6,10 L4,10 L4,5 Z" />
+                            </Grid>
+                        </Border>
+                        
+                        <!-- Resize Grip (Overlay to ignore padding) -->
+                        <Thumb x:Name="PART_ResizeGrip"
+                               Width="5"
+                               Margin="0,0,-2,0"
+                               Opacity="0"
+                               HorizontalAlignment="Right"
+                               Cursor="SizeWE">
+                            <Thumb.Template>
+                                <ControlTemplate TargetType="Thumb">
+                                    <Rectangle Fill="Transparent" />
+                                </ControlTemplate>
+                            </Thumb.Template>
+                        </Thumb>
+                    </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="HeaderBorder" Property="Background" 
