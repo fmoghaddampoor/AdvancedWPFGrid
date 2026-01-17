@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using AdvancedWPFGrid.Columns;
@@ -189,9 +190,13 @@ public class GridCellsPresenter : Panel
             {
                 Column = column,
                 DataItem = Row.DataItem,
-                Width = column.ActualWidth,
                 Grid = Row.Grid
             };
+
+            // Bind Cell properties to Column properties to ensure synchronization
+            BindingOperations.SetBinding(cell, FrameworkElement.WidthProperty, new Binding("Width") { Source = column });
+            BindingOperations.SetBinding(cell, FrameworkElement.MinWidthProperty, new Binding("MinWidth") { Source = column });
+            BindingOperations.SetBinding(cell, FrameworkElement.MaxWidthProperty, new Binding("MaxWidth") { Source = column });
 
             Children.Add(cell);
         }
@@ -208,9 +213,9 @@ public class GridCellsPresenter : Panel
         {
             if (child is GridCell cell)
             {
-                cell.Width = cell.Column?.ActualWidth ?? 100;
-                child.Measure(new Size(cell.Width, maxHeight));
-                totalWidth += cell.Width;
+                // Measure with infinite width allowance; the bound Width property will constrain it
+                child.Measure(new Size(double.PositiveInfinity, maxHeight));
+                totalWidth += child.DesiredSize.Width;
             }
         }
 
@@ -226,7 +231,7 @@ public class GridCellsPresenter : Panel
         {
             if (child is GridCell cell)
             {
-                var width = cell.Column?.ActualWidth ?? 100;
+                var width = child.DesiredSize.Width;
                 child.Arrange(new Rect(x, 0, width, height));
                 x += width;
             }
