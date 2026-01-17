@@ -191,6 +191,7 @@
                                           HorizontalAlignment="Center"
                                           VerticalAlignment="Center"
                                           Visibility="Collapsed"
+                                          Style="{DynamicResource FluentGridCheckBoxStyle}"
                                           IsChecked="{Binding SelectionState, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" />
                                 
                                 <!-- Sort Button (High-Impact SVG) -->

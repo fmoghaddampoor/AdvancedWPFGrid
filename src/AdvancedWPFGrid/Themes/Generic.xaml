@@ -5,7 +5,61 @@
     xmlns:col="clr-namespace:AdvancedWPFGrid.Columns">
 
     <!-- Simple inline styles - no merged dictionaries -->
-    
+
+    <!-- Professional Checkbox Style for Grid Columns -->
+    <Style x:Key="FluentGridCheckBoxStyle" TargetType="CheckBox">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="#888888" />
+        <Setter Property="BorderThickness" Value="1.5" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+                    <Grid>
+                        <Border x:Name="CheckBorder"
+                                Width="18" Height="18"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4"
+                                SnapsToDevicePixels="True" />
+                        <Path x:Name="CheckMark"
+                              Width="12" Height="12"
+                              Data="M 2,6 L 6,10 L 12,2"
+                              Stroke="#333333"
+                              StrokeThickness="2"
+                              StrokeStartLineCap="Round"
+                              StrokeEndLineCap="Round"
+                              StrokeLineJoin="Round"
+                              Visibility="Collapsed"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center" />
+                        <Rectangle x:Name="IndeterminateMark"
+                                   Width="10" Height="2"
+                                   Fill="#333333"
+                                   RadiusX="1" RadiusY="1"
+                                   Visibility="Collapsed"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="{x:Null}">
+                            <Setter TargetName="IndeterminateMark" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#666666" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- AdvancedGrid Style -->
     <Style TargetType="{x:Type controls:AdvancedGrid}">
         <Setter Property="Background" Value="#1E1E1E" />
@@ -145,6 +199,7 @@
                                           HorizontalAlignment="Center"
                                           VerticalAlignment="Center"
                                           Visibility="Collapsed"
+                                          Style="{DynamicResource FluentGridCheckBoxStyle}"
                                           IsChecked="{Binding SelectionState, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" />
 
                                 <!-- Sort Button (High-Impact SVG) -->

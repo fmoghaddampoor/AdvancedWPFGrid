@@ -25,7 +25,8 @@ public class SelectionColumn : GridColumnBase
         {
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
-            Margin = new Thickness(0)
+            Margin = new Thickness(0),
+            Style = Application.Current.TryFindResource("FluentGridCheckBoxStyle") as Style
         };
 
         // Bind to GridRow.IsSelected instead of dataItem directly, 
