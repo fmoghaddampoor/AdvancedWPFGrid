@@ -1,0 +1,80 @@
+{
+  "Roles": [
+    "User",
+    "Admin",
+    "Manager",
+    "Guest"
+  ],
+  "People": [
+    {
+      "Name": "Person 1",
+      "Age": 21,
+      "IsActive": false,
+      "Role": "Admin",
+      "Salary": 31000
+    },
+    {
+      "Name": "Person 2",
+      "Age": 22,
+      "IsActive": true,
+      "Role": "Manager",
+      "Salary": 32000
+    },
+    {
+      "Name": "Person 3",
+      "Age": 23,
+      "IsActive": false,
+      "Role": "Guest",
+      "Salary": 33000
+    },
+    {
+      "Name": "Person 4",
+      "Age": 24,
+      "IsActive": true,
+      "Role": "User",
+      "Salary": 34000
+    },
+    {
+      "Name": "Person 5",
+      "Age": 25,
+      "IsActive": false,
+      "Role": "Admin",
+      "Salary": 35000
+    },
+    {
+      "Name": "Person 6",
+      "Age": 26,
+      "IsActive": true,
+      "Role": "Manager",
+      "Salary": 36000
+    },
+    {
+      "Name": "Person 7",
+      "Age": 27,
+      "IsActive": false,
+      "Role": "Guest",
+      "Salary": 37000
+    },
+    {
+      "Name": "Person 8",
+      "Age": 28,
+      "IsActive": true,
+      "Role": "User",
+      "Salary": 38000
+    },
+    {
+      "Name": "Person 9",
+      "Age": 29,
+      "IsActive": false,
+      "Role": "Admin",
+      "Salary": 39000
+    },
+    {
+      "Name": "Person 10",
+      "Age": 30,
+      "IsActive": true,
+      "Role": "Manager",
+      "Salary": 40000
+    }
+  ]
+}
