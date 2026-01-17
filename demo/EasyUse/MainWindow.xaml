@@ -13,7 +13,7 @@
         x:Name="RootWindow">
     
     <Window.Resources>
-        <local:BindingProxy x:Key="DataContextProxy" Data="{Binding}" />
+        <local:BindingProxy x:Key="Proxy" Data="{Binding}"/>
     </Window.Resources>
 
     <Grid>
@@ -69,7 +69,7 @@
                         <col:DoubleColumn Header="Salary" 
                                           Binding="Salary" 
                                           Width="100"
-                                          StringFormat="{Binding Data.SalaryFormatString, Source={StaticResource DataContextProxy}}"/>
+                                          StringFormat="{Binding Data.SalaryFormatString, Source={StaticResource Proxy}}"/>
 
                         <!-- CheckBox Column -->
                         <col:CheckBoxColumn Header="Active" 
@@ -79,7 +79,7 @@
                         <!-- ComboBox Column -->
                         <col:ComboBoxColumn Header="Role" 
                                             Binding="Role" 
-                                            ItemsSource="{Binding DataContext.Roles, RelativeSource={RelativeSource AncestorType=Window}}"
+                                            ItemsSource="{Binding Data.Roles, Source={StaticResource Proxy}}"
                                             Width="120"/>
 
                         <!-- Button Column -->

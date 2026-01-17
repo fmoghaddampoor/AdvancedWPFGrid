@@ -549,6 +549,17 @@ public class AdvancedGrid : Control
         ItemsHost?.InvalidateMeasure();
         ItemsHost?.InvalidateVisual();
         HeaderPresenter?.InvalidateMeasure();
+
+        if (ItemsHost != null)
+        {
+            foreach (UIElement child in ItemsHost.PublicInternalChildren)
+            {
+                if (child is GridRow row)
+                {
+                    row.UpdateCells();
+                }
+            }
+        }
     }
 
     public void ScrollIntoView(object item)

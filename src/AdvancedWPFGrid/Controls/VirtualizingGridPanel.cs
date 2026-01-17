@@ -32,6 +32,8 @@ public class VirtualizingGridPanel : VirtualizingPanel, IScrollInfo
 
     internal AdvancedGrid? Grid { get; set; }
 
+    public UIElementCollection PublicInternalChildren => InternalChildren;
+
     private double RowHeight => Grid?.RowHeight ?? 32;
     private int TotalItemCount => GetFlattenedItemCount();
 
