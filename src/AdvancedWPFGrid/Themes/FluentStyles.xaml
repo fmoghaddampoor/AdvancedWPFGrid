@@ -544,15 +544,15 @@
 
     <!-- GridHeaderCell Style -->
     <Style TargetType="{x:Type controls:GridHeaderCell}">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderBrush" Value="{DynamicResource GridCellBorderBrush}" />
-        <Setter Property="BorderThickness" Value="0,0,1,0" />
+        <Setter Property="Background" Value="{DynamicResource FluentSurfaceAltBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource FluentBorderBrush}" />
+        <Setter Property="BorderThickness" Value="0,0,1,1" />
         <Setter Property="Foreground" Value="{DynamicResource FluentTextPrimaryBrush}" />
         <Setter Property="FontWeight" Value="SemiBold" />
-        <Setter Property="Padding" Value="{DynamicResource FluentHeaderPadding}" />
+        <Setter Property="Padding" Value="10,8" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
-        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Cursor" Value="Arrow" />
         <Setter Property="MinHeight" Value="36" />
         <Setter Property="Template">
             <Setter.Value>
@@ -560,9 +560,9 @@
                     <Grid>
                         <Border x:Name="HeaderBorder"
                                 Background="{TemplateBinding Background}"
-                                BorderBrush="{DynamicResource FluentBorderBrush}"
-                                BorderThickness="0,0,0,2"
-                                Padding="12,0,12,0">
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="10,0,8,0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
@@ -574,6 +574,7 @@
                                 <TextBlock x:Name="HeaderText"
                                            Grid.Column="0"
                                            Text="{TemplateBinding Content}"
+                                           Foreground="{TemplateBinding Foreground}"
                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                            TextTrimming="CharacterEllipsis" />
@@ -589,7 +590,7 @@
                                 <!-- Sort Button (High-Impact SVG) -->
                                 <Button x:Name="PART_SortButton"
                                         Grid.Column="1"
-                                        Width="24" Height="24"
+                                        Width="28" Height="28"
                                         Margin="4,0,0,0"
                                         Background="Transparent"
                                         BorderThickness="0"
@@ -597,33 +598,33 @@
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Border x:Name="BtnBorder" Background="Transparent" CornerRadius="0">
-                                                <Path x:Name="SortIndicator"
-                                                      Data="M 6,12 L 14,4 L 22,12 M 6,16 L 14,24 L 22,16"
-                                                      Stroke="{DynamicResource FluentAccentBrush}"
-                                                      StrokeThickness="2"
-                                                      StrokeStartLineCap="Round"
-                                                      StrokeEndLineCap="Round"
-                                                      StrokeLineJoin="Round"
-                                                      Stretch="Uniform"
-                                                      Width="14" Height="18"
-                                                      HorizontalAlignment="Center"
-                                                      VerticalAlignment="Center"/>
+                                                <Path x:Name="SortArrow"
+                                                       Data="M 6,12 L 14,4 L 22,12 M 6,16 L 14,24 L 22,16"
+                                                       Stroke="{DynamicResource FluentAccentBrush}"
+                                                       StrokeThickness="2"
+                                                       StrokeStartLineCap="Round"
+                                                       StrokeEndLineCap="Round"
+                                                       StrokeLineJoin="Round"
+                                                       Stretch="Uniform"
+                                                       Width="16" Height="20"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"/>
                                             </Border>
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="SortIndicator" Property="Stroke" Value="#005A9E"/>
+                                                    <Setter TargetName="SortArrow" Property="Stroke" Value="{DynamicResource FluentAccentLightBrush}"/>
                                                 </Trigger>
                                                 <DataTrigger Binding="{Binding SortDirection, RelativeSource={RelativeSource AncestorType=controls:GridHeaderCell}}" Value="Ascending">
-                                                    <Setter TargetName="SortIndicator" Property="Data" Value="M 4,20 L 14,4 L 24,20" />
-                                                    <Setter TargetName="SortIndicator" Property="Stroke" Value="{DynamicResource FluentAccentBrush}"/>
-                                                    <Setter TargetName="SortIndicator" Property="Fill" Value="{DynamicResource FluentAccentBrush}"/>
-                                                    <Setter TargetName="SortIndicator" Property="StrokeThickness" Value="1"/>
+                                                    <Setter TargetName="SortArrow" Property="Data" Value="M 4,20 L 14,4 L 24,20" />
+                                                    <Setter TargetName="SortArrow" Property="Stroke" Value="{DynamicResource FluentAccentBrush}"/>
+                                                    <Setter TargetName="SortArrow" Property="Fill" Value="{DynamicResource FluentAccentBrush}"/>
+                                                    <Setter TargetName="SortArrow" Property="StrokeThickness" Value="1"/>
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding SortDirection, RelativeSource={RelativeSource AncestorType=controls:GridHeaderCell}}" Value="Descending">
-                                                    <Setter TargetName="SortIndicator" Property="Data" Value="M 4,8 L 14,24 L 24,8" />
-                                                    <Setter TargetName="SortIndicator" Property="Stroke" Value="{DynamicResource FluentAccentBrush}"/>
-                                                    <Setter TargetName="SortIndicator" Property="Fill" Value="{DynamicResource FluentAccentBrush}"/>
-                                                    <Setter TargetName="SortIndicator" Property="StrokeThickness" Value="1"/>
+                                                    <Setter TargetName="SortArrow" Property="Data" Value="M 4,8 L 14,24 L 24,8" />
+                                                    <Setter TargetName="SortArrow" Property="Stroke" Value="{DynamicResource FluentAccentBrush}"/>
+                                                    <Setter TargetName="SortArrow" Property="Fill" Value="{DynamicResource FluentAccentBrush}"/>
+                                                    <Setter TargetName="SortArrow" Property="StrokeThickness" Value="1"/>
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding CanSort, RelativeSource={RelativeSource AncestorType=controls:GridHeaderCell}}" Value="False">
                                                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -636,7 +637,7 @@
                                 <!-- Filter Button (High-Impact SVG) -->
                                 <Button x:Name="PART_FilterButton"
                                         Grid.Column="2"
-                                        Width="24" Height="24"
+                                        Width="28" Height="28"
                                         Margin="4,0,0,0"
                                         Background="Transparent"
                                         BorderThickness="0"
@@ -644,40 +645,34 @@
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Border x:Name="BtnBorder" Background="Transparent" CornerRadius="0">
-                                                <Path x:Name="FilterIndicator"
-                                                      Data="M 4,4 L 24,4 L 16,14 L 16,24 L 12,20 L 12,14 Z"
-                                                      Stroke="{DynamicResource FluentAccentBrush}"
-                                                      StrokeThickness="2"
-                                                      StrokeStartLineCap="Round"
-                                                      StrokeEndLineCap="Round"
-                                                      StrokeLineJoin="Round"
-                                                      Fill="Transparent"
-                                                      Width="16" Height="16"
-                                                      Stretch="Uniform"
-                                                      HorizontalAlignment="Center"
-                                                      VerticalAlignment="Center"/>
+                                                <Path x:Name="FilterIcon"
+                                                       Data="M 4,4 L 24,4 L 16,14 L 16,24 L 12,20 L 12,14 Z"
+                                                       Stroke="{DynamicResource FluentAccentBrush}"
+                                                       StrokeThickness="2"
+                                                       StrokeStartLineCap="Round"
+                                                       StrokeEndLineCap="Round"
+                                                       StrokeLineJoin="Round"
+                                                       Fill="Transparent"
+                                                       Width="18" Height="18"
+                                                       Stretch="Uniform"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"/>
                                             </Border>
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="FilterIndicator" Property="Stroke" Value="#005A9E"/>
+                                                    <Setter TargetName="FilterIcon" Property="Stroke" Value="{DynamicResource FluentAccentLightBrush}"/>
                                                 </Trigger>
                                                 <DataTrigger Binding="{Binding IsFiltered, RelativeSource={RelativeSource AncestorType=controls:GridHeaderCell}}" Value="True">
-                                                    <Setter TargetName="FilterIndicator" Property="Fill" Value="{DynamicResource FluentAccentBrush}"/>
-                                                    <Setter TargetName="FilterIndicator" Property="Stroke" Value="{DynamicResource FluentAccentBrush}"/>
-                                                    <Setter TargetName="FilterIndicator" Property="StrokeThickness" Value="1"/>
+                                                    <Setter TargetName="FilterIcon" Property="Fill" Value="{DynamicResource FluentAccentBrush}"/>
+                                                    <Setter TargetName="FilterIcon" Property="Stroke" Value="{DynamicResource FluentAccentBrush}"/>
+                                                    <Setter TargetName="FilterIcon" Property="StrokeThickness" Value="1"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding CanFilter, RelativeSource={RelativeSource AncestorType=controls:GridHeaderCell}}" Value="False">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
                                                 </DataTrigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>
                                     </Button.Template>
-                                    <Button.Style>
-                                        <Style TargetType="Button">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding CanFilter, RelativeSource={RelativeSource AncestorType=controls:GridHeaderCell}}" Value="False">
-                                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Button.Style>
                                 </Button>
                             </Grid>
                         </Border>
@@ -695,7 +690,7 @@
                                         <Rectangle x:Name="DividerLine"
                                                    VerticalAlignment="Stretch"
                                                    Width="1"
-                                                   Fill="{DynamicResource GridCellBorderBrush}"
+                                                   Fill="{DynamicResource FluentBorderBrush}"
                                                    HorizontalAlignment="Left"
                                                    Margin="4,0,0,0"/>
                                     </Border>
@@ -710,16 +705,8 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="HeaderBorder" Property="Background" 
-                                    Value="Transparent" />
                             <Setter TargetName="PART_ResizeGrip" Property="Opacity" Value="1" />
                         </Trigger>
-                        <DataTrigger Binding="{Binding HasVerticalGridLines, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="False">
-                            <Setter TargetName="HeaderBorder" Property="BorderThickness" Value="0,0,0,0" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding HasVerticalGridLines, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="False">
-                            <Setter TargetName="HeaderBorder" Property="BorderThickness" Value="0,0,0,2" />
-                        </DataTrigger>
                         <DataTrigger Binding="{Binding IsSelectionColumn, RelativeSource={RelativeSource Self}}" Value="True">
                             <Setter TargetName="PART_SortButton" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="PART_FilterButton" Property="Visibility" Value="Collapsed" />
