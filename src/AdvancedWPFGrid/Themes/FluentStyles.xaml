@@ -514,18 +514,13 @@
                                 <controls:VirtualizingGridPanel x:Name="PART_ItemsHost" />
                             </ScrollViewer>
 
-                            <!-- Summary Row -->
                             <Border x:Name="PART_SummaryRow"
                                     Grid.Row="3"
                                     Visibility="Collapsed"
                                     Background="{DynamicResource FluentSurfaceAltBrush}"
                                     BorderBrush="{DynamicResource FluentBorderSubtleBrush}"
                                     BorderThickness="0,1,0,0">
-                                <ScrollViewer x:Name="PART_SummaryScrollViewer" 
-                                              HorizontalScrollBarVisibility="Hidden" 
-                                              VerticalScrollBarVisibility="Disabled">
-                                   <controls:GridSummaryPresenter x:Name="PART_SummaryPresenter" />
-                                </ScrollViewer>
+                                <controls:GridSummaryPresenter x:Name="PART_SummaryPresenter" />
                             </Border>
                         </Grid>
                     </Border>
@@ -557,7 +552,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:GridSummaryCell}">
-                    <Border BorderBrush="{DynamicResource FluentBorderSubtleBrush}"
+                    <Border x:Name="CellBorder" 
+                            BorderBrush="{DynamicResource FluentBorderSubtleBrush}"
                             BorderThickness="0,0,1,0"
                             Padding="10,4">
                         <TextBlock Text="{Binding Result.FormattedValue, RelativeSource={RelativeSource TemplatedParent}}"
@@ -567,6 +563,22 @@
                                    Foreground="{DynamicResource FluentAccentBrush}"
                                    FontSize="12"/>
                     </Border>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding HasVerticalSummarySeparator, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="False">
+                            <Setter TargetName="CellBorder" Property="BorderThickness" Value="0" />
+                        </DataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsLastFrozen, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Grid.HasVerticalFrozenColumnSeparator, RelativeSource={RelativeSource TemplatedParent}}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="CellBorder" Property="BorderThickness" Value="0,0,2,0" />
+                            <Setter TargetName="CellBorder" Property="BorderBrush" Value="{DynamicResource FluentBorderBrush}" />
+                        </MultiDataTrigger>
+                        <Trigger Property="IsFrozen" Value="True">
+                            <Setter TargetName="CellBorder" Property="Background" Value="{DynamicResource FluentSurfaceAltBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -662,6 +674,25 @@
                         <DataTrigger Binding="{Binding HasVerticalGridLines, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="False">
                             <Setter TargetName="CellBorder" Property="BorderThickness" Value="0" />
                         </DataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsLastFrozen, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Grid.HasVerticalFrozenColumnSeparator, RelativeSource={RelativeSource TemplatedParent}}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="CellBorder" Property="BorderBrush" Value="{DynamicResource FluentBorderBrush}" />
+                            <Setter TargetName="CellBorder" Property="BorderBrush" Value="{DynamicResource FluentBorderBrush}" />
+                            <Setter TargetName="CellBorder" Property="BorderThickness" Value="0,0,2,0" />
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding HasVerticalGridLines, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="True" />
+                                <Condition Binding="{Binding IsLastFrozen, RelativeSource={RelativeSource Self}}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="CellBorder" Property="BorderThickness" Value="0,0,1,0" />
+                        </MultiDataTrigger>
+                        <Trigger Property="IsFrozen" Value="True">
+                            <Setter TargetName="CellBorder" Property="Background" Value="{DynamicResource FluentSurfaceAltBrush}" />
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -687,7 +718,7 @@
                         <Border x:Name="HeaderBorder"
                                 Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderThickness="0,0,1,1"
                                 Padding="10,0,8,0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -821,7 +852,7 @@
                                                    Margin="4,0,0,0"/>
                                     </Border>
                                     <ControlTemplate.Triggers>
-                                        <DataTrigger Binding="{Binding HasVerticalGridLines, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="False">
+                                        <DataTrigger Binding="{Binding HasVerticalHeaderColumnSeparator, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="False">
                                             <Setter TargetName="DividerLine" Property="Visibility" Value="Collapsed"/>
                                         </DataTrigger>
                                     </ControlTemplate.Triggers>
@@ -839,6 +870,19 @@
                             <Setter TargetName="HeaderText" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="PART_HeaderSelectionCheckBox" Property="Visibility" Value="Visible" />
                         </DataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsLastFrozen, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Grid.HasVerticalFrozenColumnSeparator, RelativeSource={RelativeSource TemplatedParent}}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="HeaderBorder" Property="BorderThickness" Value="0,0,2,1" />
+                        </MultiDataTrigger>
+                        <DataTrigger Binding="{Binding HasVerticalHeaderColumnSeparator, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="False">
+                            <Setter TargetName="HeaderBorder" Property="BorderThickness" Value="0,0,0,1" />
+                        </DataTrigger>
+                        <Trigger Property="IsFrozen" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource FluentSurfaceAltBrush}" />
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

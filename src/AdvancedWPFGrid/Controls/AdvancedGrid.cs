@@ -198,7 +198,15 @@ public class AdvancedGrid : Control
         nameof(FrozenColumnCount),
         typeof(int),
         typeof(AdvancedGrid),
-        new FrameworkPropertyMetadata(0));
+        new FrameworkPropertyMetadata(0, OnFrozenColumnCountChanged));
+
+    private static void OnFrozenColumnCountChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is AdvancedGrid grid)
+        {
+            grid.RefreshView();
+        }
+    }
 
     /// <summary>
     /// Identifies the <see cref="SelectionState"/> dependency property.
@@ -241,6 +249,33 @@ public class AdvancedGrid : Control
     /// </summary>
     public static readonly DependencyProperty AlternatingRowsProperty = DependencyProperty.Register(
         nameof(AlternatingRows),
+        typeof(bool),
+        typeof(AdvancedGrid),
+        new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.AffectsRender));
+
+    /// <summary>
+    /// Identifies the <see cref="HasVerticalHeaderColumnSeparator"/> dependency property.
+    /// </summary>
+    public static readonly DependencyProperty HasVerticalHeaderColumnSeparatorProperty = DependencyProperty.Register(
+        nameof(HasVerticalHeaderColumnSeparator),
+        typeof(bool),
+        typeof(AdvancedGrid),
+        new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.AffectsRender));
+
+    /// <summary>
+    /// Identifies the <see cref="HasVerticalSummarySeparator"/> dependency property.
+    /// </summary>
+    public static readonly DependencyProperty HasVerticalSummarySeparatorProperty = DependencyProperty.Register(
+        nameof(HasVerticalSummarySeparator),
+        typeof(bool),
+        typeof(AdvancedGrid),
+        new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.AffectsRender));
+
+    /// <summary>
+    /// Identifies the <see cref="HasVerticalFrozenColumnSeparator"/> dependency property.
+    /// </summary>
+    public static readonly DependencyProperty HasVerticalFrozenColumnSeparatorProperty = DependencyProperty.Register(
+        nameof(HasVerticalFrozenColumnSeparator),
         typeof(bool),
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.AffectsRender));
@@ -307,6 +342,17 @@ public class AdvancedGrid : Control
         typeof(bool),
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(true));
+
+    /// <summary>
+    /// Identifies the <see cref="HorizontalOffset"/> dependency property (Read-Only).
+    /// </summary>
+    private static readonly DependencyPropertyKey HorizontalOffsetPropertyKey = DependencyProperty.RegisterReadOnly(
+        nameof(HorizontalOffset),
+        typeof(double),
+        typeof(AdvancedGrid),
+        new FrameworkPropertyMetadata(0.0));
+
+    public static readonly DependencyProperty HorizontalOffsetProperty = HorizontalOffsetPropertyKey.DependencyProperty;
 
     #endregion
 
@@ -466,6 +512,18 @@ public class AdvancedGrid : Control
     }
 
     /// <summary>
+    /// Gets the current horizontal scroll offset.
+    /// </summary>
+    public double HorizontalOffset => (double)GetValue(HorizontalOffsetProperty);
+
+    internal void UpdateHorizontalOffset(double offset)
+    {
+        SetValue(HorizontalOffsetPropertyKey, offset);
+        HeaderPresenter?.InvalidateArrange();
+        SummaryPresenter?.InvalidateArrange();
+    }
+
+    /// <summary>
     /// Gets or sets the collection of group descriptions for hierarchical grouping.
     /// </summary>
     public ObservableCollection<GroupDescription>? GroupDescriptions
@@ -517,6 +575,33 @@ public class AdvancedGrid : Control
     {
         get => (bool)GetValue(HasHorizontalGridLinesProperty);
         set => SetValue(HasHorizontalGridLinesProperty, value);
+    }
+
+    /// <summary>
+    /// Gets or sets whether vertical separators are displayed in the header row.
+    /// </summary>
+    public bool HasVerticalHeaderColumnSeparator
+    {
+        get => (bool)GetValue(HasVerticalHeaderColumnSeparatorProperty);
+        set => SetValue(HasVerticalHeaderColumnSeparatorProperty, value);
+    }
+
+    /// <summary>
+    /// Gets or sets whether vertical separators are displayed in the summary row.
+    /// </summary>
+    public bool HasVerticalSummarySeparator
+    {
+        get => (bool)GetValue(HasVerticalSummarySeparatorProperty);
+        set => SetValue(HasVerticalSummarySeparatorProperty, value);
+    }
+
+    /// <summary>
+    /// Gets or sets whether a distinct vertical separator is displayed at the edge of the frozen columns section.
+    /// </summary>
+    public bool HasVerticalFrozenColumnSeparator
+    {
+        get => (bool)GetValue(HasVerticalFrozenColumnSeparatorProperty);
+        set => SetValue(HasVerticalFrozenColumnSeparatorProperty, value);
     }
 
     /// <summary>
@@ -782,7 +867,6 @@ public class AdvancedGrid : Control
     private GridHeaderPresenter? HeaderPresenter { get; set; }
     private GridSummaryPresenter? SummaryPresenter { get; set; }
     private ScrollViewer? ScrollViewer { get; set; }
-    private ScrollViewer? SummaryScrollViewer { get; set; }
     private bool _isRefreshing;
 
     /// <summary>
@@ -1123,7 +1207,6 @@ public class AdvancedGrid : Control
         HeaderPresenter = GetTemplateChild("PART_HeaderPresenter") as GridHeaderPresenter;
         SummaryPresenter = GetTemplateChild("PART_SummaryPresenter") as GridSummaryPresenter;
         ScrollViewer = GetTemplateChild("PART_ScrollViewer") as ScrollViewer;
-        SummaryScrollViewer = GetTemplateChild("PART_SummaryScrollViewer") as ScrollViewer;
 
         if (HeaderPresenter != null)
         {
@@ -1150,14 +1233,7 @@ public class AdvancedGrid : Control
 
     private void OnScrollChanged(object sender, ScrollChangedEventArgs e)
     {
-        if (e.HorizontalChange != 0)
-        {
-            HeaderPresenter?.InvalidateArrange();
-            if (SummaryScrollViewer != null)
-            {
-                SummaryScrollViewer.ScrollToHorizontalOffset(e.HorizontalOffset);
-            }
-        }
+        // Horizontal offset is now handled via UpdateHorizontalOffset called from VirtualizingGridPanel
     }
 
     #endregion

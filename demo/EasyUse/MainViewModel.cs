@@ -22,7 +22,12 @@ namespace EasyUse
             "Role", 
             "IsActive", 
             "Salary", 
-            "PerformanceScore" 
+            "PerformanceScore",
+            "Department",
+            "Country",
+            "ExperienceYears",
+            "ProjectCount",
+            "Rating"
         };
 
         private string? _selectedGroup1 = "(None)";
@@ -158,6 +163,48 @@ namespace EasyUse
                 {
                     _alternatingRows = value;
                     this.OnPropertyChanged(nameof(AlternatingRows));
+                }
+            }
+        }
+
+        private bool _hasVerticalHeaderSeparator = true;
+        public bool HasVerticalHeaderSeparator
+        {
+            get => _hasVerticalHeaderSeparator;
+            set
+            {
+                if (_hasVerticalHeaderSeparator != value)
+                {
+                    _hasVerticalHeaderSeparator = value;
+                    this.OnPropertyChanged(nameof(HasVerticalHeaderSeparator));
+                }
+            }
+        }
+
+        private bool _hasVerticalSummarySeparator = true;
+        public bool HasVerticalSummarySeparator
+        {
+            get => _hasVerticalSummarySeparator;
+            set
+            {
+                if (_hasVerticalSummarySeparator != value)
+                {
+                    _hasVerticalSummarySeparator = value;
+                    this.OnPropertyChanged(nameof(HasVerticalSummarySeparator));
+                }
+            }
+        }
+
+        private bool _hasVerticalFrozenColumnSeparator = true;
+        public bool HasVerticalFrozenColumnSeparator
+        {
+            get => _hasVerticalFrozenColumnSeparator;
+            set
+            {
+                if (_hasVerticalFrozenColumnSeparator != value)
+                {
+                    _hasVerticalFrozenColumnSeparator = value;
+                    this.OnPropertyChanged(nameof(HasVerticalFrozenColumnSeparator));
                 }
             }
         }
@@ -322,6 +369,23 @@ namespace EasyUse
         public System.Windows.Input.ICommand IncrementDecimalsCommand { get; }
         public System.Windows.Input.ICommand DecrementDecimalsCommand { get; }
         
+        private int _frozenColumnCount = 0;
+        public int FrozenColumnCount
+        {
+            get => _frozenColumnCount;
+            set
+            {
+                if (_frozenColumnCount != value)
+                {
+                    _frozenColumnCount = Math.Max(0, value);
+                    this.OnPropertyChanged(nameof(FrozenColumnCount));
+                }
+            }
+        }
+
+        public ICommand IncrementFrozenColumnsCommand { get; }
+        public ICommand DecrementFrozenColumnsCommand { get; }
+
         public ICommand ShowBioCommand { get; }
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
@@ -337,6 +401,9 @@ namespace EasyUse
 
             this.IncrementDecimalsCommand = new RelayCommand(_ => this.DecimalPlaces++, _ => this.DecimalPlaces < 5);
             this.DecrementDecimalsCommand = new RelayCommand(_ => this.DecimalPlaces--, _ => this.DecimalPlaces > 0);
+            
+            this.IncrementFrozenColumnsCommand = new RelayCommand(_ => this.FrozenColumnCount++, _ => this.FrozenColumnCount < 10);
+            this.DecrementFrozenColumnsCommand = new RelayCommand(_ => this.FrozenColumnCount--, _ => this.FrozenColumnCount > 0);
 
             this.ShowBioCommand = new RelayCommand(p => 
             {

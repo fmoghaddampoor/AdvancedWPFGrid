@@ -93,12 +93,37 @@ public class GridSummaryPresenter : Panel
     {
         double x = 0;
         var height = 28.0;
+        double horizontalOffset = Grid?.HorizontalOffset ?? 0;
+        int frozenCount = Grid?.FrozenColumnCount ?? 0;
+        int currentCount = 0;
 
         foreach (UIElement child in Children)
         {
             var width = child.DesiredSize.Width;
-            child.Arrange(new Rect(x, 0, width, height));
+            
+            if (currentCount < frozenCount)
+            {
+                if (child is GridSummaryCell summaryCell)
+                {
+                    summaryCell.IsFrozen = true;
+                    summaryCell.IsLastFrozen = (currentCount == frozenCount - 1);
+                }
+                child.Arrange(new Rect(x, 0, width, height));
+                Panel.SetZIndex(child, 1000 + (frozenCount - currentCount));
+            }
+            else
+            {
+                if (child is GridSummaryCell summaryCell)
+                {
+                    summaryCell.IsFrozen = false;
+                    summaryCell.IsLastFrozen = false;
+                }
+                child.Arrange(new Rect(x - horizontalOffset, 0, width, height));
+                Panel.SetZIndex(child, 0);
+            }
+
             x += width;
+            currentCount++;
         }
 
         return new Size(Math.Max(x, finalSize.Width), height);
@@ -141,7 +166,41 @@ public class GridSummaryCell : Control
         set => SetValue(ResultProperty, value);
     }
 
-    public AdvancedGrid? Grid { get; set; }
+    public static readonly DependencyProperty IsFrozenProperty = DependencyProperty.Register(
+        nameof(IsFrozen),
+        typeof(bool),
+        typeof(GridSummaryCell),
+        new FrameworkPropertyMetadata(false));
+
+    public static readonly DependencyProperty IsLastFrozenProperty = DependencyProperty.Register(
+        nameof(IsLastFrozen),
+        typeof(bool),
+        typeof(GridSummaryCell),
+        new FrameworkPropertyMetadata(false));
+
+    public static readonly DependencyProperty GridProperty = DependencyProperty.Register(
+        nameof(Grid),
+        typeof(AdvancedGrid),
+        typeof(GridSummaryCell),
+        new FrameworkPropertyMetadata(null));
+
+    public bool IsFrozen
+    {
+        get => (bool)GetValue(IsFrozenProperty);
+        set => SetValue(IsFrozenProperty, value);
+    }
+
+    public bool IsLastFrozen
+    {
+        get => (bool)GetValue(IsLastFrozenProperty);
+        set => SetValue(IsLastFrozenProperty, value);
+    }
+
+    public AdvancedGrid? Grid
+    {
+        get => (AdvancedGrid?)GetValue(GridProperty);
+        set => SetValue(GridProperty, value);
+    }
 }
 
 /// <summary>

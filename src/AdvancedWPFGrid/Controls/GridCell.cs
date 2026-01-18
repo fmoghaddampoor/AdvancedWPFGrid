@@ -47,6 +47,24 @@ public class GridCell : ContentControl
         typeof(GridCell),
         new FrameworkPropertyMetadata(null, OnDataItemChanged));
 
+    public static readonly DependencyProperty IsFrozenProperty = DependencyProperty.Register(
+        nameof(IsFrozen),
+        typeof(bool),
+        typeof(GridCell),
+        new FrameworkPropertyMetadata(false));
+
+    public static readonly DependencyProperty IsLastFrozenProperty = DependencyProperty.Register(
+        nameof(IsLastFrozen),
+        typeof(bool),
+        typeof(GridCell),
+        new FrameworkPropertyMetadata(false));
+
+    public static readonly DependencyProperty GridProperty = DependencyProperty.Register(
+        nameof(Grid),
+        typeof(AdvancedGrid),
+        typeof(GridCell),
+        new FrameworkPropertyMetadata(null));
+
     #endregion
 
     #region Properties
@@ -69,7 +87,23 @@ public class GridCell : ContentControl
         set => SetValue(DataItemProperty, value);
     }
 
-    internal AdvancedGrid? Grid { get; set; }
+    public bool IsFrozen
+    {
+        get => (bool)GetValue(IsFrozenProperty);
+        set => SetValue(IsFrozenProperty, value);
+    }
+
+    public bool IsLastFrozen
+    {
+        get => (bool)GetValue(IsLastFrozenProperty);
+        set => SetValue(IsLastFrozenProperty, value);
+    }
+
+    public AdvancedGrid? Grid
+    {
+        get => (AdvancedGrid?)GetValue(GridProperty);
+        set => SetValue(GridProperty, value);
+    }
 
     private FrameworkElement? _displayElement;
     private FrameworkElement? _editingElement;

@@ -122,7 +122,8 @@ public class VirtualizingGridPanel : VirtualizingPanel, IScrollInfo
 
             if (element != null)
             {
-                var rect = new Rect(-_offset.X, y - _offset.Y, Math.Max(finalSize.Width, _extent.Width), itemHeight);
+                // Arrange row at x=0 instead of -_offset.X to allow frozen columns logic within the row
+                var rect = new Rect(0, y - _offset.Y, Math.Max(finalSize.Width, _extent.Width), itemHeight);
                 element.Arrange(rect);
             }
 
@@ -428,6 +429,7 @@ public class VirtualizingGridPanel : VirtualizingPanel, IScrollInfo
         if (offset != _offset.X)
         {
             _offset.X = offset;
+            Grid?.UpdateHorizontalOffset(offset);
             InvalidateMeasure();
             _scrollOwner?.InvalidateScrollInfo();
         }

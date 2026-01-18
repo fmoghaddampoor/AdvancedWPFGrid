@@ -242,16 +242,39 @@ public class GridCellsPresenter : Panel
 
     protected override Size ArrangeOverride(Size finalSize)
     {
+        if (Row?.Grid == null) return finalSize;
+
         double x = 0;
         double height = finalSize.Height;
+        double horizontalOffset = Row.Grid.HorizontalOffset;
+        int frozenCount = Row.Grid.FrozenColumnCount;
+        int currentCount = 0;
 
         foreach (UIElement child in Children)
         {
             if (child is GridCell cell)
             {
                 var width = child.DesiredSize.Width;
-                child.Arrange(new Rect(x, 0, width, height));
+                
+                if (currentCount < frozenCount)
+                {
+                    // Frozen column: stays at its natural x position relative to the row start (which is at x=0)
+                    cell.IsFrozen = true;
+                    cell.IsLastFrozen = (currentCount == frozenCount - 1);
+                    child.Arrange(new Rect(x, 0, width, height));
+                    Panel.SetZIndex(child, 1000 + (frozenCount - currentCount)); // Ensure frozen columns are on top
+                }
+                else
+                {
+                    // Normal column: shifts left as we scroll right
+                    cell.IsFrozen = false;
+                    cell.IsLastFrozen = false;
+                    child.Arrange(new Rect(x - horizontalOffset, 0, width, height));
+                    Panel.SetZIndex(child, 0);
+                }
+
                 x += width;
+                currentCount++;
             }
         }
 

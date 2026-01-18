@@ -64,6 +64,9 @@
                     <CheckBox Content="Enable Alternating Row Colors" IsChecked="{Binding AlternatingRows}" Margin="0,0,0,10"/>
                     <CheckBox Content="Show Summary Row" IsChecked="{Binding ShowSummaryRow}" Margin="0,0,0,5"/>
                     <CheckBox Content="Allow Export" IsChecked="{Binding CanUserExport}" Margin="0,0,0,5"/>
+                    <CheckBox Content="Header Vertical Lines" IsChecked="{Binding HasVerticalHeaderSeparator}" Margin="0,0,0,5"/>
+                    <CheckBox Content="Summary Vertical Lines" IsChecked="{Binding HasVerticalSummarySeparator}" Margin="0,0,0,5"/>
+                    <CheckBox Content="Frozen Column Separation" IsChecked="{Binding HasVerticalFrozenColumnSeparator}" Margin="0,0,0,5"/>
                     
                     <TextBlock Text="Summary Alignment:" FontWeight="SemiBold" Margin="0,10,0,5"/>
                     <ComboBox SelectedItem="{Binding SummaryAlignment}" Margin="0,0,0,10" Width="150" HorizontalAlignment="Left">
@@ -106,7 +109,19 @@
                                Margin="8,0,0,0" Grid.Column="1"/>
                 </Grid>
 
-                    <TextBlock Text="Note: Use buttons to adjust decimal places (0-5)." FontStyle="Italic" Foreground="Gray" Margin="0,20,0,0"/>
+                <TextBlock Text="Frozen Columns:" FontWeight="SemiBold" Margin="0,16,0,5"/>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                    <TextBlock Text="{Binding FrozenColumnCount}" 
+                               Width="50" FontSize="16" VerticalAlignment="Center" 
+                               TextAlignment="Center" FontWeight="Bold"
+                               Background="#DDDDDD" Padding="5"/>
+
+                    <StackPanel Orientation="Vertical" Margin="5,0,0,0">
+                        <Button Content="▲" Command="{Binding IncrementFrozenColumnsCommand}" Width="30" Height="15" FontSize="8"/>
+                        <Button Content="▼" Command="{Binding DecrementFrozenColumnsCommand}" Width="30" Height="15" FontSize="8"/>
+                    </StackPanel>
+                </StackPanel>
+
                 </StackPanel>
             </TabItem>
 
@@ -129,11 +144,17 @@
                                  ShowSummaryRow="{Binding ShowSummaryRow}"
                                  CanUserExport="{Binding CanUserExport}"
                                  SummaryAlignment="{Binding SummaryAlignment}"
+                                 FrozenColumnCount="{Binding FrozenColumnCount}"
+                                 HasVerticalHeaderColumnSeparator="{Binding HasVerticalHeaderSeparator}"
+                                 HasVerticalSummarySeparator="{Binding HasVerticalSummarySeparator}"
+                                 HasVerticalFrozenColumnSeparator="{Binding HasVerticalFrozenColumnSeparator}"
                                  x:Name="MainGrid">
                     <av:AdvancedGrid.AggregateFunctions>
                         <Data:AggregateFunction PropertyName="Name" FunctionType="Count" Caption="Total" />
                         <Data:AggregateFunction PropertyName="PerformanceScore" FunctionType="Average" StringFormat="Avg: {0:N1}" />
                         <Data:AggregateFunction PropertyName="Salary" FunctionType="Sum" Caption="Total" />
+                        <Data:AggregateFunction PropertyName="Salary" FunctionType="Average" StringFormat="Avg: {0:C0}" />
+                        <Data:AggregateFunction PropertyName="Bonus" FunctionType="Sum" Caption="Total Bonus" />
                     </av:AdvancedGrid.AggregateFunctions>
                     <av:AdvancedGrid.Columns>
                         <!-- Selection Column -->
@@ -144,12 +165,37 @@
                                         Binding="Name" 
                                         HeaderToolTip="Full name of the person"
                                         Width="150"/>
-                        
+
+                        <!-- Text Column -->
+                        <col:TextColumn Header="Department" 
+                                        Binding="Department" 
+                                        Width="120"/>
+
+                        <!-- Text Column -->
+                        <col:TextColumn Header="Country" 
+                                        Binding="Country" 
+                                        Width="100"/>
+
+                        <!-- Text Column -->
+                        <col:TextColumn Header="Email" 
+                                        Binding="Email" 
+                                        Width="200"/>
+
                         <!-- Double Column -->
                         <col:DoubleColumn Header="Age" 
                                           Binding="Age" 
                                           HeaderToolTip="Current age in years"
                                           Width="60"/>
+
+                        <!-- Double Column -->
+                        <col:DoubleColumn Header="Experience" 
+                                          Binding="ExperienceYears" 
+                                          Width="80"/>
+
+                        <!-- Double Column -->
+                        <col:DoubleColumn Header="Projects" 
+                                          Binding="ProjectCount" 
+                                          Width="80"/>
 
                         <!-- New Performance Score Column (Uses Global Format) -->
                         <col:DoubleColumn Header="Performance" 
@@ -162,9 +208,24 @@
                                           HeaderToolTip="Annual base salary in USD"
                                           Width="100"/>
 
+                        <!-- Double Column -->
+                        <col:DoubleColumn Header="Bonus" 
+                                          Binding="Bonus" 
+                                          Width="100"/>
+
+                        <!-- Double Column -->
+                        <col:DoubleColumn Header="Rating" 
+                                          Binding="Rating" 
+                                          Width="80"/>
+
                         <!-- CheckBox Column -->
                         <col:CheckBoxColumn Header="Active" 
                                             Binding="IsActive" 
+                                            Width="60"/>
+
+                        <!-- CheckBox Column -->
+                        <col:CheckBoxColumn Header="Remote" 
+                                            Binding="IsRemote" 
                                             Width="60"/>
 
                         <!-- ComboBox Column -->
