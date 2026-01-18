@@ -19,6 +19,11 @@ public class FilterManager
     }
 
     /// <summary>
+    /// Gets or sets the global search text.
+    /// </summary>
+    public string? GlobalSearchText { get; set; }
+
+    /// <summary>
     /// Gets the current filter descriptors.
     /// </summary>
     public IReadOnlyDictionary<string, FilterDescriptor> Filters => _filters;
@@ -75,7 +80,7 @@ public class FilterManager
     {
         if (_grid.CollectionView == null) return;
 
-        if (_filters.Count == 0)
+        if (_filters.Count == 0 && string.IsNullOrEmpty(GlobalSearchText))
         {
             _grid.CollectionView.Filter = null;
         }
@@ -85,10 +90,12 @@ public class FilterManager
         }
 
         _grid.RefreshView();
+        _grid.UpdateSearchMatchCount();
     }
 
     private bool FilterPredicate(object item)
     {
+        // 1. Check Column Filters
         foreach (var filter in _filters.Values)
         {
             if (!MatchesFilter(item, filter))
@@ -96,7 +103,40 @@ public class FilterManager
                 return false;
             }
         }
+
+        // 2. Check Global Search
+        if (!string.IsNullOrEmpty(GlobalSearchText))
+        {
+            if (!MatchesGlobalSearch(item))
+            {
+                return false;
+            }
+        }
+
         return true;
+    }
+
+    private bool MatchesGlobalSearch(object item)
+    {
+        if (_grid.Columns == null) return false;
+
+        foreach (var column in _grid.Columns)
+        {
+            // Only search visible columns with bindings? Or all? Let's search all bound columns.
+            if (string.IsNullOrEmpty(column.Binding)) continue;
+
+            var value = column.GetCellValue(item);
+            if (value != null)
+            {
+                var stringValue = value.ToString() ?? string.Empty;
+                if (stringValue.IndexOf(GlobalSearchText, StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private bool MatchesFilter(object item, FilterDescriptor filter)

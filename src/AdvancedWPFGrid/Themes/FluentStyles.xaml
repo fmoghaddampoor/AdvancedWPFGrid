@@ -4,6 +4,13 @@
     xmlns:controls="clr-namespace:AdvancedWPFGrid.Controls"
     xmlns:col="clr-namespace:AdvancedWPFGrid.Columns">
 
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Brushes.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!-- Converters -->
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
     <!-- Professional Checkbox Style for Grid Columns -->
     <Style x:Key="FluentGridCheckBoxStyle" TargetType="CheckBox">
         <Setter Property="Background" Value="Transparent" />
@@ -57,43 +64,363 @@
         </Setter>
     </Style>
 
+    <!-- Fluent Button Style for Grid Buttons -->
+    <Style x:Key="FluentGridButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Foreground" Value="{DynamicResource FluentAccentBrush}" />
+        <Setter Property="FontSize" Value="{DynamicResource FluentFontSizeSmall}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="MinHeight" Value="24" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="ButtonBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{DynamicResource FluentCornerRadiusSmall}"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Foreground" Value="{DynamicResource FluentAccentLightBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Foreground" Value="{DynamicResource FluentAccentDarkBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{DynamicResource FluentTextDisabledBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Fluent ComboBox Style -->
+    <Style x:Key="FluentGridComboBoxStyle" TargetType="{x:Type ComboBox}">
+        <Setter Property="Background" Value="{DynamicResource FluentSurfaceBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource FluentBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Foreground" Value="{DynamicResource FluentTextPrimaryBrush}" />
+        <Setter Property="FontSize" Value="{DynamicResource FluentFontSizeNormal}" />
+        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="MinHeight" Value="28" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ComboBox}">
+                    <Grid>
+                        <ToggleButton x:Name="ToggleButton"
+                                      Focusable="False"
+                                      ClickMode="Press"
+                                      IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
+                            <ToggleButton.Template>
+                                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                    <Border x:Name="Border"
+                                            Background="{DynamicResource FluentSurfaceBrush}"
+                                            BorderBrush="{DynamicResource FluentBorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="{DynamicResource FluentCornerRadiusSmall}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="24" />
+                                            </Grid.ColumnDefinitions>
+                                            <Path Grid.Column="1"
+                                                  Width="10" Height="6"
+                                                  Fill="{DynamicResource FluentTextSecondaryBrush}"
+                                                  HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"
+                                                  Data="M0,0 L5,5 L10,0 Z" />
+                                        </Grid>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Border" Property="BorderBrush" 
+                                                    Value="{StaticResource FluentBorderBrightBrush}" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </ToggleButton.Template>
+                        </ToggleButton>
+                        <ContentPresenter x:Name="ContentSite"
+                                          IsHitTestVisible="False"
+                                          Content="{TemplateBinding SelectionBoxItem}"
+                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                          Margin="8,4,24,4"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Left" />
+                        <Popup x:Name="Popup"
+                               Placement="Bottom"
+                               IsOpen="{TemplateBinding IsDropDownOpen}"
+                               AllowsTransparency="True"
+                               Focusable="False"
+                               PopupAnimation="Slide">
+                            <Border x:Name="DropDownBorder"
+                                    MinWidth="{TemplateBinding ActualWidth}"
+                                    MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                    Background="{DynamicResource FluentSurfaceBrush}"
+                                    BorderBrush="{DynamicResource FluentBorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="{StaticResource FluentCornerRadius}"
+                                    Margin="0,2,0,0">
+                                <ScrollViewer SnapsToDevicePixels="True">
+                                    <StackPanel IsItemsHost="True" 
+                                                KeyboardNavigation.DirectionalNavigation="Contained" />
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Fluent TextBox Style -->
+    <Style x:Key="FluentGridTextBoxStyle" TargetType="{x:Type TextBox}">
+        <Setter Property="Background" Value="{DynamicResource FluentSurfaceBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource FluentBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Foreground" Value="{DynamicResource FluentTextPrimaryBrush}" />
+        <Setter Property="CaretBrush" Value="{DynamicResource FluentTextPrimaryBrush}" />
+        <Setter Property="SelectionBrush" Value="{DynamicResource FluentAccentBrush}" />
+        <Setter Property="FontSize" Value="{DynamicResource FluentFontSizeNormal}" />
+        <Setter Property="Padding" Value="6,4" />
+        <Setter Property="MinHeight" Value="28" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Border x:Name="Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{DynamicResource FluentCornerRadiusSmall}">
+                        <ScrollViewer x:Name="PART_ContentHost"
+                                      Margin="{TemplateBinding Padding}"
+                                      Focusable="False"
+                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="BorderBrush" 
+                                    Value="{StaticResource FluentBorderBrightBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter TargetName="Border" Property="BorderBrush" 
+                                    Value="{DynamicResource FluentAccentBrush}" />
+                            <Setter TargetName="Border" Property="BorderThickness" Value="1,1,1,2" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Fluent ScrollBar Styles -->
+    <Style x:Key="FluentScrollBarThumbStyle" TargetType="{x:Type Thumb}">
+        <Setter Property="Background" Value="{StaticResource FluentBorderBrightBrush}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <Border x:Name="ThumbBorder"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="3"
+                            Margin="2" />
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ThumbBorder" Property="Background" 
+                                    Value="{DynamicResource FluentTextSecondaryBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="FluentScrollBarStyle" TargetType="{x:Type ScrollBar}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Width" Value="12" />
+        <Style.Triggers>
+            <Trigger Property="Orientation" Value="Horizontal">
+                <Setter Property="Width" Value="Auto" />
+                <Setter Property="Height" Value="12" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+
     <!-- AdvancedGrid Style -->
     <Style TargetType="{x:Type controls:AdvancedGrid}">
-        <Setter Property="Background" Value="{StaticResource GridBackgroundBrush}" />
-        <Setter Property="BorderBrush" Value="{StaticResource FluentBorderBrush}" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Foreground" Value="{StaticResource FluentTextPrimaryBrush}" />
-        <Setter Property="FontFamily" Value="Segoe UI Variable, Segoe UI, sans-serif" />
-        <Setter Property="FontSize" Value="{StaticResource FluentFontSizeNormal}" />
-        <Setter Property="SnapsToDevicePixels" Value="True" />
-        <Setter Property="UseLayoutRounding" Value="True" />
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Background" Value="{DynamicResource FluentSurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource FluentBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Foreground" Value="{DynamicResource FluentTextPrimaryBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:AdvancedGrid}">
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="{StaticResource FluentCornerRadius}">
+                            SnapsToDevicePixels="True">
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto"/> <!-- Search Panel -->
+                                <RowDefinition Height="Auto"/> <!-- Header -->
+                                <RowDefinition Height="*"/>    <!-- Items -->
                             </Grid.RowDefinitions>
-                            
+
+                            <!-- Search Panel -->
+                            <Border x:Name="PART_SearchPanel" 
+                                    Grid.Row="0"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="0,0,0,1"
+                                    Padding="10,8"
+                                    Background="{DynamicResource FluentSurfaceAltBrush}"
+                                    Visibility="Collapsed">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/> <!-- Result Count -->
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Integrated Search Field -->
+                                    <Border Grid.Column="0"
+                                            Background="{DynamicResource FluentSurfaceBrush}"
+                                            BorderBrush="{DynamicResource FluentBorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="{DynamicResource FluentCornerRadiusSmall}"
+                                            FocusManager.IsFocusScope="True"
+                                            x:Name="SearchFieldBorder">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/> <!-- Icon -->
+                                                <ColumnDefinition Width="*"/>    <!-- Input -->
+                                                <ColumnDefinition Width="Auto"/> <!-- Clear Button -->
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- Clickable Search Icon -->
+                                            <Button x:Name="PART_SearchIconButton"
+                                                    Grid.Column="0"
+                                                    Width="34" Height="Auto"
+                                                    Command="{x:Static ApplicationCommands.Find}"
+                                                    Background="Transparent"
+                                                    BorderThickness="0"
+                                                    Cursor="Hand"
+                                                    ToolTip="Search">
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border x:Name="IconBorder" Background="Transparent" CornerRadius="4,0,0,4">
+                                                            <Path x:Name="SearchIcon"
+                                                                  Data="M 15.5 14 h -0.79 l -0.28 -0.27 C 15.41 12.59 16 11.11 16 9.5 C 16 5.91 13.09 3 9.5 3 S 3 5.91 3 9.5 S 5.91 16 9.5 16 c 1.61 0 3.09 -0.59 4.23 -1.57 l 0.27 0.28 v 0.79 l 5 4.99 L 20.49 19 l -4.99 -5 z m -6 0 C 7.01 14 5 11.99 5 9.5 S 7.01 5 9.5 5 S 14 7.01 14 9.5 S 11.99 14 9.5 14 z"
+                                                                  Fill="{DynamicResource FluentAccentBrush}"
+                                                                  Width="14" Height="14"
+                                                                  Stretch="Uniform"
+                                                                  HorizontalAlignment="Center"
+                                                                  VerticalAlignment="Center"/>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter TargetName="IconBorder" Property="Background" Value="#10000000"/>
+                                                                <Setter TargetName="SearchIcon" Property="Fill" Value="{DynamicResource FluentAccentLightBrush}"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+
+                                            <TextBox x:Name="PART_SearchBox"
+                                                     Grid.Column="1"
+                                                     Background="Transparent"
+                                                     BorderThickness="0"
+                                                     Padding="8,6"
+                                                     VerticalContentAlignment="Center"
+                                                     FontSize="13"
+                                                     Text="{Binding SearchText, RelativeSource={RelativeSource TemplatedParent}, UpdateSourceTrigger=PropertyChanged}"
+                                                     Tag="Search grid items...">
+                                                <TextBox.InputBindings>
+                                                     <KeyBinding Key="Enter" Command="{x:Static ApplicationCommands.Find}" />
+                                                </TextBox.InputBindings>
+                                            </TextBox>
+
+                                            <!-- Nested Clear Button -->
+                                            <Button x:Name="PART_ClearSearchButton"
+                                                    Grid.Column="2"
+                                                    Width="24" Height="24"
+                                                    Margin="0,0,4,0"
+                                                    ToolTip="Clear Search"
+                                                    Command="{x:Static ApplicationCommands.Delete}"
+                                                    Background="Transparent"
+                                                    BorderThickness="0">
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border x:Name="BtnBorder" Background="Transparent" CornerRadius="12">
+                                                            <Path x:Name="ClearIcon"
+                                                                  Data="M 19,6.41 L 17.59,5 L 12,10.59 L 6.41,5 L 5,6.41 L 10.59,12 L 5,17.59 L 6.41,19 L 12,13.41 L 17.59,19 L 19,17.59 L 13.41,12 Z"
+                                                                  Fill="{DynamicResource FluentTextSecondaryBrush}"
+                                                                  Width="10" Height="10"
+                                                                  Stretch="Uniform"
+                                                                  HorizontalAlignment="Center"
+                                                                  VerticalAlignment="Center"/>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter TargetName="BtnBorder" Property="Background" Value="#15000000"/>
+                                                                <Setter TargetName="ClearIcon" Property="Fill" Value="{DynamicResource FluentAccentBrush}"/>
+                                                            </Trigger>
+                                                            <Trigger Property="IsPressed" Value="True">
+                                                                <Setter TargetName="BtnBorder" Property="Background" Value="#25000000"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                                <Button.Style>
+                                                    <Style TargetType="Button">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Text.Length, ElementName=PART_SearchBox}" Value="0">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+                                        </Grid>
+                                    </Border>
+
+                                    <!-- Result Count -->
+                                    <TextBlock Grid.Column="1" 
+                                               Text="{Binding SearchMatchCount, RelativeSource={RelativeSource TemplatedParent}, StringFormat='{}{0} found'}"
+                                               Margin="12,0,0,0"
+                                               VerticalAlignment="Center"
+                                               Foreground="{DynamicResource FluentTextSecondaryBrush}"
+                                               FontSize="12"
+                                               FontWeight="SemiBold"/>
+                                </Grid>
+                            </Border>
+
                             <!-- Column Headers -->
                             <Border x:Name="PART_HeaderHost"
-                                    Grid.Row="0"
-                                    Background="{StaticResource GridHeaderBackgroundBrush}"
-                                    BorderBrush="{StaticResource FluentBorderSubtleBrush}"
+                                    Grid.Row="1"
+                                    Background="{DynamicResource GridHeaderBackgroundBrush}"
+                                    BorderBrush="{DynamicResource FluentBorderSubtleBrush}"
                                     BorderThickness="0,0,0,1">
                                 <controls:GridHeaderPresenter x:Name="PART_HeaderPresenter" 
                                                               HorizontalAlignment="Left" />
                             </Border>
-                            
-                            <!-- Virtualized Content -->
+
                             <ScrollViewer x:Name="PART_ScrollViewer"
-                                          Grid.Row="1"
+                                          Grid.Row="2"
                                           HorizontalScrollBarVisibility="Auto"
                                           VerticalScrollBarVisibility="Auto"
                                           CanContentScroll="True"
@@ -102,7 +429,19 @@
                             </ScrollViewer>
                         </Grid>
                     </Border>
-                </ControlTemplate>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsSearchPanelVisible" Value="True">
+                                                    <Setter TargetName="PART_SearchPanel" Property="Visibility" Value="Visible"/>
+                                                </Trigger>
+                                                <Trigger SourceName="PART_SearchBox" Property="IsFocused" Value="True">
+                                                    <Setter TargetName="SearchFieldBorder" Property="BorderBrush" Value="{DynamicResource FluentAccentBrush}"/>
+                                                    <Setter TargetName="SearchFieldBorder" Property="BorderThickness" Value="1,1,1,2"/>
+                                                </Trigger>
+                                                <Trigger SourceName="SearchFieldBorder" Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="SearchFieldBorder" Property="BorderBrush" Value="{StaticResource FluentBorderBrightBrush}"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
@@ -110,9 +449,9 @@
     <!-- GridRow Style -->
     <Style TargetType="{x:Type controls:GridRow}">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderBrush" Value="{StaticResource GridCellBorderBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource GridCellBorderBrush}" />
         <Setter Property="BorderThickness" Value="0,0,0,1" />
-        <Setter Property="Foreground" Value="{StaticResource FluentTextPrimaryBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource FluentTextPrimaryBrush}" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="MinHeight" Value="32" />
@@ -166,10 +505,10 @@
     <!-- GridCell Style -->
     <Style TargetType="{x:Type controls:GridCell}">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderBrush" Value="{StaticResource GridCellBorderBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource GridCellBorderBrush}" />
         <Setter Property="BorderThickness" Value="0,0,1,0" />
-        <Setter Property="Foreground" Value="{StaticResource FluentTextPrimaryBrush}" />
-        <Setter Property="Padding" Value="{StaticResource FluentCellPadding}" />
+        <Setter Property="Foreground" Value="{DynamicResource FluentTextPrimaryBrush}" />
+        <Setter Property="Padding" Value="{DynamicResource FluentCellPadding}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -187,12 +526,12 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEditing" Value="True">
                             <Setter TargetName="CellBorder" Property="BorderBrush" 
-                                    Value="{StaticResource FluentAccentBrush}" />
+                                    Value="{DynamicResource FluentAccentBrush}" />
                             <Setter TargetName="CellBorder" Property="BorderThickness" Value="2" />
                         </Trigger>
                         <Trigger Property="IsFocused" Value="True">
                             <Setter TargetName="CellBorder" Property="BorderBrush" 
-                                    Value="{StaticResource FluentAccentBrush}" />
+                                    Value="{DynamicResource FluentAccentBrush}" />
                         </Trigger>
                         <DataTrigger Binding="{Binding HasVerticalGridLines, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="False">
                             <Setter TargetName="CellBorder" Property="BorderThickness" Value="0" />
@@ -206,11 +545,11 @@
     <!-- GridHeaderCell Style -->
     <Style TargetType="{x:Type controls:GridHeaderCell}">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderBrush" Value="{StaticResource GridCellBorderBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource GridCellBorderBrush}" />
         <Setter Property="BorderThickness" Value="0,0,1,0" />
-        <Setter Property="Foreground" Value="{StaticResource FluentTextPrimaryBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource FluentTextPrimaryBrush}" />
         <Setter Property="FontWeight" Value="SemiBold" />
-        <Setter Property="Padding" Value="{StaticResource FluentHeaderPadding}" />
+        <Setter Property="Padding" Value="{DynamicResource FluentHeaderPadding}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="Cursor" Value="Hand" />
@@ -221,7 +560,7 @@
                     <Grid>
                         <Border x:Name="HeaderBorder"
                                 Background="{TemplateBinding Background}"
-                                BorderBrush="{StaticResource FluentBorderBrush}"
+                                BorderBrush="{DynamicResource FluentBorderBrush}"
                                 BorderThickness="0,0,0,2"
                                 Padding="12,0,12,0">
                             <Grid>
@@ -260,7 +599,7 @@
                                             <Border x:Name="BtnBorder" Background="Transparent" CornerRadius="0">
                                                 <Path x:Name="SortIndicator"
                                                       Data="M 6,12 L 14,4 L 22,12 M 6,16 L 14,24 L 22,16"
-                                                      Stroke="{StaticResource FluentAccentBrush}"
+                                                      Stroke="{DynamicResource FluentAccentBrush}"
                                                       StrokeThickness="2"
                                                       StrokeStartLineCap="Round"
                                                       StrokeEndLineCap="Round"
@@ -276,14 +615,14 @@
                                                 </Trigger>
                                                 <DataTrigger Binding="{Binding SortDirection, RelativeSource={RelativeSource AncestorType=controls:GridHeaderCell}}" Value="Ascending">
                                                     <Setter TargetName="SortIndicator" Property="Data" Value="M 4,20 L 14,4 L 24,20" />
-                                                    <Setter TargetName="SortIndicator" Property="Stroke" Value="{StaticResource FluentAccentBrush}"/>
-                                                    <Setter TargetName="SortIndicator" Property="Fill" Value="{StaticResource FluentAccentBrush}"/>
+                                                    <Setter TargetName="SortIndicator" Property="Stroke" Value="{DynamicResource FluentAccentBrush}"/>
+                                                    <Setter TargetName="SortIndicator" Property="Fill" Value="{DynamicResource FluentAccentBrush}"/>
                                                     <Setter TargetName="SortIndicator" Property="StrokeThickness" Value="1"/>
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding SortDirection, RelativeSource={RelativeSource AncestorType=controls:GridHeaderCell}}" Value="Descending">
                                                     <Setter TargetName="SortIndicator" Property="Data" Value="M 4,8 L 14,24 L 24,8" />
-                                                    <Setter TargetName="SortIndicator" Property="Stroke" Value="{StaticResource FluentAccentBrush}"/>
-                                                    <Setter TargetName="SortIndicator" Property="Fill" Value="{StaticResource FluentAccentBrush}"/>
+                                                    <Setter TargetName="SortIndicator" Property="Stroke" Value="{DynamicResource FluentAccentBrush}"/>
+                                                    <Setter TargetName="SortIndicator" Property="Fill" Value="{DynamicResource FluentAccentBrush}"/>
                                                     <Setter TargetName="SortIndicator" Property="StrokeThickness" Value="1"/>
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding CanSort, RelativeSource={RelativeSource AncestorType=controls:GridHeaderCell}}" Value="False">
@@ -307,7 +646,7 @@
                                             <Border x:Name="BtnBorder" Background="Transparent" CornerRadius="0">
                                                 <Path x:Name="FilterIndicator"
                                                       Data="M 4,4 L 24,4 L 16,14 L 16,24 L 12,20 L 12,14 Z"
-                                                      Stroke="{StaticResource FluentAccentBrush}"
+                                                      Stroke="{DynamicResource FluentAccentBrush}"
                                                       StrokeThickness="2"
                                                       StrokeStartLineCap="Round"
                                                       StrokeEndLineCap="Round"
@@ -323,8 +662,8 @@
                                                     <Setter TargetName="FilterIndicator" Property="Stroke" Value="#005A9E"/>
                                                 </Trigger>
                                                 <DataTrigger Binding="{Binding IsFiltered, RelativeSource={RelativeSource AncestorType=controls:GridHeaderCell}}" Value="True">
-                                                    <Setter TargetName="FilterIndicator" Property="Fill" Value="{StaticResource FluentAccentBrush}"/>
-                                                    <Setter TargetName="FilterIndicator" Property="Stroke" Value="{StaticResource FluentAccentBrush}"/>
+                                                    <Setter TargetName="FilterIndicator" Property="Fill" Value="{DynamicResource FluentAccentBrush}"/>
+                                                    <Setter TargetName="FilterIndicator" Property="Stroke" Value="{DynamicResource FluentAccentBrush}"/>
                                                     <Setter TargetName="FilterIndicator" Property="StrokeThickness" Value="1"/>
                                                 </DataTrigger>
                                             </ControlTemplate.Triggers>
@@ -356,7 +695,7 @@
                                         <Rectangle x:Name="DividerLine"
                                                    VerticalAlignment="Stretch"
                                                    Width="1"
-                                                   Fill="{StaticResource GridCellBorderBrush}"
+                                                   Fill="{DynamicResource GridCellBorderBrush}"
                                                    HorizontalAlignment="Left"
                                                    Margin="4,0,0,0"/>
                                     </Border>
@@ -395,10 +734,10 @@
 
     <!-- GridGroupRow Style -->
     <Style TargetType="{x:Type controls:GridGroupRow}">
-        <Setter Property="Background" Value="{StaticResource GridGroupHeaderBackgroundBrush}" />
-        <Setter Property="BorderBrush" Value="{StaticResource FluentBorderSubtleBrush}" />
+        <Setter Property="Background" Value="{DynamicResource GridGroupHeaderBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource FluentBorderSubtleBrush}" />
         <Setter Property="BorderThickness" Value="0,0,0,1" />
-        <Setter Property="Foreground" Value="{StaticResource FluentTextPrimaryBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource FluentTextPrimaryBrush}" />
         <Setter Property="Padding" Value="8,6" />
         <Setter Property="MinHeight" Value="32" />
         <Setter Property="FontWeight" Value="SemiBold" />
@@ -422,7 +761,7 @@
                             <Path x:Name="ExpandIcon"
                                   Grid.Column="0"
                                   Width="10" Height="10"
-                                  Fill="{StaticResource FluentTextSecondaryBrush}"
+                                  Fill="{DynamicResource FluentTextSecondaryBrush}"
                                   VerticalAlignment="Center"
                                   RenderTransformOrigin="0.5,0.5"
                                   Data="M0,0 L6,5 L0,10 Z">
@@ -440,9 +779,9 @@
                             <TextBlock x:Name="ItemCount"
                                        Grid.Column="2"
                                        Text="{TemplateBinding ItemCountText}"
-                                       Foreground="{StaticResource FluentTextSecondaryBrush}"
+                                       Foreground="{DynamicResource FluentTextSecondaryBrush}"
                                        FontWeight="Normal"
-                                       FontSize="{StaticResource FluentFontSizeSmall}"
+                                       FontSize="{DynamicResource FluentFontSizeSmall}"
                                        VerticalAlignment="Center" />
                         </Grid>
                     </Border>
@@ -477,199 +816,6 @@
         </Setter>
     </Style>
 
-    <!-- Fluent Button Style for Grid Buttons -->
-    <Style x:Key="FluentGridButtonStyle" TargetType="{x:Type Button}">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Foreground" Value="{StaticResource FluentAccentBrush}" />
-        <Setter Property="FontSize" Value="{StaticResource FluentFontSizeSmall}" />
-        <Setter Property="FontWeight" Value="SemiBold" />
-        <Setter Property="Padding" Value="8,4" />
-        <Setter Property="MinHeight" Value="24" />
-        <Setter Property="HorizontalContentAlignment" Value="Center" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Cursor" Value="Hand" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="ButtonBorder"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="{StaticResource FluentCornerRadiusSmall}"
-                            Padding="{TemplateBinding Padding}">
-                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Foreground" Value="{StaticResource FluentAccentLightBrush}" />
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Foreground" Value="{StaticResource FluentAccentDarkBrush}" />
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Foreground" Value="{StaticResource FluentTextDisabledBrush}" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
 
-    <!-- Fluent ComboBox Style -->
-    <Style x:Key="FluentGridComboBoxStyle" TargetType="{x:Type ComboBox}">
-        <Setter Property="Background" Value="{StaticResource FluentSurfaceBrush}" />
-        <Setter Property="BorderBrush" Value="{StaticResource FluentBorderBrush}" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Foreground" Value="{StaticResource FluentTextPrimaryBrush}" />
-        <Setter Property="FontSize" Value="{StaticResource FluentFontSizeNormal}" />
-        <Setter Property="Padding" Value="8,4" />
-        <Setter Property="MinHeight" Value="28" />
-        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
-        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ComboBox}">
-                    <Grid>
-                        <ToggleButton x:Name="ToggleButton"
-                                      Focusable="False"
-                                      ClickMode="Press"
-                                      IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
-                            <ToggleButton.Template>
-                                <ControlTemplate TargetType="{x:Type ToggleButton}">
-                                    <Border x:Name="Border"
-                                            Background="{StaticResource FluentSurfaceBrush}"
-                                            BorderBrush="{StaticResource FluentBorderBrush}"
-                                            BorderThickness="1"
-                                            CornerRadius="{StaticResource FluentCornerRadiusSmall}">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="24" />
-                                            </Grid.ColumnDefinitions>
-                                            <Path Grid.Column="1"
-                                                  Width="10" Height="6"
-                                                  Fill="{StaticResource FluentTextSecondaryBrush}"
-                                                  HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center"
-                                                  Data="M0,0 L5,5 L10,0 Z" />
-                                        </Grid>
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="Border" Property="BorderBrush" 
-                                                    Value="{StaticResource FluentBorderBrightBrush}" />
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </ToggleButton.Template>
-                        </ToggleButton>
-                        <ContentPresenter x:Name="ContentSite"
-                                          IsHitTestVisible="False"
-                                          Content="{TemplateBinding SelectionBoxItem}"
-                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                          Margin="8,4,24,4"
-                                          VerticalAlignment="Center"
-                                          HorizontalAlignment="Left" />
-                        <Popup x:Name="Popup"
-                               Placement="Bottom"
-                               IsOpen="{TemplateBinding IsDropDownOpen}"
-                               AllowsTransparency="True"
-                               Focusable="False"
-                               PopupAnimation="Slide">
-                            <Border x:Name="DropDownBorder"
-                                    MinWidth="{TemplateBinding ActualWidth}"
-                                    MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                                    Background="{StaticResource FluentSurfaceBrush}"
-                                    BorderBrush="{StaticResource FluentBorderBrush}"
-                                    BorderThickness="1"
-                                    CornerRadius="{StaticResource FluentCornerRadius}"
-                                    Margin="0,2,0,0">
-                                <ScrollViewer SnapsToDevicePixels="True">
-                                    <StackPanel IsItemsHost="True" 
-                                                KeyboardNavigation.DirectionalNavigation="Contained" />
-                                </ScrollViewer>
-                            </Border>
-                        </Popup>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <!-- Fluent TextBox Style -->
-    <Style x:Key="FluentGridTextBoxStyle" TargetType="{x:Type TextBox}">
-        <Setter Property="Background" Value="{StaticResource FluentSurfaceBrush}" />
-        <Setter Property="BorderBrush" Value="{StaticResource FluentBorderBrush}" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Foreground" Value="{StaticResource FluentTextPrimaryBrush}" />
-        <Setter Property="CaretBrush" Value="{StaticResource FluentTextPrimaryBrush}" />
-        <Setter Property="SelectionBrush" Value="{StaticResource FluentAccentBrush}" />
-        <Setter Property="FontSize" Value="{StaticResource FluentFontSizeNormal}" />
-        <Setter Property="Padding" Value="6,4" />
-        <Setter Property="MinHeight" Value="28" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type TextBox}">
-                    <Border x:Name="Border"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="{StaticResource FluentCornerRadiusSmall}">
-                        <ScrollViewer x:Name="PART_ContentHost"
-                                      Margin="{TemplateBinding Padding}"
-                                      Focusable="False"
-                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="BorderBrush" 
-                                    Value="{StaticResource FluentBorderBrightBrush}" />
-                        </Trigger>
-                        <Trigger Property="IsFocused" Value="True">
-                            <Setter TargetName="Border" Property="BorderBrush" 
-                                    Value="{StaticResource FluentAccentBrush}" />
-                            <Setter TargetName="Border" Property="BorderThickness" Value="1,1,1,2" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <!-- Fluent ScrollBar Style -->
-    <Style x:Key="FluentScrollBarThumbStyle" TargetType="{x:Type Thumb}">
-        <Setter Property="Background" Value="{StaticResource FluentBorderBrightBrush}" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border x:Name="ThumbBorder"
-                            Background="{TemplateBinding Background}"
-                            CornerRadius="3"
-                            Margin="2" />
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="ThumbBorder" Property="Background" 
-                                    Value="{StaticResource FluentTextSecondaryBrush}" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style x:Key="FluentScrollBarStyle" TargetType="{x:Type ScrollBar}">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Width" Value="12" />
-        <Style.Triggers>
-            <Trigger Property="Orientation" Value="Horizontal">
-                <Setter Property="Width" Value="Auto" />
-                <Setter Property="Height" Value="12" />
-            </Trigger>
-        </Style.Triggers>
-    </Style>
 
 </ResourceDictionary>

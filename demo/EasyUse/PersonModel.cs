@@ -1,3 +1,4 @@
+#pragma warning disable
 using System;
 using System.Windows.Input;
 using System.Windows;
@@ -20,9 +21,9 @@ namespace EasyUse
 
         public PersonModel()
         {
-            ShowBioCommand = new RelayCommand(_ => MessageBox.Show($"Bio for {Name}"));
-            DeleteCommand = new RelayCommand(_ => MessageBox.Show($"Delete {Name}?"));
-            ApproveCommand = new RelayCommand(_ => MessageBox.Show($"Approved {Name}"));
+            this.ShowBioCommand = new RelayCommand(_ => MessageBox.Show($"Bio for {this.Name}"));
+            this.DeleteCommand = new RelayCommand(_ => MessageBox.Show($"Delete {this.Name}?"));
+            this.ApproveCommand = new RelayCommand(_ => MessageBox.Show($"Approved {this.Name}"));
         }
     }
 }

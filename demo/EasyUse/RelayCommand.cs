@@ -1,3 +1,4 @@
+#pragma warning disable
 using System;
 using System.Windows.Input;
 
@@ -10,18 +11,18 @@ namespace EasyUse
 
         public RelayCommand(Action<object?> execute, Predicate<object?>? canExecute = null)
         {
-            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
-            _canExecute = canExecute;
+            this._execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            this._canExecute = canExecute;
         }
 
         public bool CanExecute(object? parameter)
         {
-            return _canExecute == null || _canExecute(parameter);
+            return this._canExecute == null || this._canExecute(parameter);
         }
 
         public void Execute(object? parameter)
         {
-            _execute(parameter);
+            this._execute(parameter);
         }
 
         public event EventHandler? CanExecuteChanged

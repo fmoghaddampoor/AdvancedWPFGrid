@@ -6,7 +6,7 @@ namespace EasyUse
     {
         public MainWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

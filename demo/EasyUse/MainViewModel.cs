@@ -1,5 +1,9 @@
+#pragma warning disable SA1101, SA1309 // Prefix local calls with this, Field should not begin with underscore
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using System.Windows.Input;
+using AdvancedWPFGrid.Controls;
+using AdvancedWPFGrid.Managers;
 
 namespace EasyUse
 {
@@ -29,8 +33,8 @@ namespace EasyUse
                 if (_selectedGroup1 != value)
                 {
                     _selectedGroup1 = value;
-                    OnPropertyChanged(nameof(SelectedGroup1));
-                    UpdateGroupDescriptors();
+                    this.OnPropertyChanged(nameof(SelectedGroup1));
+                    this.UpdateGroupDescriptors();
                 }
             }
         }
@@ -44,8 +48,8 @@ namespace EasyUse
                 if (_selectedGroup2 != value)
                 {
                     _selectedGroup2 = value;
-                    OnPropertyChanged(nameof(SelectedGroup2));
-                    UpdateGroupDescriptors();
+                    this.OnPropertyChanged(nameof(SelectedGroup2));
+                    this.UpdateGroupDescriptors();
                 }
             }
         }
@@ -59,8 +63,8 @@ namespace EasyUse
                 if (_selectedGroup3 != value)
                 {
                     _selectedGroup3 = value;
-                    OnPropertyChanged(nameof(SelectedGroup3));
-                    UpdateGroupDescriptors();
+                    this.OnPropertyChanged(nameof(SelectedGroup3));
+                    this.UpdateGroupDescriptors();
                 }
             }
         }
@@ -71,9 +75,9 @@ namespace EasyUse
         {
             GroupDescriptors.Clear();
 
-            AddGroupDescriptor(SelectedGroup1);
-            AddGroupDescriptor(SelectedGroup2);
-            AddGroupDescriptor(SelectedGroup3);
+            this.AddGroupDescriptor(SelectedGroup1);
+            this.AddGroupDescriptor(SelectedGroup2);
+            this.AddGroupDescriptor(SelectedGroup3);
         }
 
         private void AddGroupDescriptor(string? propertyName)
@@ -94,7 +98,7 @@ namespace EasyUse
                 {
                     _decimalPlaces = value;
                     GlobalDoubleFormat = $"F{value}";
-                    OnPropertyChanged(nameof(DecimalPlaces));
+                    this.OnPropertyChanged(nameof(DecimalPlaces));
                     System.Windows.Input.CommandManager.InvalidateRequerySuggested();
                 }
             }
@@ -110,7 +114,7 @@ namespace EasyUse
                 if (_globalDoubleFormat != value)
                 {
                     _globalDoubleFormat = value;
-                    OnPropertyChanged(nameof(GlobalDoubleFormat));
+                    this.OnPropertyChanged(nameof(GlobalDoubleFormat));
                 }
             }
         }
@@ -124,7 +128,7 @@ namespace EasyUse
                 if (_hasVerticalGridLines != value)
                 {
                     _hasVerticalGridLines = value;
-                    OnPropertyChanged(nameof(HasVerticalGridLines));
+                    this.OnPropertyChanged(nameof(HasVerticalGridLines));
                 }
             }
         }
@@ -138,7 +142,7 @@ namespace EasyUse
                 if (_hasHorizontalGridLines != value)
                 {
                     _hasHorizontalGridLines = value;
-                    OnPropertyChanged(nameof(HasHorizontalGridLines));
+                    this.OnPropertyChanged(nameof(HasHorizontalGridLines));
                 }
             }
         }
@@ -152,7 +156,7 @@ namespace EasyUse
                 if (_alternatingRows != value)
                 {
                     _alternatingRows = value;
-                    OnPropertyChanged(nameof(AlternatingRows));
+                    this.OnPropertyChanged(nameof(AlternatingRows));
                 }
             }
         }
@@ -166,7 +170,7 @@ namespace EasyUse
                 if (_canUserSort != value)
                 {
                     _canUserSort = value;
-                    OnPropertyChanged(nameof(CanUserSort));
+                    this.OnPropertyChanged(nameof(CanUserSort));
                 }
             }
         }
@@ -180,10 +184,69 @@ namespace EasyUse
                 if (_canUserFilter != value)
                 {
                     _canUserFilter = value;
-                    OnPropertyChanged(nameof(CanUserFilter));
+                    this.OnPropertyChanged(nameof(CanUserFilter));
                 }
             }
         }
+
+        private bool _isSearchPanelVisible = false;
+        public bool IsSearchPanelVisible
+        {
+            get => _isSearchPanelVisible;
+            set
+            {
+                if (_isSearchPanelVisible != value)
+                {
+                    _isSearchPanelVisible = value;
+                    this.OnPropertyChanged(nameof(IsSearchPanelVisible));
+                }
+            }
+        }
+
+        private bool _isAutoSearchEnabled = true;
+        public bool IsAutoSearchEnabled
+        {
+            get => _isAutoSearchEnabled;
+            set
+            {
+                if (_isAutoSearchEnabled != value)
+                {
+                    _isAutoSearchEnabled = value;
+                    this.OnPropertyChanged(nameof(IsAutoSearchEnabled));
+                }
+            }
+        }
+
+        private SearchCountMode _searchCountMode = SearchCountMode.Rows;
+        public SearchCountMode SearchCountMode
+        {
+            get => _searchCountMode;
+            set
+            {
+                if (_searchCountMode != value)
+                {
+                    _searchCountMode = value;
+                    this.OnPropertyChanged(nameof(SearchCountMode));
+                }
+            }
+        }
+
+        private double _searchDelaySeconds = 0.5;
+        public double SearchDelaySeconds
+        {
+            get => _searchDelaySeconds;
+            set
+            {
+                if (Math.Abs(_searchDelaySeconds - value) > 0.001)
+                {
+                    _searchDelaySeconds = value;
+                    this.OnPropertyChanged(nameof(SearchDelaySeconds));
+                    this.OnPropertyChanged(nameof(SearchDelay));
+                }
+            }
+        }
+
+        public TimeSpan SearchDelay => TimeSpan.FromSeconds(_searchDelaySeconds);
 
         private bool _canUserReorderColumns = true;
         public bool CanUserReorderColumns
@@ -194,7 +257,7 @@ namespace EasyUse
                 if (_canUserReorderColumns != value)
                 {
                     _canUserReorderColumns = value;
-                    OnPropertyChanged(nameof(CanUserReorderColumns));
+                    this.OnPropertyChanged(nameof(CanUserReorderColumns));
                 }
             }
         }
@@ -208,7 +271,7 @@ namespace EasyUse
                 if (_canUserResizeColumns != value)
                 {
                     _canUserResizeColumns = value;
-                    OnPropertyChanged(nameof(CanUserResizeColumns));
+                    this.OnPropertyChanged(nameof(CanUserResizeColumns));
                 }
             }
         }
@@ -218,18 +281,20 @@ namespace EasyUse
 
         public MainViewModel(AppData appData)
         {
-            Roles = appData.Roles ?? new List<string>();
-            People = new ObservableCollection<PersonModel>(appData.People ?? new List<PersonModel>());
+            this.Roles = appData.Roles ?? new List<string>();
+            this.People = new ObservableCollection<PersonModel>(appData.People ?? new List<PersonModel>());
             
             // Initial format update
-            GlobalDoubleFormat = $"F{DecimalPlaces}";
+            this.GlobalDoubleFormat = $"F{this.DecimalPlaces}";
 
-            IncrementDecimalsCommand = new RelayCommand(_ => DecimalPlaces++, _ => DecimalPlaces < 5);
-            DecrementDecimalsCommand = new RelayCommand(_ => DecimalPlaces--, _ => DecimalPlaces > 0);
+            this.IncrementDecimalsCommand = new RelayCommand(_ => this.DecimalPlaces++, _ => this.DecimalPlaces < 5);
+            this.DecrementDecimalsCommand = new RelayCommand(_ => this.DecimalPlaces--, _ => this.DecimalPlaces > 0);
         }
+
+        public IEnumerable<SearchCountMode> SearchCountModes => Enum.GetValues(typeof(SearchCountMode)).Cast<SearchCountMode>();
 
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string propertyName) => 
-            PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            this.PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
     }
 }

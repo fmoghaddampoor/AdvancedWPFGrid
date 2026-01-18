@@ -11,8 +11,8 @@ namespace EasyUse
 
         public object Data
         {
-            get { return (object)GetValue(DataProperty); }
-            set { SetValue(DataProperty, value); }
+            get { return (object)this.GetValue(DataProperty); }
+            set { this.SetValue(DataProperty, value); }
         }
 
         public static readonly DependencyProperty DataProperty =

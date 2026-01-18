@@ -67,16 +67,16 @@
                                                 <ControlTemplate TargetType="Button">
                                                     <Border x:Name="BtnBorder" Background="Transparent" CornerRadius="0">
                                                         <Path x:Name="SortArrow"
-                                                              Data="M 6,12 L 14,4 L 22,12 M 6,16 L 14,24 L 22,16"
-                                                              Stroke="#0078D4"
-                                                              StrokeThickness="2"
-                                                              StrokeStartLineCap="Round"
-                                                              StrokeEndLineCap="Round"
-                                                              StrokeLineJoin="Round"
-                                                              Stretch="Uniform"
-                                                              Width="16" Height="20"
-                                                              HorizontalAlignment="Center"
-                                                              VerticalAlignment="Center"/>
+                                                               Data="M 6,12 L 14,4 L 22,12 M 6,16 L 14,24 L 22,16"
+                                                               Stroke="#0078D4"
+                                                               StrokeThickness="2"
+                                                               StrokeStartLineCap="Round"
+                                                               StrokeEndLineCap="Round"
+                                                               StrokeLineJoin="Round"
+                                                               Stretch="Uniform"
+                                                               Width="16" Height="20"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"/>
                                                     </Border>
                                                     <ControlTemplate.Triggers>
                                                         <Trigger Property="IsMouseOver" Value="True">
@@ -113,17 +113,17 @@
                                                 <ControlTemplate TargetType="Button">
                                                     <Border x:Name="BtnBorder" Background="Transparent" CornerRadius="0">
                                                         <Path x:Name="FilterIcon"
-                                                              Data="M 4,4 L 24,4 L 16,14 L 16,24 L 12,20 L 12,14 Z"
-                                                              Stroke="#0078D4"
-                                                              StrokeThickness="2"
-                                                              StrokeStartLineCap="Round"
-                                                              StrokeEndLineCap="Round"
-                                                              StrokeLineJoin="Round"
-                                                              Fill="Transparent"
-                                                              Width="18" Height="18"
-                                                              Stretch="Uniform"
-                                                              HorizontalAlignment="Center"
-                                                              VerticalAlignment="Center"/>
+                                                               Data="M 4,4 L 24,4 L 16,14 L 16,24 L 12,20 L 12,14 Z"
+                                                               Stroke="#0078D4"
+                                                               StrokeThickness="2"
+                                                               StrokeStartLineCap="Round"
+                                                               StrokeEndLineCap="Round"
+                                                               StrokeLineJoin="Round"
+                                                               Fill="Transparent"
+                                                               Width="18" Height="18"
+                                                               Stretch="Uniform"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"/>
                                                     </Border>
                                                     <ControlTemplate.Triggers>
                                                         <Trigger Property="IsMouseOver" Value="True">
@@ -186,7 +186,7 @@
                                     <Setter TargetName="PART_SortButton" Property="Opacity" Value="1" />
                                     <Setter TargetName="PART_FilterButton" Property="Opacity" Value="1" />
                                 </Trigger>
-                                
+
                                 <!-- Make active buttons fully visible -->
                                 <Trigger Property="SortDirection" Value="Ascending">
                                     <Setter TargetName="PART_SortButton" Property="Opacity" Value="1" />
@@ -265,29 +265,58 @@
                     <CheckBox Content="Show Horizontal Grid Lines" IsChecked="{Binding HasHorizontalGridLines}" Margin="0,0,0,5"/>
                     <CheckBox Content="Enable Alternating Row Colors" IsChecked="{Binding AlternatingRows}" Margin="0,0,0,10"/>
 
-                    <TextBlock Text="User Interactions:" FontWeight="SemiBold" Margin="0,10,0,5"/>
-                    <CheckBox Content="Allow Sorting" IsChecked="{Binding CanUserSort}" Margin="0,0,0,5"/>
-                    <CheckBox Content="Allow Filtering" IsChecked="{Binding CanUserFilter}" Margin="0,0,0,5"/>
-                    <CheckBox Content="Allow Column Reordering" IsChecked="{Binding CanUserReorderColumns}" Margin="0,0,0,5"/>
-                    <CheckBox Content="Allow Column Resizing" IsChecked="{Binding CanUserResizeColumns}" Margin="0,0,0,10"/>
+                    <TextBlock Text="Features" FontWeight="SemiBold" Margin="0,16,0,8"/>
+                <CheckBox Content="Allow Sorting" IsChecked="{Binding CanUserSort}"/>
+                <CheckBox Content="Allow Filtering" IsChecked="{Binding CanUserFilter}" Margin="0,4,0,0"/>
+                <CheckBox Content="Allow Reorder" IsChecked="{Binding CanUserReorderColumns}" Margin="0,4,0,0"/>
+                <CheckBox Content="Allow Resize" IsChecked="{Binding CanUserResizeColumns}" Margin="0,4,0,0"/>
+
+                <Separator Margin="0,16"/>
+
+                <TextBlock Text="Search Panel" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                <CheckBox Content="Show Search Panel" IsChecked="{Binding IsSearchPanelVisible}"/>
+                <CheckBox Content="Auto Search" IsChecked="{Binding IsAutoSearchEnabled}" Margin="0,4,0,0"/>
+                
+                <Grid Margin="0,8,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Delay (s):" VerticalAlignment="Center"/>
+                    <TextBox Text="{Binding SearchDelaySeconds, StringFormat=N1}" Margin="8,0,0,0" Grid.Column="1"/>
+                </Grid>
+
+                <Grid Margin="0,8,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Count Mode:" VerticalAlignment="Center"/>
+                     <ComboBox SelectedItem="{Binding SearchCountMode}" 
+                               ItemsSource="{Binding SearchCountModes}"
+                               Margin="8,0,0,0" Grid.Column="1"/>
+                </Grid>
 
                     <TextBlock Text="Note: Use buttons to adjust decimal places (0-5)." FontStyle="Italic" Foreground="Gray" Margin="0,20,0,0"/>
                 </StackPanel>
             </TabItem>
 
-            <!-- Grid Tab -->
-            <TabItem Header="Grid">
+            <!-- Data Grid Tab -->
+            <TabItem Header="Data Grid">
                 <av:AdvancedGrid ItemsSource="{Binding People}"
-                                 SelectionMode="Extended"
+                                 HasVerticalGridLines="{Binding HasVerticalGridLines}"
+                                 HasHorizontalGridLines="{Binding HasHorizontalGridLines}"
+                                 AlternatingRows="{Binding AlternatingRows}"
                                  CanUserSort="{Binding CanUserSort}"
                                  CanUserFilter="{Binding CanUserFilter}"
                                  CanUserReorderColumns="{Binding CanUserReorderColumns}"
                                  CanUserResizeColumns="{Binding CanUserResizeColumns}"
-                                  DoubleFormat="{Binding GlobalDoubleFormat}"
-                                  HasVerticalGridLines="{Binding HasVerticalGridLines}"
-                                  HasHorizontalGridLines="{Binding HasHorizontalGridLines}"
-                                  AlternatingRows="{Binding AlternatingRows}"
-                                  GroupDescriptions="{Binding GroupDescriptors}">
+                                 DoubleFormat="{Binding GlobalDoubleFormat}"
+                                 GroupDescriptions="{Binding GroupDescriptors}"
+                                 IsSearchPanelVisible="{Binding IsSearchPanelVisible}"
+                                 IsAutoSearchEnabled="{Binding IsAutoSearchEnabled}"
+                                 SearchDelay="{Binding SearchDelay}"
+                                 SearchCountMode="{Binding SearchCountMode}">
                     <av:AdvancedGrid.Columns>
                         <!-- Selection Column -->
                         <col:SelectionColumn Width="50" />

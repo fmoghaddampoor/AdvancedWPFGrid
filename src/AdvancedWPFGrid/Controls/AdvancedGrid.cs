@@ -420,6 +420,99 @@ public class AdvancedGrid : Control
     }
 
     /// <summary>
+    /// Identifies the IsSearchPanelVisible dependency property.
+    /// </summary>
+    public static readonly DependencyProperty IsSearchPanelVisibleProperty = DependencyProperty.Register(
+        nameof(IsSearchPanelVisible),
+        typeof(bool),
+        typeof(AdvancedGrid),
+        new FrameworkPropertyMetadata(false));
+
+    public bool IsSearchPanelVisible
+    {
+        get => (bool)GetValue(IsSearchPanelVisibleProperty);
+        set => SetValue(IsSearchPanelVisibleProperty, value);
+    }
+
+    /// <summary>
+    /// Identifies the SearchText dependency property.
+    /// </summary>
+    public static readonly DependencyProperty SearchTextProperty = DependencyProperty.Register(
+        nameof(SearchText),
+        typeof(string),
+        typeof(AdvancedGrid),
+        new FrameworkPropertyMetadata(string.Empty, OnSearchTextChanged));
+
+    public string SearchText
+    {
+        get => (string)GetValue(SearchTextProperty);
+        set => SetValue(SearchTextProperty, value);
+    }
+
+    /// <summary>
+    /// Identifies the IsAutoSearchEnabled dependency property.
+    /// </summary>
+    public static readonly DependencyProperty IsAutoSearchEnabledProperty = DependencyProperty.Register(
+        nameof(IsAutoSearchEnabled),
+        typeof(bool),
+        typeof(AdvancedGrid),
+        new FrameworkPropertyMetadata(true));
+
+    public bool IsAutoSearchEnabled
+    {
+        get => (bool)GetValue(IsAutoSearchEnabledProperty);
+        set => SetValue(IsAutoSearchEnabledProperty, value);
+    }
+
+    /// <summary>
+    /// Identifies the SearchDelay dependency property.
+    /// </summary>
+    public static readonly DependencyProperty SearchDelayProperty = DependencyProperty.Register(
+        nameof(SearchDelay),
+        typeof(TimeSpan),
+        typeof(AdvancedGrid),
+        new FrameworkPropertyMetadata(TimeSpan.FromMilliseconds(500)));
+
+    public TimeSpan SearchDelay
+    {
+        get => (TimeSpan)GetValue(SearchDelayProperty);
+        set => SetValue(SearchDelayProperty, value);
+    }
+
+    /// <summary>
+    /// Identifies the SearchCountMode dependency property.
+    /// </summary>
+    public static readonly DependencyProperty SearchCountModeProperty = DependencyProperty.Register(
+        nameof(SearchCountMode),
+        typeof(SearchCountMode),
+        typeof(AdvancedGrid),
+        new FrameworkPropertyMetadata(SearchCountMode.Rows, OnSearchCountModeChanged));
+
+    public SearchCountMode SearchCountMode
+    {
+        get => (SearchCountMode)GetValue(SearchCountModeProperty);
+        set => SetValue(SearchCountModeProperty, value);
+    }
+
+    /// <summary>
+    /// Identifies the SearchMatchCount dependency property (Read-Only).
+    /// </summary>
+    public static readonly DependencyPropertyKey SearchMatchCountPropertyKey = DependencyProperty.RegisterReadOnly(
+        nameof(SearchMatchCount),
+        typeof(int),
+        typeof(AdvancedGrid),
+        new FrameworkPropertyMetadata(0));
+
+    public static readonly DependencyProperty SearchMatchCountProperty = SearchMatchCountPropertyKey.DependencyProperty;
+
+    public int SearchMatchCount
+    {
+        get => (int)GetValue(SearchMatchCountProperty);
+        private set => SetValue(SearchMatchCountPropertyKey, value);
+    }
+
+
+    /// <summary>
     /// Gets or sets whether alternating row styling is enabled.
     /// </summary>
     public bool AlternatingRows
@@ -597,6 +690,126 @@ public class AdvancedGrid : Control
     /// </summary>
     private object? _selectionAnchor;
 
+    private readonly System.Windows.Threading.DispatcherTimer _searchTimer;
+
+    #endregion
+
+    #region Search Methods
+
+    private static void OnSearchTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is AdvancedGrid grid)
+        {
+            if (grid.IsAutoSearchEnabled)
+            {
+                grid._searchTimer.Interval = grid.SearchDelay;
+                grid._searchTimer.Stop();
+                grid._searchTimer.Start();
+            }
+            else
+            {
+                // Manual search only (Enter key or button)
+                // But for now, if IsAutoSearchEnabled is false, we might wait for explicit command.
+                // The implementation plan says "automatic search if available... search box will search after user pauses"
+                // which implies AutoSearch. If IsAutoSearchEnabled is false, we don't trigger here.
+                // We'll rely on the KeyDown handler or a Search Command.
+            }
+        }
+    }
+
+    private static void OnSearchCountModeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is AdvancedGrid grid)
+        {
+            grid.UpdateSearchMatchCount();
+        }
+    }
+
+    private void OnSearchTimerTick(object? sender, EventArgs e)
+    {
+        _searchTimer.Stop();
+        PerformSearch();
+    }
+
+    private void OnFindExecuted(object sender, ExecutedRoutedEventArgs e)
+    {
+        PerformSearch();
+    }
+
+    private void OnDeleteExecuted(object sender, ExecutedRoutedEventArgs e)
+    {
+        SearchText = string.Empty;
+        PerformSearch();
+    }
+
+    /// <summary>
+    /// Performs the search operation using the current SearchText.
+    /// </summary>
+    public void PerformSearch()
+    {
+        if (FilterManager != null)
+        {
+            FilterManager.GlobalSearchText = SearchText;
+            FilterManager.ApplyFiltering();
+            UpdateSearchMatchCount();
+        }
+    }
+
+    internal void UpdateSearchMatchCount()
+    {
+        if (CollectionView == null)
+        {
+            SearchMatchCount = 0;
+            return;
+        }
+
+        // If no global search and no column filters, hide the count
+        if (string.IsNullOrWhiteSpace(SearchText) && (FilterManager == null || FilterManager.Filters.Count == 0))
+        {
+            SearchMatchCount = 0;
+            return;
+        }
+
+        if (SearchCountMode == SearchCountMode.Rows)
+        {
+            SearchMatchCount = CollectionView.Cast<object>().Count();
+        }
+        else // Cells
+        {
+            int cellCount = 0;
+            var searchText = SearchText;
+            
+            // If explicit search text is empty, do we count all cells? 
+            // Usually "0 found" if no search, or total cells? 
+            // Let's assume matches for the search text.
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                SearchMatchCount = 0; 
+                return;
+            }
+
+            foreach (var item in CollectionView)
+            {
+                if (Columns == null) continue;
+                foreach (var column in Columns)
+                {
+                    if (string.IsNullOrEmpty(column.Binding)) continue;
+                    
+                    var value = column.GetCellValue(item);
+                    if (value != null)
+                    {
+                         var stringValue = value.ToString() ?? string.Empty;
+                         if (stringValue.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0)
+                         {
+                             cellCount++;
+                         }
+                    }
+                }
+            }
+            SearchMatchCount = cellCount;
+        }
+    }
+
     #endregion
 
     #region Constructor
@@ -607,11 +820,17 @@ public class AdvancedGrid : Control
         GroupDescriptions = new ObservableCollection<GroupDescription>();
         SelectedItems = _selectedItems;
 
+        _searchTimer = new System.Windows.Threading.DispatcherTimer();
+        _searchTimer.Tick += OnSearchTimerTick;
+
         SortManager = new SortManager(this);
         FilterManager = new FilterManager(this);
         GroupManager = new GroupManager(this);
 
         _selectedItems.CollectionChanged += OnSelectedItemsChanged;
+
+        CommandBindings.Add(new CommandBinding(ApplicationCommands.Find, OnFindExecuted));
+        CommandBindings.Add(new CommandBinding(ApplicationCommands.Delete, OnDeleteExecuted));
 
         Loaded += OnGridLoaded;
         Unloaded += OnGridUnloaded;
@@ -1049,44 +1268,56 @@ public class AdvancedGrid : Control
 
     #region Public Methods
 
+    private bool _isRefreshing = false;
+
     /// <summary>
     /// Refreshes the grid view, including headers and rows.
     /// </summary>
     public void RefreshView()
     {
-        if (ItemsHost is VirtualizingGridPanel panel)
+        if (_isRefreshing) return;
+        _isRefreshing = true;
+
+        try
         {
-            panel.ClearRealizedRows();
-        }
+            if (ItemsHost is VirtualizingGridPanel panel)
+            {
+                panel.ClearRealizedRows();
+            }
         
-        // Refresh header sort/filter indicators
-        if (HeaderPresenter != null)
-        {
-            foreach (UIElement child in HeaderPresenter.Children)
+            // Refresh header sort/filter indicators
+            if (HeaderPresenter != null)
             {
-                if (child is GridHeaderCell cell && cell.Column != null)
+                foreach (UIElement child in HeaderPresenter.Children)
                 {
-                    cell.CanSort = cell.Column.CanSort && CanUserSort;
-                    cell.CanFilter = cell.Column.CanFilter && CanUserFilter;
-                    cell.UpdateSortIndicator();
-                    cell.UpdateFilterIndicator();
+                    if (child is GridHeaderCell cell && cell.Column != null)
+                    {
+                        cell.CanSort = cell.Column.CanSort && CanUserSort;
+                        cell.CanFilter = cell.Column.CanFilter && CanUserFilter;
+                        cell.UpdateSortIndicator();
+                        cell.UpdateFilterIndicator();
+                    }
+                }
+            }
+
+            ItemsHost?.InvalidateMeasure();
+            ItemsHost?.InvalidateVisual();
+            HeaderPresenter?.InvalidateMeasure();
+
+            if (ItemsHost != null)
+            {
+                foreach (UIElement child in ItemsHost.PublicInternalChildren)
+                {
+                    if (child is GridRow row)
+                    {
+                        row.UpdateCells();
+                    }
                 }
             }
         }
-
-        ItemsHost?.InvalidateMeasure();
-        ItemsHost?.InvalidateVisual();
-        HeaderPresenter?.InvalidateMeasure();
-
-        if (ItemsHost != null)
+        finally
         {
-            foreach (UIElement child in ItemsHost.PublicInternalChildren)
-            {
-                if (child is GridRow row)
-                {
-                    row.UpdateCells();
-                }
-            }
+            _isRefreshing = false;
         }
     }
 
