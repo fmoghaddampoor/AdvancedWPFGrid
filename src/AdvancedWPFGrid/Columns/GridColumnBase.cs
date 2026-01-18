@@ -51,7 +51,7 @@ public abstract class GridColumnBase : DependencyObject
         nameof(IsReadOnly),
         typeof(bool),
         typeof(GridColumnBase),
-        new FrameworkPropertyMetadata(false));
+        new FrameworkPropertyMetadata(true));
 
     public static readonly DependencyProperty CanSortProperty = DependencyProperty.Register(
         nameof(CanSort),

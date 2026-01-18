@@ -45,7 +45,7 @@ public class CheckBoxColumn : GridColumnBase
 
     public CheckBoxColumn()
     {
-        IsReadOnly = false;
+
         CanSort = true;
         CanFilter = true;
         HorizontalAlignment = HorizontalAlignment.Center;
