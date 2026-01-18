@@ -294,6 +294,7 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/> <!-- Result Count -->
+                                        <ColumnDefinition Width="Auto"/> <!-- Export Button -->
                                     </Grid.ColumnDefinitions>
 
                                     <!-- Integrated Search Field -->
@@ -407,6 +408,85 @@
                                                Foreground="{DynamicResource FluentTextSecondaryBrush}"
                                                FontSize="12"
                                                FontWeight="SemiBold"/>
+
+                                    <Menu Grid.Column="2" Background="Transparent" VerticalAlignment="Center" Margin="10,0,0,0">
+                                        <MenuItem Header="Export" 
+                                                  Padding="8,4"
+                                                  ItemsSource="{Binding ExportProviders, RelativeSource={RelativeSource TemplatedParent}}">
+                                             <MenuItem.Template>
+                                                <ControlTemplate TargetType="MenuItem">
+                                                    <Grid SnapsToDevicePixels="True">
+                                                        <Border x:Name="Border" 
+                                                                Background="Transparent"
+                                                                BorderBrush="{DynamicResource FluentBorderBrush}"
+                                                                BorderThickness="1"
+                                                                CornerRadius="{DynamicResource FluentCornerRadiusSmall}"
+                                                                Padding="8,4">
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <Path Data="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"
+                                                                      Fill="{DynamicResource FluentAccentBrush}"
+                                                                      Width="12" Height="12"
+                                                                      Stretch="Uniform"
+                                                                      VerticalAlignment="Center"
+                                                                      Margin="0,0,6,0"/>
+                                                                <TextBlock Text="Export" 
+                                                                           VerticalAlignment="Center"
+                                                                           FontSize="12"
+                                                                           FontWeight="SemiBold"
+                                                                           Foreground="{DynamicResource FluentTextPrimaryBrush}"/>
+                                                                <Path Data="M7 10l5 5 5-5z"
+                                                                      Fill="{DynamicResource FluentTextSecondaryBrush}"
+                                                                      Width="8" Height="8"
+                                                                      Stretch="Uniform"
+                                                                      VerticalAlignment="Center"
+                                                                      Margin="6,0,0,0"/>
+                                                            </StackPanel>
+                                                        </Border>
+                                                        <Popup x:Name="PART_Popup"
+                                                               AllowsTransparency="True"
+                                                               Focusable="False"
+                                                               IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                                                               Placement="Bottom"
+                                                               PopupAnimation="Fade">
+                                                            <Border Background="{DynamicResource FluentSurfaceBrush}"
+                                                                    BorderBrush="{DynamicResource FluentBorderBrush}"
+                                                                    BorderThickness="1"
+                                                                    CornerRadius="{DynamicResource FluentCornerRadiusSmall}"
+                                                                    Padding="2"
+                                                                    MinWidth="120"
+                                                                    Margin="0,4,0,0">
+                                                                <ScrollViewer x:Name="SubMenuScrollViewer" CanContentScroll="True">
+                                                                    <ItemsPresenter x:Name="ItemsPresenter" 
+                                                                                    KeyboardNavigation.DirectionalNavigation="Cycle" 
+                                                                                    KeyboardNavigation.TabNavigation="Cycle" 
+                                                                                    Grid.IsSharedSizeScope="True" 
+                                                                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                                                </ScrollViewer>
+                                                            </Border>
+                                                        </Popup>
+                                                    </Grid>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsHighlighted" Value="True">
+                                                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource FluentSurfaceBrush}"/>
+                                                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource FluentAccentBrush}"/>
+                                                        </Trigger>
+                                                        <Trigger Property="IsSubmenuOpen" Value="True">
+                                                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource FluentSurfaceBrush}"/>
+                                                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource FluentAccentBrush}"/>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </MenuItem.Template>
+                                            <MenuItem.ItemContainerStyle>
+                                                <Style TargetType="MenuItem">
+                                                    <Setter Property="Header" Value="{Binding FormatName}"/>
+                                                    <Setter Property="Command" Value="{Binding Path=ExportCommand, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}"/>
+                                                    <Setter Property="CommandParameter" Value="{Binding}"/>
+                                                    <Setter Property="Padding" Value="10,6"/>
+                                                </Style>
+                                            </MenuItem.ItemContainerStyle>
+                                        </MenuItem>
+                                    </Menu>
                                 </Grid>
                             </Border>
 

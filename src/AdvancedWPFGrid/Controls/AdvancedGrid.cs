@@ -11,6 +11,11 @@ using System.Windows.Media;
 using AdvancedWPFGrid.Columns;
 using AdvancedWPFGrid.Data;
 using AdvancedWPFGrid.Managers;
+using AdvancedWPFGrid.Common;
+using AdvancedWPFGrid.Export;
+using AdvancedWPFGrid.Export.ExportServices;
+using Microsoft.Win32;
+using System;
 
 namespace AdvancedWPFGrid.Controls;
 
@@ -741,6 +746,16 @@ public class AdvancedGrid : Control
     internal ICollectionView? CollectionView { get; private set; }
 
     /// <summary>
+    /// Gets the collection of available export providers.
+    /// </summary>
+    public ObservableCollection<IExportService> ExportProviders { get; } = new();
+
+    /// <summary>
+    /// Gets the command used to export grid data.
+    /// </summary>
+    public ICommand ExportCommand { get; }
+
+    /// <summary>
     /// Gets the items host.
     /// </summary>
     private VirtualizingGridPanel? ItemsHost { get; set; }
@@ -1040,6 +1055,10 @@ public class AdvancedGrid : Control
         GroupDescriptions = new ObservableCollection<GroupDescription>();
         AggregateFunctions = new ObservableCollection<AggregateFunction>();
         SelectedItems = _selectedItems;
+
+        ExportProviders.Add(new ExcelExportService());
+        ExportProviders.Add(new PdfExportService());
+        ExportCommand = new RelayCommand(ExecuteExport, CanExecuteExport);
 
         _searchTimer = new System.Windows.Threading.DispatcherTimer();
         _searchTimer.Tick += OnSearchTimerTick;
@@ -1378,6 +1397,53 @@ public class AdvancedGrid : Control
     public void SelectItem(object item, bool addToSelection = false)
     {
         SelectItem(item, addToSelection, false);
+    }
+
+    private bool CanExecuteExport(object? parameter) => CollectionView != null;
+
+    private async void ExecuteExport(object? parameter)
+    {
+        if (parameter is not IExportService service) return;
+
+        var dialog = new SaveFileDialog
+        {
+            Filter = service.FileFilter,
+            FileName = $"Export_{DateTime.Now:yyyyMMdd_HHmmss}",
+            DefaultExt = service.FileExtension
+        };
+
+        if (dialog.ShowDialog() == true)
+        {
+            var options = new ExportOptions
+            {
+                FilePath = dialog.FileName,
+                Title = "Grid Export"
+            };
+
+            try
+            {
+                var view = CollectionView;
+                if (view == null) return;
+
+                // Extract data and column metadata on UI thread
+                var dataToExport = view.Cast<object>().ToList();
+                var exportColumns = Columns
+                    .Where(c => c.IsVisible)
+                    .Select(c => new GridExportColumn
+                    {
+                        Header = c.Header ?? string.Empty,
+                        Binding = c.Binding
+                    })
+                    .ToList();
+
+                await service.ExportAsync(dataToExport, exportColumns, options);
+                MessageBox.Show("Export completed successfully.", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Export failed: {ex.Message}", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
     }
 
     /// <summary>
