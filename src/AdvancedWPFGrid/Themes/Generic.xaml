@@ -21,11 +21,134 @@
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            
+
+                            <!-- Search Panel -->
+                            <Border x:Name="PART_SearchPanel"
+                                    Grid.Row="0"
+                                    Visibility="Collapsed"
+                                    Padding="12,8"
+                                    Background="#252525"
+                                    BorderBrush="#454545"
+                                    BorderThickness="0,0,0,1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Search Field with Nested Icons -->
+                                    <Border x:Name="SearchFieldBorder" 
+                                            Grid.Column="0"
+                                            Background="#1E1E1E" 
+                                            BorderBrush="#454545" 
+                                            BorderThickness="1" 
+                                            CornerRadius="4" 
+                                            Padding="1,0">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="32" /> <!-- Search Icon Button -->
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" /> <!-- Clear Button -->
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- Clickable Search Icon -->
+                                            <Button x:Name="PART_SearchIcon"
+                                                    Grid.Column="0"
+                                                    Width="32" Height="30"
+                                                    Background="Transparent"
+                                                    BorderThickness="0"
+                                                    Command="{x:Static ApplicationCommands.Find}"
+                                                    Cursor="Hand">
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="Transparent">
+                                                            <Path x:Name="IconPath"
+                                                                  Data="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+                                                                  Fill="#858585"
+                                                                  Width="16" Height="16"
+                                                                  Stretch="Uniform"
+                                                                  HorizontalAlignment="Center"
+                                                                  VerticalAlignment="Center"/>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter TargetName="IconPath" Property="Fill" Value="#0078D4"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+
+                                            <TextBox x:Name="PART_SearchBox"
+                                                      Grid.Column="1"
+                                                      Background="Transparent"
+                                                      BorderThickness="0"
+                                                      Foreground="White"
+                                                      VerticalContentAlignment="Center"
+                                                      Padding="4,0"
+                                                      Text="{Binding SearchText, RelativeSource={RelativeSource TemplatedParent}, UpdateSourceTrigger=PropertyChanged}">
+                                                <TextBox.InputBindings>
+                                                      <KeyBinding Key="Enter" Command="{x:Static ApplicationCommands.Find}" />
+                                                </TextBox.InputBindings>
+                                            </TextBox>
+
+                                            <Button x:Name="PART_ClearSearchButton"
+                                                    Grid.Column="2"
+                                                    Width="24" Height="24"
+                                                    Margin="0,0,4,0"
+                                                    Command="{x:Static ApplicationCommands.Delete}"
+                                                    Background="Transparent"
+                                                    BorderThickness="0">
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border x:Name="BtnBorder" Background="Transparent" CornerRadius="12">
+                                                            <Path x:Name="ClearIcon"
+                                                                  Data="M 19,6.41 L 17.59,5 L 12,10.59 L 6.41,5 L 5,6.41 L 10.59,12 L 5,17.59 L 6.41,19 L 12,13.41 L 17.59,19 L 19,17.59 L 13.41,12 Z"
+                                                                  Fill="#858585"
+                                                                  Width="10" Height="10"
+                                                                  Stretch="Uniform"
+                                                                  HorizontalAlignment="Center"
+                                                                  VerticalAlignment="Center"/>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter TargetName="BtnBorder" Property="Background" Value="#15FFFFFF"/>
+                                                                <Setter TargetName="ClearIcon" Property="Fill" Value="#0078D4"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                                <Button.Style>
+                                                    <Style TargetType="Button">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Text.Length, ElementName=PART_SearchBox}" Value="0">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+                                        </Grid>
+                                    </Border>
+
+                                    <!-- Result Count -->
+                                    <TextBlock Grid.Column="1" 
+                                               Text="{Binding SearchMatchCount, RelativeSource={RelativeSource TemplatedParent}, StringFormat='{}{0} found'}"
+                                               Margin="12,0,0,0"
+                                               VerticalAlignment="Center"
+                                               Foreground="#858585"
+                                               FontSize="12"
+                                               FontWeight="SemiBold"/>
+                                </Grid>
+                            </Border>
+
                             <!-- Column Headers -->
-                            <Border Grid.Row="0"
+                            <Border x:Name="PART_HeaderHost"
+                                    Grid.Row="1"
                                     Background="#2D2D2D"
                                     BorderBrush="#454545"
                                     BorderThickness="0,0,0,1">
@@ -34,15 +157,37 @@
                             
                             <!-- Virtualized Content -->
                             <ScrollViewer x:Name="PART_ScrollViewer"
-                                          Grid.Row="1"
+                                          Grid.Row="2"
                                           HorizontalScrollBarVisibility="Auto"
                                           VerticalScrollBarVisibility="Auto"
                                           CanContentScroll="True"
                                           Focusable="False">
                                 <controls:VirtualizingGridPanel x:Name="PART_ItemsHost" />
                             </ScrollViewer>
+
+                            <!-- Summary Row -->
+                            <Border x:Name="PART_SummaryRow"
+                                    Grid.Row="3"
+                                    Visibility="Collapsed"
+                                    Background="#252525"
+                                    BorderBrush="#454545"
+                                    BorderThickness="0,1,0,0">
+                                <ScrollViewer x:Name="PART_SummaryScrollViewer" 
+                                              HorizontalScrollBarVisibility="Hidden" 
+                                              VerticalScrollBarVisibility="Disabled">
+                                   <controls:GridSummaryPresenter x:Name="PART_SummaryPresenter" />
+                                </ScrollViewer>
+                            </Border>
                         </Grid>
                     </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSearchPanelVisible" Value="True">
+                            <Setter TargetName="PART_SearchPanel" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="ShowSummaryRow" Value="True">
+                            <Setter TargetName="PART_SummaryRow" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -128,10 +273,11 @@
                                 Padding="10,0,8,0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
 
                                 <TextBlock x:Name="HeaderText"
                                            Grid.Column="0"
@@ -286,6 +432,7 @@
         <Setter Property="Padding" Value="8,6" />
         <Setter Property="MinHeight" Value="32" />
         <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:GridGroupRow}">
@@ -298,20 +445,76 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             
-                            <TextBlock Grid.Column="0" 
-                                       Text="▶" 
-                                       Margin="0,0,8,0"
-                                       VerticalAlignment="Center" />
+                            <!-- Expand/Collapse Icon -->
+                            <Path x:Name="ExpandIcon"
+                                  Grid.Column="0"
+                                  Width="10" Height="10"
+                                  Fill="#858585"
+                                  VerticalAlignment="Center"
+                                  RenderTransformOrigin="0.5,0.5"
+                                  Data="M0,0 L6,5 L0,10 Z">
+                                <Path.RenderTransform>
+                                    <RotateTransform Angle="0" />
+                                </Path.RenderTransform>
+                            </Path>
                             
+                            <!-- Group Header Content -->
                             <ContentPresenter Grid.Column="1"
+                                              Margin="8,0,0,0"
                                               VerticalAlignment="Center" />
+
+                            <!-- Group Aggregates -->
+                            <ItemsControl Grid.Column="2" 
+                                          ItemsSource="{Binding GridGroupItem.GroupSummaries, RelativeSource={RelativeSource TemplatedParent}}"
+                                          Margin="12,0,12,0"
+                                          VerticalAlignment="Center">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding FormattedValue}" 
+                                                   Margin="0,0,12,0"
+                                                   Foreground="#0078D4"
+                                                   FontWeight="Bold"
+                                                   FontSize="11"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            
+                            <!-- Item Count -->
+                            <TextBlock x:Name="ItemCount"
+                                       Grid.Column="3"
+                                       Text="{TemplateBinding ItemCountText}"
+                                       Foreground="#858585"
+                                       FontWeight="Normal"
+                                       FontSize="11"
+                                       VerticalAlignment="Center" />
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsExpanded" Value="True">
                              <Setter Property="Background" Value="#454545" />
+                             <Setter TargetName="ExpandIcon" Property="RenderTransform">
+                                <Setter.Value>
+                                    <RotateTransform Angle="90" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="GroupBorder" Property="Background" Value="#4A4A4A" />
+                        </Trigger>
+                        <Trigger Property="GroupLevel" Value="1">
+                            <Setter Property="Padding" Value="24,6,8,6" />
+                        </Trigger>
+                        <Trigger Property="GroupLevel" Value="2">
+                            <Setter Property="Padding" Value="40,6,8,6" />
                         </Trigger>
                         <DataTrigger Binding="{Binding HasHorizontalGridLines, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="False">
                             <Setter TargetName="GroupBorder" Property="BorderThickness" Value="0" />

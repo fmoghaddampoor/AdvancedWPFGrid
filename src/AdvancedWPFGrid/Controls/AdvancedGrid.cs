@@ -253,6 +253,36 @@ public class AdvancedGrid : Control
             grid.RefreshView();
         }
     }
+
+    /// <summary>
+    /// Identifies the <see cref="AggregateFunctions"/> dependency property.
+    /// </summary>
+    public static readonly DependencyProperty AggregateFunctionsProperty = DependencyProperty.Register(
+        nameof(AggregateFunctions),
+        typeof(ObservableCollection<AggregateFunction>),
+        typeof(AdvancedGrid),
+        new FrameworkPropertyMetadata(null, OnAggregateFunctionsChanged));
+
+    /// <summary>
+    /// Identifies the <see cref="SummaryResults"/> dependency property.
+    /// </summary>
+    private static readonly DependencyPropertyKey SummaryResultsPropertyKey = DependencyProperty.RegisterReadOnly(
+        nameof(SummaryResults),
+        typeof(ObservableCollection<AggregateResult>),
+        typeof(AdvancedGrid),
+        new FrameworkPropertyMetadata(null));
+
+    public static readonly DependencyProperty SummaryResultsProperty = SummaryResultsPropertyKey.DependencyProperty;
+
+    /// <summary>
+    /// Identifies the <see cref="ShowSummaryRow"/> dependency property.
+    /// </summary>
+    public static readonly DependencyProperty ShowSummaryRowProperty = DependencyProperty.Register(
+        nameof(ShowSummaryRow),
+        typeof(bool),
+        typeof(AdvancedGrid),
+        new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsArrange));
+
     #endregion
 
     #region Properties
@@ -300,6 +330,33 @@ public class AdvancedGrid : Control
     {
         get => (GridSelectionMode)GetValue(SelectionModeProperty);
         set => SetValue(SelectionModeProperty, value);
+    }
+
+    /// <summary>
+    /// Gets or sets the collection of aggregation functions to perform.
+    /// </summary>
+    public ObservableCollection<AggregateFunction> AggregateFunctions
+    {
+        get => (ObservableCollection<AggregateFunction>)GetValue(AggregateFunctionsProperty);
+        set => SetValue(AggregateFunctionsProperty, value);
+    }
+
+    /// <summary>
+    /// Gets the calculated summary results.
+    /// </summary>
+    public ObservableCollection<AggregateResult> SummaryResults
+    {
+        get => (ObservableCollection<AggregateResult>)GetValue(SummaryResultsProperty);
+        private set => SetValue(SummaryResultsPropertyKey, value);
+    }
+
+    /// <summary>
+    /// Gets or sets whether to display the summary row at the bottom of the grid.
+    /// </summary>
+    public bool ShowSummaryRow
+    {
+        get => (bool)GetValue(ShowSummaryRowProperty);
+        set => SetValue(ShowSummaryRowProperty, value);
     }
 
     /// <summary>
@@ -666,19 +723,14 @@ public class AdvancedGrid : Control
     internal ICollectionView? CollectionView { get; private set; }
 
     /// <summary>
-    /// Gets the virtualized panel hosting the grid rows.
+    /// Gets the items host.
     /// </summary>
-    internal VirtualizingGridPanel? ItemsHost { get; private set; }
-
-    /// <summary>
-    /// Gets the header presenter displaying column headers.
-    /// </summary>
-    internal GridHeaderPresenter? HeaderPresenter { get; private set; }
-
-    /// <summary>
-    /// Gets the scroll viewer controlling scrolling behavior.
-    /// </summary>
-    internal ScrollViewer? ScrollViewer { get; private set; }
+    private VirtualizingGridPanel? ItemsHost { get; set; }
+    private GridHeaderPresenter? HeaderPresenter { get; set; }
+    private GridSummaryPresenter? SummaryPresenter { get; set; }
+    private ScrollViewer? ScrollViewer { get; set; }
+    private ScrollViewer? SummaryScrollViewer { get; set; }
+    private bool _isRefreshing;
 
     /// <summary>
     /// Internal collection of selected items.
@@ -747,14 +799,154 @@ public class AdvancedGrid : Control
     /// </summary>
     public void PerformSearch()
     {
-        if (FilterManager != null)
+        _searchTimer.Stop();
+        FilterManager.GlobalSearchText = SearchText;
+        FilterManager.ApplyFiltering();
+        UpdateAggregates();
+    }
+
+    private static void OnAggregateFunctionsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is AdvancedGrid grid)
         {
-            FilterManager.GlobalSearchText = SearchText;
-            FilterManager.ApplyFiltering();
-            UpdateSearchMatchCount();
+            if (e.OldValue is ObservableCollection<AggregateFunction> oldColl)
+            {
+                oldColl.CollectionChanged -= grid.OnAggregateFunctionsCollectionChanged;
+            }
+
+            if (e.NewValue is ObservableCollection<AggregateFunction> newColl)
+            {
+                newColl.CollectionChanged += grid.OnAggregateFunctionsCollectionChanged;
+            }
+
+            grid.UpdateAggregates();
         }
     }
 
+    private void OnAggregateFunctionsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        UpdateAggregates();
+    }
+
+    /// <summary>
+    /// Recalculates all defined aggregates for the current view.
+    /// </summary>
+    public void UpdateAggregates()
+    {
+        if (AggregateFunctions == null || AggregateFunctions.Count == 0 || CollectionView == null)
+        {
+            SummaryResults = new ObservableCollection<AggregateResult>();
+            return;
+        }
+
+        var results = new ObservableCollection<AggregateResult>();
+        var items = CollectionView.Cast<object>().ToList();
+
+        foreach (var func in AggregateFunctions)
+        {
+            if (string.IsNullOrEmpty(func.PropertyName)) continue;
+
+            var result = InternalCalculateAggregate(items, func);
+            if (result != null)
+            {
+                results.Add(result);
+            }
+        }
+
+        SummaryResults = results;
+    }
+
+    internal void UpdateGroupAggregates()
+    {
+        GroupManager?.UpdateGroupAggregates();
+    }
+
+    internal AggregateResult? InternalCalculateAggregate(List<object> items, AggregateFunction func)
+    {
+        if (items.Count == 0 && func.FunctionType != AggregateType.Count) return null;
+
+        object? finalValue = null;
+        
+        try
+        {
+            switch (func.FunctionType)
+            {
+                case AggregateType.Count:
+                    finalValue = items.Count;
+                    break;
+
+                case AggregateType.Sum:
+                    finalValue = items.Sum(item => GetNumericValue(item, func.PropertyName));
+                    break;
+
+                case AggregateType.Average:
+                    if (items.Count > 0)
+                        finalValue = items.Average(item => GetNumericValue(item, func.PropertyName));
+                    break;
+
+                case AggregateType.Min:
+                    finalValue = items.Min(item => GetComparableValue(item, func.PropertyName));
+                    break;
+
+                case AggregateType.Max:
+                    finalValue = items.Max(item => GetComparableValue(item, func.PropertyName));
+                    break;
+            }
+        }
+        catch
+        {
+            // Silently fail for incompatible types
+            return null;
+        }
+
+        if (finalValue == null) return null;
+
+        var formattedValue = finalValue.ToString() ?? string.Empty;
+        if (!string.IsNullOrEmpty(func.StringFormat))
+        {
+            if (func.StringFormat.Contains("{0"))
+            {
+                 formattedValue = string.Format(func.StringFormat, finalValue);
+            }
+            else
+            {
+                formattedValue = string.Format("{0:" + func.StringFormat + "}", finalValue);
+            }
+        }
+        else if (!string.IsNullOrEmpty(func.Caption))
+        {
+            formattedValue = $"{func.Caption}: {formattedValue}";
+        }
+
+        return new AggregateResult
+        {
+            PropertyName = func.PropertyName,
+            Value = finalValue,
+            FormattedValue = formattedValue
+        };
+    }
+
+    private double GetNumericValue(object item, string propertyName)
+    {
+        var prop = item.GetType().GetProperty(propertyName);
+        var val = prop?.GetValue(item);
+        if (val == null) return 0;
+
+        try
+        {
+            return Convert.ToDouble(val);
+        }
+        catch
+        {
+            return 0;
+        }
+    }
+
+    private object? GetComparableValue(object item, string propertyName)
+    {
+        var prop = item.GetType().GetProperty(propertyName);
+        return prop?.GetValue(item);
+    }
     internal void UpdateSearchMatchCount()
     {
         if (CollectionView == null)
@@ -818,6 +1010,7 @@ public class AdvancedGrid : Control
     {
         Columns = new GridColumnCollection();
         GroupDescriptions = new ObservableCollection<GroupDescription>();
+        AggregateFunctions = new ObservableCollection<AggregateFunction>();
         SelectedItems = _selectedItems;
 
         _searchTimer = new System.Windows.Threading.DispatcherTimer();
@@ -860,11 +1053,18 @@ public class AdvancedGrid : Control
 
         ItemsHost = GetTemplateChild("PART_ItemsHost") as VirtualizingGridPanel;
         HeaderPresenter = GetTemplateChild("PART_HeaderPresenter") as GridHeaderPresenter;
+        SummaryPresenter = GetTemplateChild("PART_SummaryPresenter") as GridSummaryPresenter;
         ScrollViewer = GetTemplateChild("PART_ScrollViewer") as ScrollViewer;
+        SummaryScrollViewer = GetTemplateChild("PART_SummaryScrollViewer") as ScrollViewer;
 
         if (HeaderPresenter != null)
         {
             HeaderPresenter.Grid = this;
+        }
+
+        if (SummaryPresenter != null)
+        {
+            SummaryPresenter.Grid = this;
         }
 
         if (ItemsHost != null)
@@ -882,9 +1082,13 @@ public class AdvancedGrid : Control
 
     private void OnScrollChanged(object sender, ScrollChangedEventArgs e)
     {
-        if (HeaderPresenter != null)
+        if (e.HorizontalChange != 0)
         {
-            HeaderPresenter.RenderTransform = new TranslateTransform(-e.HorizontalOffset, 0);
+            HeaderPresenter?.InvalidateArrange();
+            if (SummaryScrollViewer != null)
+            {
+                SummaryScrollViewer.ScrollToHorizontalOffset(e.HorizontalOffset);
+            }
         }
     }
 
@@ -1268,8 +1472,6 @@ public class AdvancedGrid : Control
 
     #region Public Methods
 
-    private bool _isRefreshing = false;
-
     /// <summary>
     /// Refreshes the grid view, including headers and rows.
     /// </summary>
@@ -1314,6 +1516,8 @@ public class AdvancedGrid : Control
                     }
                 }
             }
+
+            UpdateAggregates();
         }
         finally
         {

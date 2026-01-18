@@ -89,6 +89,12 @@ public abstract class GridColumnBase : DependencyObject
         typeof(GridColumnBase),
         new FrameworkPropertyMetadata(false));
 
+    public static readonly DependencyProperty ShowSummaryProperty = DependencyProperty.Register(
+        nameof(ShowSummary),
+        typeof(bool),
+        typeof(GridColumnBase),
+        new FrameworkPropertyMetadata(true));
+
     #endregion
 
     #region Properties
@@ -171,6 +177,12 @@ public abstract class GridColumnBase : DependencyObject
     {
         get => (bool)GetValue(IsSelectionColumnProperty);
         set => SetValue(IsSelectionColumnProperty, value);
+    }
+
+    public bool ShowSummary
+    {
+        get => (bool)GetValue(ShowSummaryProperty);
+        set => SetValue(ShowSummaryProperty, value);
     }
 
     internal AdvancedGrid? Grid { get; set; }

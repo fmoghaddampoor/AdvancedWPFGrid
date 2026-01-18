@@ -7,6 +7,7 @@
         xmlns:av="clr-namespace:AdvancedWPFGrid.Controls;assembly=AdvancedWPFGrid"
         xmlns:col="clr-namespace:AdvancedWPFGrid.Columns;assembly=AdvancedWPFGrid"
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+        xmlns:Data="clr-namespace:AdvancedWPFGrid.Data;assembly=AdvancedWPFGrid"
         mc:Ignorable="d"
         Title="Easy Use - Advanced WPF Grid Demo" Height="450" Width="900"
         WindowStartupLocation="CenterScreen"
@@ -60,6 +61,7 @@
                     <CheckBox Content="Show Vertical Grid Lines" IsChecked="{Binding HasVerticalGridLines}" Margin="0,0,0,5"/>
                     <CheckBox Content="Show Horizontal Grid Lines" IsChecked="{Binding HasHorizontalGridLines}" Margin="0,0,0,5"/>
                     <CheckBox Content="Enable Alternating Row Colors" IsChecked="{Binding AlternatingRows}" Margin="0,0,0,10"/>
+                    <CheckBox Content="Show Summary Row" IsChecked="{Binding ShowSummaryRow, ElementName=MainGrid}" Margin="0,0,0,5"/>
 
                     <TextBlock Text="Features" FontWeight="SemiBold" Margin="0,16,0,8"/>
                 <CheckBox Content="Allow Sorting" IsChecked="{Binding CanUserSort}"/>
@@ -112,7 +114,14 @@
                                  IsSearchPanelVisible="{Binding IsSearchPanelVisible}"
                                  IsAutoSearchEnabled="{Binding IsAutoSearchEnabled}"
                                  SearchDelay="{Binding SearchDelay}"
-                                 SearchCountMode="{Binding SearchCountMode}">
+                                 SearchCountMode="{Binding SearchCountMode}"
+                                 ShowSummaryRow="True"
+                                 x:Name="MainGrid">
+                    <av:AdvancedGrid.AggregateFunctions>
+                        <Data:AggregateFunction PropertyName="Name" FunctionType="Count" Caption="Total" />
+                        <Data:AggregateFunction PropertyName="PerformanceScore" FunctionType="Average" StringFormat="Avg: {0:N1}" />
+                        <Data:AggregateFunction PropertyName="Salary" FunctionType="Sum" StringFormat="Total: ${0:N0}" />
+                    </av:AdvancedGrid.AggregateFunctions>
                     <av:AdvancedGrid.Columns>
                         <!-- Selection Column -->
                         <col:SelectionColumn Width="50" />
@@ -186,6 +195,7 @@
                                               ButtonPosition="Right"
                                               ButtonWidth="70"
                                               Width="180"
+                                              ShowSummary="False"
                                               CanSort="False"
                                               CanFilter="False"/>
                                               

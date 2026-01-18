@@ -58,6 +58,9 @@ public class GroupManager
         // Build our internal group structure for virtualization
         BuildGroupStructure();
 
+        // Calculate aggregates for each group
+        UpdateGroupAggregates();
+
         _grid.RefreshView();
     }
 
@@ -123,6 +126,56 @@ public class GroupManager
         }
 
         return string.Empty;
+    }
+
+    /// <summary>
+    /// Recalculates aggregates for all groups.
+    /// </summary>
+    public void UpdateGroupAggregates()
+    {
+        if (_grid.AggregateFunctions == null || _grid.AggregateFunctions.Count == 0) return;
+
+        CalculateSummariesForGroups(_groups);
+    }
+
+    private void CalculateSummariesForGroups(IList<GridGroupItem> groups)
+    {
+        foreach (var group in groups)
+        {
+            var dataItems = GetItemsInGroup(group);
+            group.GroupSummaries.Clear();
+
+            foreach (var func in _grid.AggregateFunctions)
+            {
+                var result = _grid.InternalCalculateAggregate(dataItems, func);
+                if (result != null)
+                {
+                    group.GroupSummaries.Add(result);
+                }
+            }
+
+            if (group.SubGroups.Count > 0)
+            {
+                CalculateSummariesForGroups(group.SubGroups);
+            }
+        }
+    }
+
+    private List<object> GetItemsInGroup(GridGroupItem group)
+    {
+        var result = new List<object>();
+        if (group.SubGroups.Count > 0)
+        {
+            foreach (var sub in group.SubGroups)
+            {
+                result.AddRange(GetItemsInGroup(sub));
+            }
+        }
+        else
+        {
+            result.AddRange(group.Items);
+        }
+        return result;
     }
 
     /// <summary>

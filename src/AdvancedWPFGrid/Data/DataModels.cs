@@ -51,6 +51,11 @@ public class GridGroupItem
     }
 
     /// <summary>
+    /// Calculated summary results for this group.
+    /// </summary>
+    public List<AggregateResult> GroupSummaries { get; set; } = [];
+
+    /// <summary>
     /// Gets the display text for this group header.
     /// </summary>
     public string DisplayText => $"{PropertyName}: {Key?.ToString() ?? "(null)"}";

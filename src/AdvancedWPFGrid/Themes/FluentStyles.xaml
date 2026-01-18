@@ -279,6 +279,7 @@
                                 <RowDefinition Height="Auto"/> <!-- Search Panel -->
                                 <RowDefinition Height="Auto"/> <!-- Header -->
                                 <RowDefinition Height="*"/>    <!-- Items -->
+                                <RowDefinition Height="Auto"/> <!-- Summary Row -->
                             </Grid.RowDefinitions>
 
                             <!-- Search Panel -->
@@ -427,11 +428,28 @@
                                           Focusable="False">
                                 <controls:VirtualizingGridPanel x:Name="PART_ItemsHost" />
                             </ScrollViewer>
+
+                            <!-- Summary Row -->
+                            <Border x:Name="PART_SummaryRow"
+                                    Grid.Row="3"
+                                    Visibility="Collapsed"
+                                    Background="{DynamicResource FluentSurfaceAltBrush}"
+                                    BorderBrush="{DynamicResource FluentBorderSubtleBrush}"
+                                    BorderThickness="0,1,0,0">
+                                <ScrollViewer x:Name="PART_SummaryScrollViewer" 
+                                              HorizontalScrollBarVisibility="Hidden" 
+                                              VerticalScrollBarVisibility="Disabled">
+                                   <controls:GridSummaryPresenter x:Name="PART_SummaryPresenter" />
+                                </ScrollViewer>
+                            </Border>
                         </Grid>
                     </Border>
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsSearchPanelVisible" Value="True">
                                                     <Setter TargetName="PART_SearchPanel" Property="Visibility" Value="Visible"/>
+                                                </Trigger>
+                                                <Trigger Property="ShowSummaryRow" Value="True">
+                                                    <Setter TargetName="PART_SummaryRow" Property="Visibility" Value="Visible"/>
                                                 </Trigger>
                                                 <Trigger SourceName="PART_SearchBox" Property="IsFocused" Value="True">
                                                     <Setter TargetName="SearchFieldBorder" Property="BorderBrush" Value="{DynamicResource FluentAccentBrush}"/>
@@ -442,6 +460,26 @@
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- GridSummaryCell Style -->
+    <Style TargetType="{x:Type controls:GridSummaryCell}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:GridSummaryCell}">
+                    <Border BorderBrush="{DynamicResource FluentBorderSubtleBrush}"
+                            BorderThickness="0,0,1,0"
+                            Padding="10,4">
+                        <TextBlock Text="{Binding Result.FormattedValue, RelativeSource={RelativeSource TemplatedParent}}"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="{Binding Column.HorizontalAlignment, RelativeSource={RelativeSource TemplatedParent}}"
+                                   FontWeight="Bold"
+                                   Foreground="{DynamicResource FluentAccentBrush}"
+                                   FontSize="12"/>
+                    </Border>
+                </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
@@ -742,6 +780,7 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             
                             <!-- Expand/Collapse Icon -->
@@ -761,10 +800,31 @@
                             <ContentPresenter Grid.Column="1"
                                               Margin="8,0,0,0"
                                               VerticalAlignment="Center" />
+
+                            <!-- Group Aggregates -->
+                            <ItemsControl Grid.Column="2" 
+                                          ItemsSource="{Binding GridGroupItem.GroupSummaries, RelativeSource={RelativeSource TemplatedParent}}"
+                                          Margin="12,0,12,0"
+                                          VerticalAlignment="Center">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding FormattedValue}" 
+                                                   Margin="0,0,12,0"
+                                                   Foreground="{DynamicResource FluentAccentBrush}"
+                                                   FontWeight="Bold"
+                                                   FontSize="11"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                             
                             <!-- Item Count -->
                             <TextBlock x:Name="ItemCount"
-                                       Grid.Column="2"
+                                       Grid.Column="3"
                                        Text="{TemplateBinding ItemCountText}"
                                        Foreground="{DynamicResource FluentTextSecondaryBrush}"
                                        FontWeight="Normal"
