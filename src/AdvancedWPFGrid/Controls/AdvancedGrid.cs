@@ -1077,6 +1077,7 @@ public class AdvancedGrid : Control
         SelectedItems = _selectedItems;
 
         ExportProviders.Add(new ExcelExportService());
+        ExportProviders.Add(new CsvExportService());
         ExportProviders.Add(new PdfExportService());
         ExportCommand = new RelayCommand(ExecuteExport, CanExecuteExport);
 
