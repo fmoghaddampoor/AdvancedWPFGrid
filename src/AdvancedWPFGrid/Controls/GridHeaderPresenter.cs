@@ -160,7 +160,7 @@ public class GridHeaderCell : ContentControl
     {
         if (d is GridHeaderCell cell && e.NewValue is GridColumnBase column)
         {
-            cell.CanSort = column.CanSort;
+            cell.CanSort = column.CanSort && (cell.Grid?.CanUserSort ?? true);
             cell.CanFilter = column.CanFilter && (cell.Grid?.CanUserFilter ?? true);
             cell.IsSelectionColumn = column.IsSelectionColumn;
             cell.UpdateSortIndicator();
@@ -223,6 +223,7 @@ public class GridHeaderCell : ContentControl
             _grid = value;
             if (_grid != null && Column != null)
             {
+                CanSort = Column.CanSort && _grid.CanUserSort;
                 CanFilter = Column.CanFilter && _grid.CanUserFilter;
                 UpdateSortIndicator();
                 UpdateFilterIndicator();
@@ -303,9 +304,9 @@ public class GridHeaderCell : ContentControl
 
     private void OnSortButtonClick(object sender, RoutedEventArgs e)
     {
-        if (Column != null && Column.CanSort && Grid?.CanUserSort == true)
+        if (Column != null && CanSort)
         {
-            Grid.SortManager.ToggleSort(Column.Binding);
+            Grid?.SortManager.ToggleSort(Column.Binding);
             UpdateSortIndicator();
         }
     }

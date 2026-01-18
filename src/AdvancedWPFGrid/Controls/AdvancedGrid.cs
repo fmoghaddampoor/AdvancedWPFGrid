@@ -101,7 +101,7 @@ public class AdvancedGrid : Control
         nameof(CanUserSort),
         typeof(bool),
         typeof(AdvancedGrid),
-        new FrameworkPropertyMetadata(true));
+        new FrameworkPropertyMetadata(true, OnCanUserSortChanged));
 
     /// <summary>
     /// Identifies the <see cref="CanUserFilter"/> dependency property.
@@ -239,6 +239,14 @@ public class AdvancedGrid : Control
         new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.AffectsRender));
 
     private static void OnCanUserFilterChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is AdvancedGrid grid)
+        {
+            grid.RefreshView();
+        }
+    }
+
+    private static void OnCanUserSortChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is AdvancedGrid grid)
         {
@@ -1058,6 +1066,7 @@ public class AdvancedGrid : Control
             {
                 if (child is GridHeaderCell cell && cell.Column != null)
                 {
+                    cell.CanSort = cell.Column.CanSort && CanUserSort;
                     cell.CanFilter = cell.Column.CanFilter && CanUserFilter;
                     cell.UpdateSortIndicator();
                     cell.UpdateFilterIndicator();
