@@ -44,252 +44,377 @@ public class AdvancedGrid : Control
 
     #region Dependency Properties
 
+    /// <summary>
+    /// Identifies the <see cref="ItemsSource"/> dependency property.
+    /// </summary>
     public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register(
         nameof(ItemsSource),
         typeof(IEnumerable),
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(null, OnItemsSourceChanged));
 
+    /// <summary>
+    /// Identifies the <see cref="Columns"/> dependency property.
+    /// </summary>
     public static readonly DependencyProperty ColumnsProperty = DependencyProperty.Register(
         nameof(Columns),
         typeof(GridColumnCollection),
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(null, OnColumnsChanged));
 
+    /// <summary>
+    /// Tracks whether initial auto-fit of columns has been performed.
+    /// </summary>
     private bool _initialAutoFitDone = false;
 
+    /// <summary>
+    /// Identifies the <see cref="SelectedItem"/> dependency property.
+    /// </summary>
     public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(
         nameof(SelectedItem),
         typeof(object),
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedItemChanged));
 
+    /// <summary>
+    /// Identifies the <see cref="SelectedItems"/> dependency property.
+    /// </summary>
     public static readonly DependencyProperty SelectedItemsProperty = DependencyProperty.Register(
         nameof(SelectedItems),
         typeof(IList),
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(null));
 
+    /// <summary>
+    /// Identifies the <see cref="SelectionMode"/> dependency property.
+    /// </summary>
     public static readonly DependencyProperty SelectionModeProperty = DependencyProperty.Register(
         nameof(SelectionMode),
         typeof(GridSelectionMode),
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(GridSelectionMode.Extended));
 
+    /// <summary>
+    /// Identifies the <see cref="CanUserSort"/> dependency property.
+    /// </summary>
     public static readonly DependencyProperty CanUserSortProperty = DependencyProperty.Register(
         nameof(CanUserSort),
         typeof(bool),
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(true));
 
+    /// <summary>
+    /// Identifies the <see cref="CanUserFilter"/> dependency property.
+    /// </summary>
     public static readonly DependencyProperty CanUserFilterProperty = DependencyProperty.Register(
         nameof(CanUserFilter),
         typeof(bool),
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(true));
 
+    /// <summary>
+    /// Identifies the <see cref="CanUserResizeColumns"/> dependency property.
+    /// </summary>
     public static readonly DependencyProperty CanUserResizeColumnsProperty = DependencyProperty.Register(
         nameof(CanUserResizeColumns),
         typeof(bool),
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(true));
 
+    /// <summary>
+    /// Identifies the <see cref="CanUserReorderColumns"/> dependency property.
+    /// </summary>
     public static readonly DependencyProperty CanUserReorderColumnsProperty = DependencyProperty.Register(
         nameof(CanUserReorderColumns),
         typeof(bool),
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(true));
 
+    /// <summary>
+    /// Identifies the <see cref="HeaderHeight"/> dependency property.
+    /// </summary>
     public static readonly DependencyProperty HeaderHeightProperty = DependencyProperty.Register(
         nameof(HeaderHeight),
         typeof(double),
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(48.0));
 
+    /// <summary>
+    /// Identifies the <see cref="RowHeight"/> dependency property.
+    /// </summary>
     public static readonly DependencyProperty RowHeightProperty = DependencyProperty.Register(
         nameof(RowHeight),
         typeof(double),
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(32.0, FrameworkPropertyMetadataOptions.AffectsMeasure));
 
+    /// <summary>
+    /// Identifies the <see cref="AlternatingRowBackground"/> dependency property.
+    /// </summary>
     public static readonly DependencyProperty AlternatingRowBackgroundProperty = DependencyProperty.Register(
         nameof(AlternatingRowBackground),
         typeof(Brush),
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(null));
 
+    /// <summary>
+    /// Identifies the <see cref="GroupDescriptions"/> dependency property.
+    /// </summary>
     public static readonly DependencyProperty GroupDescriptionsProperty = DependencyProperty.Register(
         nameof(GroupDescriptions),
         typeof(ObservableCollection<GroupDescription>),
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(null, OnGroupDescriptionsChanged));
 
+    /// <summary>
+    /// Identifies the IsGridFocused attached dependency property.
+    /// </summary>
     public static readonly DependencyProperty IsGridFocusedProperty = DependencyProperty.RegisterAttached(
         "IsGridFocused",
         typeof(bool),
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.Inherits));
 
+    /// <summary>
+    /// Identifies the <see cref="RowHeightBinding"/> dependency property.
+    /// </summary>
     public static readonly DependencyProperty RowHeightBindingProperty = DependencyProperty.Register(
         nameof(RowHeightBinding),
         typeof(string),
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(null));
 
+    /// <summary>
+    /// Identifies the <see cref="FrozenColumnCount"/> dependency property.
+    /// </summary>
     public static readonly DependencyProperty FrozenColumnCountProperty = DependencyProperty.Register(
         nameof(FrozenColumnCount),
         typeof(int),
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(0));
 
+    /// <summary>
+    /// Identifies the <see cref="SelectionState"/> dependency property.
+    /// </summary>
     public static readonly DependencyProperty SelectionStateProperty = DependencyProperty.Register(
         nameof(SelectionState),
         typeof(bool?),
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(false, OnSelectionStateChanged));
 
+    /// <summary>
+    /// Identifies the <see cref="DoubleFormat"/> dependency property.
+    /// </summary>
     public static readonly DependencyProperty DoubleFormatProperty = DependencyProperty.Register(
         nameof(DoubleFormat),
         typeof(string),
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(null, OnDoubleFormatChanged));
 
+    /// <summary>
+    /// Identifies the <see cref="HasVerticalGridLines"/> dependency property.
+    /// </summary>
     public static readonly DependencyProperty HasVerticalGridLinesProperty = DependencyProperty.Register(
         nameof(HasVerticalGridLines),
         typeof(bool),
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.AffectsRender));
 
+    /// <summary>
+    /// Identifies the <see cref="HasHorizontalGridLines"/> dependency property.
+    /// </summary>
     public static readonly DependencyProperty HasHorizontalGridLinesProperty = DependencyProperty.Register(
         nameof(HasHorizontalGridLines),
         typeof(bool),
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.AffectsRender));
 
+    /// <summary>
+    /// Identifies the <see cref="AlternatingRows"/> dependency property.
+    /// </summary>
     public static readonly DependencyProperty AlternatingRowsProperty = DependencyProperty.Register(
         nameof(AlternatingRows),
         typeof(bool),
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.AffectsRender));
-
     #endregion
 
     #region Properties
 
+    /// <summary>
+    /// Gets or sets the collection of items to display in the grid.
+    /// </summary>
     public IEnumerable? ItemsSource
     {
         get => (IEnumerable?)GetValue(ItemsSourceProperty);
         set => SetValue(ItemsSourceProperty, value);
     }
 
+    /// <summary>
+    /// Gets or sets the collection of columns defined for this grid.
+    /// </summary>
     public GridColumnCollection Columns
     {
         get => (GridColumnCollection)GetValue(ColumnsProperty);
         set => SetValue(ColumnsProperty, value);
     }
 
+    /// <summary>
+    /// Gets or sets the currently selected item.
+    /// </summary>
     public object? SelectedItem
     {
         get => GetValue(SelectedItemProperty);
         set => SetValue(SelectedItemProperty, value);
     }
 
+    /// <summary>
+    /// Gets the collection of currently selected items.
+    /// </summary>
     public IList? SelectedItems
     {
         get => (IList?)GetValue(SelectedItemsProperty);
         private set => SetValue(SelectedItemsProperty, value);
     }
 
+    /// <summary>
+    /// Gets or sets the selection mode for the grid.
+    /// </summary>
     public GridSelectionMode SelectionMode
     {
         get => (GridSelectionMode)GetValue(SelectionModeProperty);
         set => SetValue(SelectionModeProperty, value);
     }
 
+    /// <summary>
+    /// Gets or sets whether users can sort columns by clicking headers.
+    /// </summary>
     public bool CanUserSort
     {
         get => (bool)GetValue(CanUserSortProperty);
         set => SetValue(CanUserSortProperty, value);
     }
 
+    /// <summary>
+    /// Gets or sets whether users can filter columns.
+    /// </summary>
     public bool CanUserFilter
     {
         get => (bool)GetValue(CanUserFilterProperty);
         set => SetValue(CanUserFilterProperty, value);
     }
 
+    /// <summary>
+    /// Gets or sets whether users can resize columns by dragging.
+    /// </summary>
     public bool CanUserResizeColumns
     {
         get => (bool)GetValue(CanUserResizeColumnsProperty);
         set => SetValue(CanUserResizeColumnsProperty, value);
     }
 
+    /// <summary>
+    /// Gets or sets whether users can reorder columns by dragging.
+    /// </summary>
     public bool CanUserReorderColumns
     {
         get => (bool)GetValue(CanUserReorderColumnsProperty);
         set => SetValue(CanUserReorderColumnsProperty, value);
     }
 
+    /// <summary>
+    /// Gets or sets the height of each data row in pixels.
+    /// </summary>
     public double RowHeight
     {
         get => (double)GetValue(RowHeightProperty);
         set => SetValue(RowHeightProperty, value);
     }
 
+    /// <summary>
+    /// Gets or sets the height of the header row in pixels.
+    /// </summary>
     public double HeaderHeight
     {
         get => (double)GetValue(HeaderHeightProperty);
         set => SetValue(HeaderHeightProperty, value);
     }
 
+    /// <summary>
+    /// Gets or sets the brush used for alternating row backgrounds.
+    /// </summary>
     public Brush? AlternatingRowBackground
     {
         get => (Brush?)GetValue(AlternatingRowBackgroundProperty);
         set => SetValue(AlternatingRowBackgroundProperty, value);
     }
 
+    /// <summary>
+    /// Gets or sets the collection of group descriptions for hierarchical grouping.
+    /// </summary>
     public ObservableCollection<GroupDescription>? GroupDescriptions
     {
         get => (ObservableCollection<GroupDescription>?)GetValue(GroupDescriptionsProperty);
         set => SetValue(GroupDescriptionsProperty, value);
     }
 
+    /// <summary>
+    /// Gets or sets the property name to bind row heights to for variable row heights.
+    /// </summary>
     public string? RowHeightBinding
     {
         get => (string?)GetValue(RowHeightBindingProperty);
         set => SetValue(RowHeightBindingProperty, value);
     }
 
+    /// <summary>
+    /// Gets or sets the number of columns frozen on the left side during horizontal scrolling.
+    /// </summary>
     public int FrozenColumnCount
     {
         get => (int)GetValue(FrozenColumnCountProperty);
         set => SetValue(FrozenColumnCountProperty, value);
     }
 
+    /// <summary>
+    /// Gets or sets the format string for double values in the grid.
+    /// </summary>
     public string? DoubleFormat
     {
         get => (string?)GetValue(DoubleFormatProperty);
         set => SetValue(DoubleFormatProperty, value);
     }
 
+    /// <summary>
+    /// Gets or sets whether vertical grid lines are displayed.
+    /// </summary>
     public bool HasVerticalGridLines
     {
         get => (bool)GetValue(HasVerticalGridLinesProperty);
         set => SetValue(HasVerticalGridLinesProperty, value);
     }
 
+    /// <summary>
+    /// Gets or sets whether horizontal grid lines are displayed.
+    /// </summary>
     public bool HasHorizontalGridLines
     {
         get => (bool)GetValue(HasHorizontalGridLinesProperty);
         set => SetValue(HasHorizontalGridLinesProperty, value);
     }
 
+    /// <summary>
+    /// Gets or sets whether alternating row styling is enabled.
+    /// </summary>
     public bool AlternatingRows
     {
         get => (bool)GetValue(AlternatingRowsProperty);
         set => SetValue(AlternatingRowsProperty, value);
     }
 
+    /// <summary>
+    /// Gets or sets the selection state: true (all selected), false (none), null (some selected).
+    /// </summary>
     public bool? SelectionState
     {
         get => (bool?)GetValue(SelectionStateProperty);
@@ -304,13 +429,28 @@ public class AdvancedGrid : Control
         }
     }
 
+    /// <summary>
+    /// Gets the IsGridFocused attached property value.
+    /// </summary>
+    /// <param name="obj">The dependency object to query.</param>
+    /// <returns>True if the grid is focused; otherwise, false.</returns>
     public static bool GetIsGridFocused(DependencyObject obj) => (bool)obj.GetValue(IsGridFocusedProperty);
+
+    /// <summary>
+    /// Sets the IsGridFocused attached property value.
+    /// </summary>
+    /// <param name="obj">The dependency object to set.</param>
+    /// <param name="value">The value to set.</param>
     public static void SetIsGridFocused(DependencyObject obj, bool value) => obj.SetValue(IsGridFocusedProperty, value);
 
     #endregion
 
     #region Internal Properties
 
+    /// <summary>
+    /// Automatically adjusts the width of the specified column to fit its content.
+    /// </summary>
+    /// <param name="column">The column to auto-fit.</param>
     public void AutoFitColumn(GridColumnBase column)
     {
         if (column == null) return;
@@ -384,6 +524,9 @@ public class AdvancedGrid : Control
         column.Width = maxWidth + extraWidth;
     }
 
+    /// <summary>
+    /// Automatically adjusts the width of all columns to fit their content.
+    /// </summary>
     public void AutoFitAllColumns()
     {
         if (Columns == null) return;
@@ -393,15 +536,49 @@ public class AdvancedGrid : Control
         }
     }
     
+    /// <summary>
+    /// Gets the sort manager responsible for column sorting operations.
+    /// </summary>
     public SortManager SortManager { get; }
+
+    /// <summary>
+    /// Gets the filter manager responsible for column filtering operations.
+    /// </summary>
     public FilterManager FilterManager { get; }
+
+    /// <summary>
+    /// Gets the group manager responsible for row grouping operations.
+    /// </summary>
     public GroupManager GroupManager { get; }
+
+    /// <summary>
+    /// Gets the collection view wrapping the ItemsSource for sorting, filtering, and grouping.
+    /// </summary>
     internal ICollectionView? CollectionView { get; private set; }
+
+    /// <summary>
+    /// Gets the virtualized panel hosting the grid rows.
+    /// </summary>
     internal VirtualizingGridPanel? ItemsHost { get; private set; }
+
+    /// <summary>
+    /// Gets the header presenter displaying column headers.
+    /// </summary>
     internal GridHeaderPresenter? HeaderPresenter { get; private set; }
+
+    /// <summary>
+    /// Gets the scroll viewer controlling scrolling behavior.
+    /// </summary>
     internal ScrollViewer? ScrollViewer { get; private set; }
 
+    /// <summary>
+    /// Internal collection of selected items.
+    /// </summary>
     private readonly ObservableCollection<object> _selectedItems = new ObservableCollection<object>();
+
+    /// <summary>
+    /// The anchor item for shift-click range selection.
+    /// </summary>
     private object? _selectionAnchor;
 
     #endregion
@@ -665,6 +842,12 @@ public class AdvancedGrid : Control
 
     #region Selection
 
+    /// <summary>
+    /// Selects an item in the grid, optionally handling modifier keys for multi-selection.
+    /// </summary>
+    /// <param name="item">The item to select.</param>
+    /// <param name="isControlPressed">True if the Control key is pressed (toggles selection).</param>
+    /// <param name="isShiftPressed">True if the Shift key is pressed (extends selection).</param>
     public void SelectItem(object item, bool isControlPressed, bool isShiftPressed)
     {
         if (CollectionView == null) return;
@@ -720,11 +903,20 @@ public class AdvancedGrid : Control
         ItemsHost?.InvalidateVisual();
     }
 
+    /// <summary>
+    /// Selects an item in the grid.
+    /// </summary>
+    /// <param name="item">The item to select.</param>
+    /// <param name="addToSelection">True to add to existing selection; False to replace selection.</param>
     public void SelectItem(object item, bool addToSelection = false)
     {
         SelectItem(item, addToSelection, false);
     }
 
+    /// <summary>
+    /// Deselects a specific item.
+    /// </summary>
+    /// <param name="item">The item to deselect.</param>
     public void DeselectItem(object item)
     {
         _selectedItems.Remove(item);
@@ -737,6 +929,9 @@ public class AdvancedGrid : Control
         ItemsHost?.InvalidateVisual();
     }
 
+    /// <summary>
+    /// Selects all items in the grid, if multiple selection is enabled.
+    /// </summary>
     public void SelectAll()
     {
         if (SelectionMode != GridSelectionMode.Single && CollectionView != null)
@@ -750,6 +945,9 @@ public class AdvancedGrid : Control
         }
     }
 
+    /// <summary>
+    /// Clears all selected items.
+    /// </summary>
     public void ClearSelection()
     {
         _selectedItems.Clear();
@@ -757,6 +955,11 @@ public class AdvancedGrid : Control
         ItemsHost?.InvalidateVisual();
     }
 
+    /// <summary>
+    /// Determines whether the specified item is selected.
+    /// </summary>
+    /// <param name="item">The item to check.</param>
+    /// <returns>True if the item is selected; otherwise, false.</returns>
     public bool IsItemSelected(object item) => _selectedItems.Contains(item);
 
     private bool _isUpdatingSelectionState = false;
@@ -830,6 +1033,9 @@ public class AdvancedGrid : Control
 
     #region Public Methods
 
+    /// <summary>
+    /// Refreshes the grid view, including headers and rows.
+    /// </summary>
     public void RefreshView()
     {
         if (ItemsHost is VirtualizingGridPanel panel)
@@ -865,6 +1071,10 @@ public class AdvancedGrid : Control
         }
     }
 
+    /// <summary>
+    /// Scrolls the specified item into view.
+    /// </summary>
+    /// <param name="item">The item to scroll to.</param>
     public void ScrollIntoView(object item)
     {
         if (CollectionView == null || ItemsHost == null) return;
@@ -879,16 +1089,25 @@ public class AdvancedGrid : Control
         }
     }
 
+    /// <summary>
+    /// Begins editing the current cell.
+    /// </summary>
     public void BeginEdit()
     {
         // Start editing the current cell
     }
 
+    /// <summary>
+    /// Cancels the current edit operation.
+    /// </summary>
     public void CancelEdit()
     {
         // Cancel current edit
     }
 
+    /// <summary>
+    /// Commits the current edit operation.
+    /// </summary>
     public void CommitEdit()
     {
         // Commit current edit
@@ -898,24 +1117,36 @@ public class AdvancedGrid : Control
 
     #region Routed Events
 
+    /// <summary>
+    /// Identifies the <see cref="SelectionChanged"/> routed event.
+    /// </summary>
     public static readonly RoutedEvent SelectionChangedEvent = EventManager.RegisterRoutedEvent(
         nameof(SelectionChanged),
         RoutingStrategy.Bubble,
         typeof(SelectionChangedEventHandler),
         typeof(AdvancedGrid));
 
+    /// <summary>
+    /// Occurs when the selection changes.
+    /// </summary>
     public event SelectionChangedEventHandler SelectionChanged
     {
         add => AddHandler(SelectionChangedEvent, value);
         remove => RemoveHandler(SelectionChangedEvent, value);
     }
 
+    /// <summary>
+    /// Identifies the <see cref="CellEditEnding"/> routed event.
+    /// </summary>
     public static readonly RoutedEvent CellEditEndingEvent = EventManager.RegisterRoutedEvent(
         nameof(CellEditEnding),
         RoutingStrategy.Bubble,
         typeof(EventHandler<GridCellEditEndingEventArgs>),
         typeof(AdvancedGrid));
 
+    /// <summary>
+    /// Occurs when a cell edit is ending.
+    /// </summary>
     public event EventHandler<GridCellEditEndingEventArgs> CellEditEnding
     {
         add => AddHandler(CellEditEndingEvent, value);
@@ -926,6 +1157,10 @@ public class AdvancedGrid : Control
 
     #region Keyboard Navigation
 
+    /// <summary>
+    /// Handles the <see cref="UIElement.KeyDown"/> routed event to support keyboard navigation.
+    /// </summary>
+    /// <param name="e">The key event arguments.</param>
     protected override void OnKeyDown(KeyEventArgs e)
     {
         base.OnKeyDown(e);
@@ -1027,6 +1262,10 @@ public class AdvancedGrid : Control
         }
     }
 
+    /// <summary>
+    /// Handles the <see cref="Control.MouseDoubleClick"/> routed event.
+    /// </summary>
+    /// <param name="e">The mouse button event arguments.</param>
     protected override void OnMouseDoubleClick(MouseButtonEventArgs e)
     {
         base.OnMouseDoubleClick(e);
