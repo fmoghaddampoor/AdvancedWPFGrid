@@ -277,6 +277,20 @@ namespace EasyUse
             }
         }
 
+        private System.Windows.HorizontalAlignment _summaryAlignment = System.Windows.HorizontalAlignment.Left;
+        public System.Windows.HorizontalAlignment SummaryAlignment
+        {
+            get => _summaryAlignment;
+            set
+            {
+                if (_summaryAlignment != value)
+                {
+                    _summaryAlignment = value;
+                    this.OnPropertyChanged(nameof(SummaryAlignment));
+                }
+            }
+        }
+
         public System.Windows.Input.ICommand IncrementDecimalsCommand { get; }
         public System.Windows.Input.ICommand DecrementDecimalsCommand { get; }
         

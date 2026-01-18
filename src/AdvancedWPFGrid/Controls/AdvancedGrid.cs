@@ -283,6 +283,15 @@ public class AdvancedGrid : Control
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsArrange));
 
+    /// <summary>
+    /// Identifies the <see cref="SummaryAlignment"/> dependency property.
+    /// </summary>
+    public static readonly DependencyProperty SummaryAlignmentProperty = DependencyProperty.Register(
+        nameof(SummaryAlignment),
+        typeof(HorizontalAlignment),
+        typeof(AdvancedGrid),
+        new FrameworkPropertyMetadata(HorizontalAlignment.Left, FrameworkPropertyMetadataOptions.AffectsArrange));
+
     #endregion
 
     #region Properties
@@ -357,6 +366,15 @@ public class AdvancedGrid : Control
     {
         get => (bool)GetValue(ShowSummaryRowProperty);
         set => SetValue(ShowSummaryRowProperty, value);
+    }
+
+    /// <summary>
+    /// Gets or sets the horizontal alignment for summary row values.
+    /// </summary>
+    public HorizontalAlignment SummaryAlignment
+    {
+        get => (HorizontalAlignment)GetValue(SummaryAlignmentProperty);
+        set => SetValue(SummaryAlignmentProperty, value);
     }
 
     /// <summary>

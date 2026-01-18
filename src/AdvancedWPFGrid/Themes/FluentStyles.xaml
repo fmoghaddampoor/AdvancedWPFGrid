@@ -474,7 +474,7 @@
                             Padding="10,4">
                         <TextBlock Text="{Binding Result.FormattedValue, RelativeSource={RelativeSource TemplatedParent}}"
                                    VerticalAlignment="Center"
-                                   HorizontalAlignment="{Binding Column.HorizontalAlignment, RelativeSource={RelativeSource TemplatedParent}}"
+                                   HorizontalAlignment="{Binding Grid.SummaryAlignment, RelativeSource={RelativeSource TemplatedParent}}"
                                    FontWeight="Bold"
                                    Foreground="{DynamicResource FluentAccentBrush}"
                                    FontSize="12"/>

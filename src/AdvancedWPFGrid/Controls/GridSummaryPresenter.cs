@@ -141,7 +141,7 @@ public class GridSummaryCell : Control
         set => SetValue(ResultProperty, value);
     }
 
-    internal AdvancedGrid? Grid { get; set; }
+    public AdvancedGrid? Grid { get; set; }
 }
 
 /// <summary>
