@@ -901,7 +901,10 @@ public class AdvancedGrid : Control
 
         if (finalValue == null) return null;
 
+        // Default to basic ToString
         var formattedValue = finalValue.ToString() ?? string.Empty;
+        
+        // Apply format if StringFormat is provided
         if (!string.IsNullOrEmpty(func.StringFormat))
         {
             if (func.StringFormat.Contains("{0"))
@@ -913,7 +916,14 @@ public class AdvancedGrid : Control
                 formattedValue = string.Format("{0:" + func.StringFormat + "}", finalValue);
             }
         }
-        else if (!string.IsNullOrEmpty(func.Caption))
+        // Otherwise, apply grid's DoubleFormat to numeric values if available
+        else if (finalValue is double && !string.IsNullOrEmpty(DoubleFormat))
+        {
+            formattedValue = string.Format("{0:" + DoubleFormat + "}", finalValue);
+        }
+        
+        // Add caption prefix if provided
+        if (!string.IsNullOrEmpty(func.Caption) && string.IsNullOrEmpty(func.StringFormat))
         {
             formattedValue = $"{func.Caption}: {formattedValue}";
         }

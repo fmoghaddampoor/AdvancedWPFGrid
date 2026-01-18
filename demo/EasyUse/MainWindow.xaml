@@ -120,7 +120,7 @@
                     <av:AdvancedGrid.AggregateFunctions>
                         <Data:AggregateFunction PropertyName="Name" FunctionType="Count" Caption="Total" />
                         <Data:AggregateFunction PropertyName="PerformanceScore" FunctionType="Average" StringFormat="Avg: {0:N1}" />
-                        <Data:AggregateFunction PropertyName="Salary" FunctionType="Sum" StringFormat="Total: ${0:N0}" />
+                        <Data:AggregateFunction PropertyName="Salary" FunctionType="Sum" Caption="Total" />
                     </av:AdvancedGrid.AggregateFunctions>
                     <av:AdvancedGrid.Columns>
                         <!-- Selection Column -->
