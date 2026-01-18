@@ -290,42 +290,48 @@
                                   GroupDescriptions="{Binding GroupDescriptors}">
                     <av:AdvancedGrid.Columns>
                         <!-- Selection Column -->
-                        <col:SelectionColumn Width="50" />
+                        <col:SelectionColumn Width="50" IsReadOnly="True" />
                         
                         <!-- Text Column -->
                         <col:TextColumn Header="Name" 
                                         Binding="Name" 
                                         HeaderToolTip="Full name of the person"
-                                        Width="150"/>
+                                        Width="150"
+                                        IsReadOnly="True"/>
                         
                         <!-- Double Column -->
                         <col:DoubleColumn Header="Age" 
                                           Binding="Age" 
                                           HeaderToolTip="Current age in years"
                                           Width="60"
-                                          StringFormat="N0"/>
+                                          StringFormat="N0"
+                                          IsReadOnly="True"/>
 
                         <!-- New Performance Score Column (Uses Global Format) -->
                         <col:DoubleColumn Header="Performance" 
                                           Binding="PerformanceScore" 
-                                          Width="100"/>
+                                          Width="100"
+                                          IsReadOnly="True"/>
                                           
                         <!-- Double Column with Currency -->
                         <col:DoubleColumn Header="Salary" 
                                           Binding="Salary" 
                                           HeaderToolTip="Annual base salary in USD"
-                                          Width="100"/>
+                                          Width="100"
+                                          IsReadOnly="True"/>
 
                         <!-- CheckBox Column -->
                         <col:CheckBoxColumn Header="Active" 
                                             Binding="IsActive" 
-                                            Width="60"/>
+                                            Width="60"
+                                            IsReadOnly="True"/>
 
                         <!-- ComboBox Column -->
                         <col:ComboBoxColumn Header="Role" 
                                             Binding="Role" 
                                             ItemsSource="{Binding Data.Roles, Source={StaticResource Proxy}}"
-                                            Width="120"/>
+                                            Width="120"
+                                            IsReadOnly="True"/>
 
                         <!-- Button Column -->
                         <col:ButtonColumn Header="Bio" 
@@ -363,7 +369,8 @@
                                               ButtonWidth="70"
                                               Width="180"
                                               CanSort="False"
-                                              CanFilter="False"/>
+                                              CanFilter="False"
+                                              IsReadOnly="True"/>
                                               
                     </av:AdvancedGrid.Columns>
                 </av:AdvancedGrid>
