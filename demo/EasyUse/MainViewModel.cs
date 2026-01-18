@@ -247,6 +247,34 @@ namespace EasyUse
             }
         }
 
+        private bool _showSummaryRow = true;
+        public bool ShowSummaryRow
+        {
+            get => _showSummaryRow;
+            set
+            {
+                if (_showSummaryRow != value)
+                {
+                    _showSummaryRow = value;
+                    this.OnPropertyChanged(nameof(ShowSummaryRow));
+                }
+            }
+        }
+
+        private bool _canUserExport = true;
+        public bool CanUserExport
+        {
+            get => _canUserExport;
+            set
+            {
+                if (_canUserExport != value)
+                {
+                    _canUserExport = value;
+                    this.OnPropertyChanged(nameof(CanUserExport));
+                }
+            }
+        }
+
         public TimeSpan SearchDelay => TimeSpan.FromSeconds(_searchDelaySeconds);
 
         private bool _canUserReorderColumns = true;

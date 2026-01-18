@@ -299,6 +299,15 @@ public class AdvancedGrid : Control
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(HorizontalAlignment.Left, FrameworkPropertyMetadataOptions.AffectsArrange));
 
+    /// <summary>
+    /// Identifies the <see cref="CanUserExport"/> dependency property.
+    /// </summary>
+    public static readonly DependencyProperty CanUserExportProperty = DependencyProperty.Register(
+        nameof(CanUserExport),
+        typeof(bool),
+        typeof(AdvancedGrid),
+        new FrameworkPropertyMetadata(true));
+
     #endregion
 
     #region Properties
@@ -445,6 +454,15 @@ public class AdvancedGrid : Control
     {
         get => (Brush?)GetValue(AlternatingRowBackgroundProperty);
         set => SetValue(AlternatingRowBackgroundProperty, value);
+    }
+
+    /// <summary>
+    /// Gets or sets whether the user can export data.
+    /// </summary>
+    public bool CanUserExport
+    {
+        get => (bool)GetValue(CanUserExportProperty);
+        set => SetValue(CanUserExportProperty, value);
     }
 
     /// <summary>
