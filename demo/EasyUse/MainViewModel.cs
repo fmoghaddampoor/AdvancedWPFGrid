@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Windows.Input;
+using System.Windows;
 using AdvancedWPFGrid.Controls;
 using AdvancedWPFGrid.Managers;
 
@@ -278,6 +279,11 @@ namespace EasyUse
 
         public System.Windows.Input.ICommand IncrementDecimalsCommand { get; }
         public System.Windows.Input.ICommand DecrementDecimalsCommand { get; }
+        
+        public ICommand ShowBioCommand { get; }
+        public ICommand EditCommand { get; }
+        public ICommand DeleteCommand { get; }
+        public ICommand ApproveCommand { get; }
 
         public MainViewModel(AppData appData)
         {
@@ -289,6 +295,23 @@ namespace EasyUse
 
             this.IncrementDecimalsCommand = new RelayCommand(_ => this.DecimalPlaces++, _ => this.DecimalPlaces < 5);
             this.DecrementDecimalsCommand = new RelayCommand(_ => this.DecimalPlaces--, _ => this.DecimalPlaces > 0);
+
+            this.ShowBioCommand = new RelayCommand(p => 
+            {
+                if (p is PersonModel person) MessageBox.Show($"Bio for {person.Name}");
+            });
+            this.EditCommand = new RelayCommand(p => 
+            {
+                if (p is PersonModel person) MessageBox.Show($"Editing {person.Name}...");
+            });
+            this.DeleteCommand = new RelayCommand(p => 
+            {
+                if (p is PersonModel person) MessageBox.Show($"Delete {person.Name}?");
+            });
+            this.ApproveCommand = new RelayCommand(p => 
+            {
+                if (p is PersonModel person) MessageBox.Show($"Approved {person.Name}");
+            });
         }
 
         public IEnumerable<SearchCountMode> SearchCountModes => Enum.GetValues(typeof(SearchCountMode)).Cast<SearchCountMode>();

@@ -13,17 +13,5 @@ namespace EasyUse
         public string Role { get; set; } = "User";
         public double Salary { get; set; }
         public double PerformanceScore { get; set; }
-        
-        // Setup commands for buttons
-        public ICommand ShowBioCommand { get; }
-        public ICommand DeleteCommand { get; }
-        public ICommand ApproveCommand { get; }
-
-        public PersonModel()
-        {
-            this.ShowBioCommand = new RelayCommand(_ => MessageBox.Show($"Bio for {this.Name}"));
-            this.DeleteCommand = new RelayCommand(_ => MessageBox.Show($"Delete {this.Name}?"));
-            this.ApproveCommand = new RelayCommand(_ => MessageBox.Show($"Approved {this.Name}"));
-        }
     }
 }

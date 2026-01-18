@@ -358,7 +358,7 @@
                         <!-- Button Column -->
                         <col:ButtonColumn Header="Bio" 
                                           ButtonContent="View"
-                                          Command="{Binding ShowBioCommand}"
+                                           Command="{Binding Data.ShowBioCommand, Source={StaticResource Proxy}}"
                                           Width="80"
                                           CanSort="False"
                                           CanFilter="False"/>
@@ -366,7 +366,7 @@
                         <!-- Icon Button Column (Edit) -->
                         <col:IconButtonColumn Header="Edit"
                                               IconData="{x:Static col:IconButtonColumn.EditIcon}"
-                                              Command="{Binding ApproveCommand}"
+                                               Command="{Binding Data.EditCommand, Source={StaticResource Proxy}}"
                                               ToolTipText="Edit user"
                                               Width="50"
                                               CanSort="False" 
@@ -375,7 +375,7 @@
                         <!-- Icon Button Column (Delete) -->
                         <col:IconButtonColumn Header="Delete"
                                               IconData="{x:Static col:IconButtonColumn.DeleteIcon}"
-                                              Command="{Binding DeleteCommand}"
+                                               Command="{Binding Data.DeleteCommand, Source={StaticResource Proxy}}"
                                               ToolTipText="Delete user"
                                               Width="50"
                                               CanSort="False" 
@@ -386,7 +386,7 @@
                         <col:TextButtonColumn Header="Status"
                                               Binding="Name"
                                               ButtonContent="Approve"
-                                              Command="{Binding ApproveCommand}"
+                                                Command="{Binding Data.ApproveCommand, Source={StaticResource Proxy}}"
                                               ButtonPosition="Right"
                                               ButtonWidth="70"
                                               Width="180"
