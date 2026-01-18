@@ -161,7 +161,7 @@ public class GridHeaderCell : ContentControl
         if (d is GridHeaderCell cell && e.NewValue is GridColumnBase column)
         {
             cell.CanSort = column.CanSort;
-            cell.CanFilter = column.CanFilter;
+            cell.CanFilter = column.CanFilter && (cell.Grid?.CanUserFilter ?? true);
             cell.IsSelectionColumn = column.IsSelectionColumn;
             cell.UpdateSortIndicator();
             cell.UpdateFilterIndicator();
@@ -214,7 +214,21 @@ public class GridHeaderCell : ContentControl
         set => SetValue(IsDragOverProperty, value);
     }
 
-    internal AdvancedGrid? Grid { get; set; }
+    private AdvancedGrid? _grid;
+    internal AdvancedGrid? Grid 
+    { 
+        get => _grid;
+        set 
+        {
+            _grid = value;
+            if (_grid != null && Column != null)
+            {
+                CanFilter = Column.CanFilter && _grid.CanUserFilter;
+                UpdateSortIndicator();
+                UpdateFilterIndicator();
+            }
+        }
+    }
 
     private Thumb? _resizeGrip;
     private Button? _sortButton;

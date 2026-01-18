@@ -302,8 +302,7 @@
                         <col:DoubleColumn Header="Age" 
                                           Binding="Age" 
                                           HeaderToolTip="Current age in years"
-                                          Width="60"
-                                          StringFormat="N0"/>
+                                          Width="60"/>
 
                         <!-- New Performance Score Column (Uses Global Format) -->
                         <col:DoubleColumn Header="Performance" 

@@ -110,7 +110,7 @@ public class AdvancedGrid : Control
         nameof(CanUserFilter),
         typeof(bool),
         typeof(AdvancedGrid),
-        new FrameworkPropertyMetadata(true));
+        new FrameworkPropertyMetadata(true, OnCanUserFilterChanged));
 
     /// <summary>
     /// Identifies the <see cref="CanUserResizeColumns"/> dependency property.
@@ -237,6 +237,14 @@ public class AdvancedGrid : Control
         typeof(bool),
         typeof(AdvancedGrid),
         new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.AffectsRender));
+
+    private static void OnCanUserFilterChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is AdvancedGrid grid)
+        {
+            grid.RefreshView();
+        }
+    }
     #endregion
 
     #region Properties
@@ -1048,9 +1056,11 @@ public class AdvancedGrid : Control
         {
             foreach (UIElement child in HeaderPresenter.Children)
             {
-                if (child is GridHeaderCell cell)
+                if (child is GridHeaderCell cell && cell.Column != null)
                 {
+                    cell.CanFilter = cell.Column.CanFilter && CanUserFilter;
                     cell.UpdateSortIndicator();
+                    cell.UpdateFilterIndicator();
                 }
             }
         }
