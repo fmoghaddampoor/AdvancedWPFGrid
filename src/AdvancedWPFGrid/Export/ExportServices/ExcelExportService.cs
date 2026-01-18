@@ -16,7 +16,7 @@ public class ExcelExportService : IExportService
     public string FileExtension => ".xlsx";
     public string FileFilter => "Excel Workbook (*.xlsx)|*.xlsx";
 
-    public async Task ExportAsync(IEnumerable data, IEnumerable<GridExportColumn> columns, ExportOptions options)
+    public async Task ExportAsync(IEnumerable data, IEnumerable<GridExportColumn> columns, ExportOptions options, IProgress<double>? progress = null)
     {
         if (string.IsNullOrEmpty(options.FilePath))
             throw new System.ArgumentException("File path must be specified.", nameof(options));
@@ -30,6 +30,8 @@ public class ExcelExportService : IExportService
             int currentColumn = 1;
 
             var columnList = columns.ToList();
+            var itemList = data.Cast<object>().ToList();
+            int totalRows = itemList.Count;
 
             // Write Headers
             if (options.IncludeHeaders)
@@ -47,8 +49,9 @@ public class ExcelExportService : IExportService
             }
 
             // Write Data
-            foreach (var item in data)
+            for (int i = 0; i < totalRows; i++)
             {
+                var item = itemList[i];
                 currentColumn = 1;
                 foreach (var col in columnList)
                 {
@@ -63,12 +66,17 @@ public class ExcelExportService : IExportService
                     currentColumn++;
                 }
                 currentRow++;
+
+                // Report progress
+                progress?.Report((double)i / totalRows * 90.0); // Reserve 10% for saving
             }
 
             // Auto-fit columns
             worksheet.Columns().AdjustToContents();
+            progress?.Report(95.0);
 
             workbook.SaveAs(options.FilePath);
+            progress?.Report(100.0);
         });
     }
 }

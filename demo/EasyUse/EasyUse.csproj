@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net10.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows7.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -11,6 +11,10 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <RunAnalyzers>false</RunAnalyzers>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets/app_icon.png" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Update="data.json">

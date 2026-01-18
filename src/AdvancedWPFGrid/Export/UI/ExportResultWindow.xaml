@@ -1,0 +1,38 @@
+<Window x:Class="AdvancedWPFGrid.Export.UI.ExportResultWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Export Successful" Height="220" Width="400"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        ResizeMode="NoResize"
+        Background="{DynamicResource FluentSurfaceBrush}"
+        TextElement.Foreground="{DynamicResource FluentTextPrimaryBrush}">
+    <Grid Margin="25">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+            <Path Data="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                  Fill="#28a745" Width="24" Height="24" Stretch="Uniform" Margin="0,0,12,0"/>
+            <TextBlock Text="Success!" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <TextBlock Grid.Row="1" TextWrapping="Wrap" Foreground="{DynamicResource FluentTextSecondaryBrush}">
+            The data has been exported successfully. You can open the file or view it in the folder below.
+        </TextBlock>
+
+        <StackPanel Grid.Row="2" Orientation="Vertical" Margin="0,15,0,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Open File" Width="90" Height="28" Click="OpenFile_Click"
+                        Background="{DynamicResource FluentAccentBrush}" Foreground="White" BorderThickness="0" Margin="0,0,10,0"/>
+                <Button Content="Show in Folder" Width="100" Height="28" Click="ShowInFolder_Click"
+                        Background="Transparent" BorderBrush="{DynamicResource FluentBorderBrush}" Margin="0,0,10,0"/>
+                <Button Content="Close" Width="80" Height="28" Click="Close_Click"
+                        Background="Transparent" BorderBrush="{DynamicResource FluentBorderBrush}"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

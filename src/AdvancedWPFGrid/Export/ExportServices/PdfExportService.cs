@@ -1,104 +1,108 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AdvancedWPFGrid.Columns;
-using QuestPDF.Fluent;
-using QuestPDF.Helpers;
-using QuestPDF.Infrastructure;
+using MigraDoc.DocumentObjectModel;
+using MigraDoc.DocumentObjectModel.Tables;
+using MigraDoc.Rendering;
+using PdfSharp.Pdf;
 
 namespace AdvancedWPFGrid.Export.ExportServices;
 
 /// <summary>
-/// Exports grid data to PDF format using QuestPDF.
+/// Exports grid data to PDF using PDFSharp/MigraDoc (MIT Licensed).
 /// </summary>
 public class PdfExportService : IExportService
 {
-    public PdfExportService()
-    {
-        QuestPDF.Settings.License = LicenseType.Community;
-    }
-
     public string FormatName => "PDF";
     public string FileExtension => ".pdf";
     public string FileFilter => "PDF Document (*.pdf)|*.pdf";
 
-    public async Task ExportAsync(IEnumerable data, IEnumerable<GridExportColumn> columns, ExportOptions options)
+    public async Task ExportAsync(IEnumerable data, IEnumerable<GridExportColumn> columns, ExportOptions options, IProgress<double>? progress = null)
     {
         if (string.IsNullOrEmpty(options.FilePath))
             throw new System.ArgumentException("File path must be specified.", nameof(options));
 
-        // Create the document
-        var document = Document.Create(container =>
+        await Task.Run(() =>
         {
-            container.Page(page =>
+            var document = new Document();
+            document.Info.Title = options.Title;
+
+            // Styles
+            Style style = document.Styles["Normal"];
+            style.Font.Name = "Verdana";
+            style.Font.Size = 8;
+
+            Section section = document.AddSection();
+            section.PageSetup.Orientation = Orientation.Landscape;
+            section.PageSetup.PageFormat = PageFormat.A4;
+            section.PageSetup.LeftMargin = "1cm";
+            section.PageSetup.RightMargin = "1cm";
+
+            // Title
+            Paragraph title = section.AddParagraph(options.Title);
+            title.Format.Font.Size = 14;
+            title.Format.Font.Bold = true;
+            title.Format.SpaceAfter = "0.5cm";
+            title.Format.Font.Color = Colors.DarkBlue;
+
+            // Table
+            Table table = section.AddTable();
+            table.Borders.Width = 0.75;
+            table.Borders.Color = Colors.LightGray;
+
+            var columnList = columns.ToList();
+            var itemList = data.Cast<object>().ToList();
+            int totalRows = itemList.Count;
+
+            // Define Columns
+            foreach (var col in columnList)
             {
-                page.Size(PageSizes.A4.Landscape());
-                page.Margin(1, Unit.Centimetre);
-                page.PageColor(Colors.White);
-                page.DefaultTextStyle(x => x.FontSize(10).FontFamily(Fonts.Verdana));
+                table.AddColumn(); // Auto-width isn't great in MigraDoc, but we can't easily measure without a graphics context here.
+            }
 
-                page.Header().Text(options.Title)
-                    .SemiBold().FontSize(18).FontColor(Colors.Blue.Medium);
+            // Header Row
+            if (options.IncludeHeaders)
+            {
+                Row headerRow = table.AddRow();
+                headerRow.HeadingFormat = true;
+                headerRow.Format.Font.Bold = true;
+                headerRow.Shading.Color = Colors.AliceBlue;
 
-                page.Content().PaddingVertical(10).Table(table =>
+                for (int i = 0; i < columnList.Count; i++)
                 {
-                    var visibleColumns = columns.ToList();
-                    
-                    table.ColumnsDefinition(columns =>
-                    {
-                        foreach (var col in visibleColumns)
-                        {
-                            columns.RelativeColumn();
-                        }
-                    });
+                    headerRow.Cells[i].AddParagraph(columnList[i].Header);
+                    headerRow.Cells[i].VerticalAlignment = VerticalAlignment.Center;
+                }
+            }
 
-                    // Header
-                    if (options.IncludeHeaders)
-                    {
-                        table.Header(header =>
-                        {
-                            foreach (var col in visibleColumns)
-                            {
-                                header.Cell().Element(CellStyle).Text(col.Header).SemiBold();
-                            }
+            // Data Rows
+            for (int i = 0; i < totalRows; i++)
+            {
+                var item = itemList[i];
+                Row row = table.AddRow();
+                row.VerticalAlignment = VerticalAlignment.Center;
 
-                            static IContainer CellStyle(IContainer container)
-                            {
-                                return container.DefaultTextStyle(x => x.SemiBold())
-                                                .PaddingVertical(5)
-                                                .BorderBottom(1)
-                                                .BorderColor(Colors.Black);
-                            }
-                        });
-                    }
-
-                    // Content
-                    foreach (var item in data)
-                    {
-                        foreach (var col in visibleColumns)
-                        {
-                            var value = col.GetValue(item)?.ToString() ?? string.Empty;
-                            table.Cell().Element(CellStyle).Text(value);
-                        }
-
-                        static IContainer CellStyle(IContainer container)
-                        {
-                            return container.BorderBottom(1)
-                                            .BorderColor(Colors.Grey.Lighten2)
-                                            .PaddingVertical(5);
-                        }
-                    }
-                });
-
-                page.Footer().AlignCenter().Text(x =>
+                for (int j = 0; j < columnList.Count; j++)
                 {
-                    x.Span("Page ");
-                    x.CurrentPageNumber();
-                });
-            });
+                    var value = columnList[j].GetValue(item, true)?.ToString() ?? string.Empty;
+                    row.Cells[j].AddParagraph(value);
+                }
+
+                // Report progress
+                progress?.Report((double)i / totalRows * 80.0); // Reserve 20% for rendering
+            }
+
+            // Render and Save
+            progress?.Report(85.0);
+            PdfDocumentRenderer renderer = new PdfDocumentRenderer();
+            renderer.Document = document;
+            renderer.RenderDocument();
+            progress?.Report(95.0);
+            renderer.PdfDocument.Save(options.FilePath);
+            progress?.Report(100.0);
         });
-
-        await Task.Run(() => document.GeneratePdf(options.FilePath));
     }
 }

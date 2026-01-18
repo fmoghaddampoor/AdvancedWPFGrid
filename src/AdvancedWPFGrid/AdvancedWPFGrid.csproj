@@ -15,14 +15,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Page Update="Themes\Generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.105.0" />
-    <PackageReference Include="QuestPDF" Version="2025.12.3" />
+    <PackageReference Include="PDFsharp-MigraDoc-WPF" Version="6.1.1" />
     <PackageReference Include="SecurityCodeScan.VS2019" Version="5.6.7">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>

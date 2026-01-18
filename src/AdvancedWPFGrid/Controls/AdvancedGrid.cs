@@ -14,8 +14,10 @@ using AdvancedWPFGrid.Managers;
 using AdvancedWPFGrid.Common;
 using AdvancedWPFGrid.Export;
 using AdvancedWPFGrid.Export.ExportServices;
+using AdvancedWPFGrid.Export.UI;
 using Microsoft.Win32;
 using System;
+using System.Linq;
 
 namespace AdvancedWPFGrid.Controls;
 
@@ -1405,44 +1407,104 @@ public class AdvancedGrid : Control
     {
         if (parameter is not IExportService service) return;
 
-        var dialog = new SaveFileDialog
+        try
         {
-            Filter = service.FileFilter,
-            FileName = $"Export_{DateTime.Now:yyyyMMdd_HHmmss}",
-            DefaultExt = service.FileExtension
-        };
+            var view = CollectionView;
+            if (view == null) return;
 
-        if (dialog.ShowDialog() == true)
-        {
-            var options = new ExportOptions
+            // 1. Prepare Column Metadata
+            var exportColumns = Columns.Select(c => 
             {
-                FilePath = dialog.FileName,
-                Title = "Grid Export"
+                string? format = null;
+                if (c is DoubleColumn dc)
+                {
+                    if (!string.IsNullOrEmpty(dc.StringFormat)) format = dc.StringFormat;
+                    else if (!string.IsNullOrEmpty(DoubleFormat)) format = DoubleFormat;
+                    else format = dc.ShowThousandsSeparator ? $"N{dc.DecimalPlaces}" : $"F{dc.DecimalPlaces}";
+
+                    if (!string.IsNullOrEmpty(format) && !format.Contains("{0"))
+                        format = "{0:" + format + "}";
+                }
+
+                return new GridExportColumn
+                {
+                    Header = c.Header ?? string.Empty,
+                    Binding = c.Binding,
+                    IsSelected = c.IsVisible,
+                    StringFormat = format
+                };
+            }).ToList();
+
+            // 2. Show Settings Dialog
+            var options = new ExportOptions { Title = "Grid Export" };
+            var settingsVm = new ExportSettingsViewModel(options, exportColumns);
+            var settingsWindow = new ExportSettingsWindow(settingsVm) { Owner = Window.GetWindow(this) };
+            
+            if (settingsWindow.ShowDialog() != true) return;
+
+            // 3. Select File
+            var dialog = new SaveFileDialog
+            {
+                Filter = service.FileFilter,
+                FileName = $"Export_{DateTime.Now:yyyyMMdd_HHmmss}",
+                DefaultExt = service.FileExtension
             };
+
+            if (dialog.ShowDialog() != true) return;
+            options.FilePath = dialog.FileName;
+
+            // 4. Extract Data (UI Thread)
+            IEnumerable dataToExport;
+            if (options.VisibleRowsOnly)
+            {
+                dataToExport = view.Cast<object>().ToList();
+            }
+            else
+            {
+                // To export ALL data (ignoring filters), we use ItemsSource
+                dataToExport = ItemsSource?.Cast<object>().ToList() ?? new List<object>();
+            }
+
+            var finalColumns = exportColumns.Where(c => c.IsSelected).ToList();
+            if (finalColumns.Count == 0)
+            {
+                MessageBox.Show("Please select at least one column to export.", "Export", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var dataList = dataToExport.Cast<object>().ToList();
+            if (dataList.Count == 0)
+            {
+                MessageBox.Show("No data found to export.", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            // 5. Run Export with Progress
+            var progressWindow = new ExportProgressWindow 
+            { 
+                Owner = Window.GetWindow(this),
+                WindowStartupLocation = WindowStartupLocation.CenterOwner 
+            };
+            progressWindow.Show();
 
             try
             {
-                var view = CollectionView;
-                if (view == null) return;
-
-                // Extract data and column metadata on UI thread
-                var dataToExport = view.Cast<object>().ToList();
-                var exportColumns = Columns
-                    .Where(c => c.IsVisible)
-                    .Select(c => new GridExportColumn
-                    {
-                        Header = c.Header ?? string.Empty,
-                        Binding = c.Binding
-                    })
-                    .ToList();
-
-                await service.ExportAsync(dataToExport, exportColumns, options);
-                MessageBox.Show("Export completed successfully.", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
+                await service.ExportAsync(dataList, finalColumns, options, progressWindow);
+                // Tiny delay so user sees 100%
+                await Task.Delay(200);
             }
-            catch (Exception ex)
+            finally
             {
-                MessageBox.Show($"Export failed: {ex.Message}", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                progressWindow.Close();
             }
+
+            // 6. Show Result
+            var resultWindow = new ExportResultWindow(options.FilePath!) { Owner = Window.GetWindow(this) };
+            resultWindow.ShowDialog();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Export failed: {ex.Message}", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
