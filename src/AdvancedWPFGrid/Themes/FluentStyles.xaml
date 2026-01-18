@@ -570,7 +570,7 @@
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
                                 <Condition Binding="{Binding IsLastFrozen, RelativeSource={RelativeSource Self}}" Value="True" />
-                                <Condition Binding="{Binding Grid.HasVerticalFrozenColumnSeparator, RelativeSource={RelativeSource TemplatedParent}}" Value="True" />
+                                <Condition Binding="{Binding HasVerticalFrozenColumnSeparator, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="True" />
                             </MultiDataTrigger.Conditions>
                             <Setter TargetName="CellBorder" Property="BorderThickness" Value="0,0,2,0" />
                             <Setter TargetName="CellBorder" Property="BorderBrush" Value="{DynamicResource FluentBorderBrush}" />
@@ -677,9 +677,8 @@
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
                                 <Condition Binding="{Binding IsLastFrozen, RelativeSource={RelativeSource Self}}" Value="True" />
-                                <Condition Binding="{Binding Grid.HasVerticalFrozenColumnSeparator, RelativeSource={RelativeSource TemplatedParent}}" Value="True" />
+                                <Condition Binding="{Binding HasVerticalFrozenColumnSeparator, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="True" />
                             </MultiDataTrigger.Conditions>
-                            <Setter TargetName="CellBorder" Property="BorderBrush" Value="{DynamicResource FluentBorderBrush}" />
                             <Setter TargetName="CellBorder" Property="BorderBrush" Value="{DynamicResource FluentBorderBrush}" />
                             <Setter TargetName="CellBorder" Property="BorderThickness" Value="0,0,2,0" />
                         </MultiDataTrigger>
@@ -870,16 +869,16 @@
                             <Setter TargetName="HeaderText" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="PART_HeaderSelectionCheckBox" Property="Visibility" Value="Visible" />
                         </DataTrigger>
-                        <MultiDataTrigger>
-                            <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding IsLastFrozen, RelativeSource={RelativeSource Self}}" Value="True" />
-                                <Condition Binding="{Binding Grid.HasVerticalFrozenColumnSeparator, RelativeSource={RelativeSource TemplatedParent}}" Value="True" />
-                            </MultiDataTrigger.Conditions>
-                            <Setter TargetName="HeaderBorder" Property="BorderThickness" Value="0,0,2,1" />
-                        </MultiDataTrigger>
                         <DataTrigger Binding="{Binding HasVerticalHeaderColumnSeparator, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="False">
                             <Setter TargetName="HeaderBorder" Property="BorderThickness" Value="0,0,0,1" />
                         </DataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsLastFrozen, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding HasVerticalFrozenColumnSeparator, RelativeSource={RelativeSource AncestorType=controls:AdvancedGrid}}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="HeaderBorder" Property="BorderThickness" Value="0,0,2,1" />
+                        </MultiDataTrigger>
                         <Trigger Property="IsFrozen" Value="True">
                             <Setter Property="Background" Value="{DynamicResource FluentSurfaceAltBrush}" />
                         </Trigger>
