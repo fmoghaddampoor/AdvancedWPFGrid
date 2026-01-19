@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Data;
 using AdvancedWPFGrid.Columns;
 using AdvancedWPFGrid.Data;
 
@@ -516,7 +517,14 @@ public class GridHeaderCell : ContentControl
 
     private void ShowFilterPopup()
     {
-        // Create a simple filter popup
+        if (Column == null || Grid?.FilterManager == null) return;
+
+        // 1. Get Distinct Values
+        var allValues = Grid.FilterManager.GetDistinctValues(Column.Binding);
+        var currentFilter = Grid.FilterManager.Filters.TryGetValue(Column.Binding ?? string.Empty, out var descriptor) 
+            ? descriptor : null;
+
+        // 2. Create Popup
         var popup = new Popup
         {
             PlacementTarget = _filterButton ?? (UIElement)this,
@@ -530,96 +538,175 @@ public class GridHeaderCell : ContentControl
             Background = Application.Current.TryFindResource("FluentSurfaceBrush") as System.Windows.Media.Brush,
             BorderBrush = Application.Current.TryFindResource("FluentBorderBrush") as System.Windows.Media.Brush,
             BorderThickness = new Thickness(1),
-            CornerRadius = new CornerRadius(4),
-            Padding = new Thickness(8),
-            MinWidth = 200
+            CornerRadius = new CornerRadius(8),
+            Padding = new Thickness(12),
+            MinWidth = 240,
+            MaxHeight = 400,
+            Effect = new System.Windows.Media.Effects.DropShadowEffect { BlurRadius = 15, Opacity = 0.2, ShadowDepth = 5 }
         };
 
-        var stack = new StackPanel();
+        var mainStack = new StackPanel();
 
-        var label = new TextBlock
+        // Header
+        mainStack.Children.Add(new TextBlock
         {
-            Text = $"Filter: {Column?.Header}",
-            FontWeight = FontWeights.SemiBold,
+            Text = $"Filter: {Column.Header}",
+            FontWeight = FontWeights.Bold,
+            FontSize = 14,
             Foreground = Application.Current.TryFindResource("FluentTextPrimaryBrush") as System.Windows.Media.Brush,
-            Margin = new Thickness(0, 0, 0, 8)
-        };
+            Margin = new Thickness(0, 0, 0, 10)
+        });
 
-        var textBox = new TextBox
+        // Search Box
+        var searchBox = new TextBox
         {
             Style = Application.Current.TryFindResource("FluentGridTextBoxStyle") as Style,
+            Margin = new Thickness(0, 0, 0, 8),
+            Tag = "Search values..."
+        };
+        mainStack.Children.Add(searchBox);
+
+        // ListBox with Checkboxes
+        var listBox = new ListBox
+        {
+            Style = Application.Current.TryFindResource("FluentFilterListBoxStyle") as Style,
+            MaxHeight = 200,
             Margin = new Thickness(0, 0, 0, 8)
         };
 
-        // Initialize with current filter value
-        if (Column != null && Grid?.FilterManager != null)
+        // Data Structure for Items
+        var filterItems = new System.Collections.ObjectModel.ObservableCollection<FilterItem>();
+        
+        // Add "Select All"
+        var selectAllItem = new FilterItem { Text = "(Select All)", IsChecked = true };
+        filterItems.Add(selectAllItem);
+
+        foreach (var val in allValues)
         {
-            if (Grid.FilterManager.Filters.TryGetValue(Column.Binding ?? string.Empty, out var descriptor))
-            {
-                textBox.Text = descriptor.FilterValue;
-            }
+            var isChecked = currentFilter == null || 
+                          (currentFilter.Operator == FilterOperator.In && currentFilter.FilterValues.Contains(val)) ||
+                          (currentFilter.Operator != FilterOperator.In && val.Contains(currentFilter.FilterValue ?? string.Empty, StringComparison.OrdinalIgnoreCase));
+            
+            filterItems.Add(new FilterItem { Text = val, IsChecked = isChecked });
         }
 
-        var buttonStack = new StackPanel
-        {
-            Orientation = Orientation.Horizontal,
-            HorizontalAlignment = HorizontalAlignment.Right
-        };
+        // Handle Select All logic
+        selectAllItem.IsChecked = filterItems.Skip(1).All(x => x.IsChecked);
+        
+        listBox.ItemsSource = filterItems;
 
-        var applyButton = new Button
+        // Synchronize Select All
+        bool isUpdating = false;
+        selectAllItem.PropertyChanged += (s, ev) =>
         {
-            Content = "Apply",
-            Style = Application.Current.TryFindResource("FluentGridButtonStyle") as Style,
-            Padding = new Thickness(12, 4, 12, 4)
-        };
-
-        var clearButton = new Button
-        {
-            Content = "Clear",
-            Style = Application.Current.TryFindResource("FluentGridButtonStyle") as Style,
-            Padding = new Thickness(12, 4, 12, 4),
-            Margin = new Thickness(0, 0, 4, 0)
-        };
-
-        applyButton.Click += (s, e) =>
-        {
-            if (Column != null && Grid != null)
+            if (isUpdating) return;
+            if (ev.PropertyName == nameof(FilterItem.IsChecked))
             {
-                if (!string.IsNullOrWhiteSpace(textBox.Text))
-                {
-                    Grid.FilterManager.SetFilter(Column.Binding, textBox.Text);
-                }
-                else
-                {
-                    Grid.FilterManager.ClearFilter(Column.Binding);
-                }
-                UpdateFilterIndicator();
-                popup.IsOpen = false;
+                isUpdating = true;
+                foreach (var item in filterItems.Skip(1))
+                    item.IsChecked = selectAllItem.IsChecked;
+                isUpdating = false;
             }
         };
 
-        clearButton.Click += (s, e) =>
+        foreach (var item in filterItems.Skip(1))
         {
-            if (Column != null && Grid != null)
+            item.PropertyChanged += (s, ev) =>
+            {
+                if (isUpdating) return;
+                if (ev.PropertyName == nameof(FilterItem.IsChecked))
+                {
+                    isUpdating = true;
+                    selectAllItem.IsChecked = filterItems.Skip(1).All(x => x.IsChecked);
+                    isUpdating = false;
+                }
+            };
+        }
+
+        // Item Template (Checkbox)
+        var itemTemplate = new DataTemplate();
+        var factory = new FrameworkElementFactory(typeof(CheckBox));
+        factory.SetBinding(CheckBox.ContentProperty, new Binding("Text"));
+        factory.SetBinding(CheckBox.IsCheckedProperty, new Binding("IsChecked") { Mode = BindingMode.TwoWay });
+        factory.SetValue(CheckBox.StyleProperty, Application.Current.TryFindResource("FluentFilterCheckBoxStyle"));
+        factory.SetValue(FrameworkElement.MarginProperty, new Thickness(2));
+        itemTemplate.VisualTree = factory;
+        listBox.ItemTemplate = itemTemplate;
+
+        mainStack.Children.Add(listBox);
+
+        // Filter Logic for Search
+        searchBox.TextChanged += (s, ev) =>
+        {
+            var text = searchBox.Text.ToLower();
+            foreach (var item in filterItems.Skip(1))
+            {
+                var viewItem = listBox.ItemContainerGenerator.ContainerFromItem(item) as UIElement;
+                if (viewItem != null)
+                {
+                    viewItem.Visibility = item.Text.ToLower().Contains(text) ? Visibility.Visible : Visibility.Collapsed;
+                }
+            }
+        };
+
+        // Button Bar
+        var buttonStack = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right };
+        
+        var clearBtn = new Button { Content = "Clear", Style = Application.Current.TryFindResource("FluentGridButtonStyle") as Style, Margin = new Thickness(0, 0, 8, 0) };
+        var applyBtn = new Button { Content = "Apply", Style = Application.Current.TryFindResource("FluentGridButtonStyle") as Style, FontWeight = FontWeights.Bold };
+
+        applyBtn.Click += (s, ev) =>
+        {
+            var selectedValues = filterItems.Skip(1).Where(x => x.IsChecked).Select(x => x.Text).ToList();
+            if (selectedValues.Count == allValues.Count)
             {
                 Grid.FilterManager.ClearFilter(Column.Binding);
-                UpdateFilterIndicator();
-                popup.IsOpen = false;
             }
+            else
+            {
+                var desc = new FilterDescriptor
+                {
+                    PropertyName = Column.Binding ?? string.Empty,
+                    Operator = FilterOperator.In,
+                    FilterValues = selectedValues
+                };
+                Grid.FilterManager.SetFilter(desc.PropertyName, string.Empty, FilterOperator.In); // Placeholder call to trigger logic
+                // Actually we need to update FilterManager to accept a descriptor or fix the SetFilter signature
+                // For now, let's hack the SetFilter to support this if we can, or just reach into the manager.
+                
+                // Better: Update FilterManager to have an overload for SetFilter(FilterDescriptor)
+                Grid.FilterManager.SetFilter(desc); 
+            }
+            UpdateFilterIndicator();
+            popup.IsOpen = false;
         };
 
-        buttonStack.Children.Add(clearButton);
-        buttonStack.Children.Add(applyButton);
+        clearBtn.Click += (s, ev) =>
+        {
+            Grid.FilterManager.ClearFilter(Column.Binding);
+            UpdateFilterIndicator();
+            popup.IsOpen = false;
+        };
 
-        stack.Children.Add(label);
-        stack.Children.Add(textBox);
-        stack.Children.Add(buttonStack);
+        buttonStack.Children.Add(clearBtn);
+        buttonStack.Children.Add(applyBtn);
+        mainStack.Children.Add(buttonStack);
 
-        border.Child = stack;
+        border.Child = mainStack;
         popup.Child = border;
         popup.IsOpen = true;
+    }
 
-        textBox.Focus();
+    private class FilterItem : INotifyPropertyChanged
+    {
+        private bool _isChecked;
+        public string Text { get; set; } = string.Empty;
+        public bool IsChecked
+        {
+            get => _isChecked;
+            set { _isChecked = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsChecked))); }
+        }
+        public event PropertyChangedEventHandler? PropertyChanged;
     }
 
     #endregion

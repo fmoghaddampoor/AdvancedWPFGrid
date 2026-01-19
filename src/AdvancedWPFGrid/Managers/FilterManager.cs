@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using AdvancedWPFGrid.Controls;
 using AdvancedWPFGrid.Data;
 
@@ -27,6 +28,16 @@ public class FilterManager
     /// Gets the current filter descriptors.
     /// </summary>
     public IReadOnlyDictionary<string, FilterDescriptor> Filters => _filters;
+
+    /// <summary>
+    /// Sets a filter using a descriptor.
+    /// </summary>
+    public void SetFilter(FilterDescriptor descriptor)
+    {
+        if (string.IsNullOrEmpty(descriptor.PropertyName)) return;
+        _filters[descriptor.PropertyName] = descriptor;
+        ApplyFiltering();
+    }
 
     /// <summary>
     /// Sets a filter for the specified property.
@@ -198,6 +209,9 @@ public class FilterManager
                 case FilterOperator.LessThanOrEqual:
                     return CompareValues(value, filterValue) <= 0;
 
+                case FilterOperator.In:
+                    return filter.FilterValues != null && filter.FilterValues.Any(v => v.Equals(stringValue, comparison));
+
                 default:
                     return true;
             }
@@ -237,5 +251,33 @@ public class FilterManager
         }
 
         return 0;
+    }
+
+    /// <summary>
+    /// Gets all distinct values for a given property from the current data source.
+    /// </summary>
+    public List<string> GetDistinctValues(string? propertyName)
+    {
+        var result = new List<string>();
+        if (string.IsNullOrEmpty(propertyName) || _grid.ItemsSource == null) return result;
+
+        var items = _grid.ItemsSource.Cast<object>();
+        foreach (var item in items)
+        {
+            var property = item.GetType().GetProperty(propertyName);
+            if (property != null)
+            {
+                var value = property.GetValue(item);
+                var stringValue = value?.ToString() ?? "(null)";
+                if (!result.Contains(stringValue))
+                {
+                    result.Add(stringValue);
+                }
+            }
+        }
+
+        // Sort results
+        result.Sort(new NaturalStringComparer());
+        return result;
     }
 }

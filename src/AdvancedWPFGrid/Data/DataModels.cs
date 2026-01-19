@@ -77,6 +77,11 @@ public class FilterDescriptor
     public string? FilterValue { get; set; }
 
     /// <summary>
+    /// Collection of values for "In" operator (Excel-style).
+    /// </summary>
+    public List<string> FilterValues { get; set; } = new();
+
+    /// <summary>
     /// The filter operator.
     /// </summary>
     public FilterOperator Operator { get; set; } = FilterOperator.Contains;
@@ -102,7 +107,8 @@ public enum FilterOperator
     GreaterThanOrEqual,
     LessThanOrEqual,
     IsNull,
-    IsNotNull
+    IsNotNull,
+    In
 }
 
 /// <summary>
